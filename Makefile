@@ -50,7 +50,10 @@ examples: lib $(EXAMPLES_BIN)
 examples/%: $(EXAMPLES_SRCS)
 	$(CC) $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS) $< -o $@
 
-clean: clean-bin clean-build
+clean: clean-bin clean-build clean-vendor
+
+clean-vendor:
+	rm -rf ./vendor/libjson-rpc-cpp/build/out/*
 
 clean-bin:
 	rm -rf $(BIN_DIRECTORY)
