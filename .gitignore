@@ -1,0 +1,10 @@
+.DS_Store
+._.DS_Store
+.swp
+*.swp
+
+bin
+build
+*.dSYM
+examples/*
+!examples/*.cpp
