@@ -4,6 +4,7 @@
 *.swp
 
 bin
+!src/bin
 build
 *.dSYM
 examples/*

@@ -53,6 +53,7 @@ examples/%: $(EXAMPLES_SRCS)
 clean: clean-bin clean-build clean-vendor
 
 clean-vendor:
+	find ./vendor/libjson-rpc-cpp/build/src/*/CMakeFiles -name "*.o" -exec rm {} \;
 	rm -rf ./vendor/libjson-rpc-cpp/build/out/*
 
 clean-bin:

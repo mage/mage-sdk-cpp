@@ -80,3 +80,9 @@ Todo
 - [ ] Make install/clean for the binaries (maybe)
 - [ ] Message stream event handling
 - [ ] CLI: Have the option to list and describe the remote calls
+
+See also
+---------
+
+- [JSONCPP, the library we use for our JSON operations](http://jsoncpp.sourceforge.net/)
+- [libjson-rpc-cpp](https://github.com/cinemast/libjson-rpc-cpp)
