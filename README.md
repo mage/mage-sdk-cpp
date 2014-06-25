@@ -48,7 +48,7 @@ Usage: magecli -a [application name] -d [domain] [-p [protocol]] [-h]
 
 Some real-life examples:
 
-![Screenshot](./img/screenshot.jpg)
+![Screenshot](./img/screenshot.png)
 
 ### Building the example scripts
 
