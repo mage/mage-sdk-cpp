@@ -1,13 +1,22 @@
 BIN_DIRECTORY = ./bin
 BUILD_DIRECTORY = ./build
 
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Linux)
+	LIBCURL_DYLIB = /usr/lib64/libcurl.so
+endif
+ifeq ($(UNAME_S),Darwin)
+	LIBCURL_DYLIB = /usr/lib/libcurl.dylib
+endif
+
 CC = g++
-CFLAGS  = -g -Wall
+CFLAGS  = -g -Wall -std=c++0x
 
 INCLUDES = -I ./src -I ./vendor/libjson-rpc-cpp/src
 
 LFLAGS = -L ./vendor/libjson-rpc-cpp/build/out -L ./build
-LIBS = -ljsonrpc -lmage -ldl /usr/lib/libcurl.dylib
+LIBS = -ljsonrpc -lmage -ldl $(LIBCURL_DYLIB)
 
 LIB_SRCS = $(wildcard ./src/*.cpp)
 LIB_OBJS = $(addprefix ./build/,$(notdir $(LIB_SRCS:.cpp=.o)))

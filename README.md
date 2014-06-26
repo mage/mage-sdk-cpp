@@ -22,7 +22,25 @@ made available on a given server.
 Installation
 -------------
 
-### setup
+### Requirements
+
+#### OS X
+
+You will need OS X 10.9 and up, with XCode installed.
+
+#### CentOS
+
+```
+sudo yum install cmake automake autoconf libtool libcurl-devel
+```
+
+#### Ubuntu/Debian
+
+```
+sudo apt-get install libcurl4-openssl-dev cmake
+```
+
+### Setup
 
 ```bash
 git clone git@github.com:Wizcorp/mage-sdk-cpp.git
@@ -76,6 +94,8 @@ as soon as we have experimented with them.
 Todo
 -----
 
+- [ ] Test/fix build on CentOS, Debian and Ubuntu
+- [ ] Test integration against popular game development SDKs
 - [ ] Session handling: save the session when we receive it, and offer an API to interact with it
 - [ ] Make install/clean for the binaries (maybe)
 - [ ] Message stream event handling

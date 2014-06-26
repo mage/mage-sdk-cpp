@@ -1,5 +1,5 @@
 #include <mage.h>
-#include <GetOpt.h>
+#include <getopt.h>
 #include <iostream>
 
 using namespace mage;
