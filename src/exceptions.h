@@ -6,8 +6,8 @@
 
 namespace mage
 {
-    class MageError: public std::runtime_error
-    {
+	class MageError: public std::runtime_error
+	{
 		public:
 			MageError(const std::string message);
 	};
