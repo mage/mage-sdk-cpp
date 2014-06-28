@@ -49,9 +49,29 @@ git submodule update --init
 make
 ```
 
+### Building for iOS, Android, WP8, etc
+
+**Note**: when building libraries under platforms,
+you should never need to provide your own cURL implementation.
+We are using the one coming from a bootstrapped cocos2d-x project;
+this happens to work very well on all platforms tested so far. Please
+[post an issue](./issues/new) if you encounter any problems.
+
+#### Make all platforms
+
+```
+make platforms
+```
+
+#### Make a specific platform
+
+```
+make [ios|android|wp8]
+```
+
 ### magecli
 
-After you `make`, you will find an application called
+Thw default make will produce a binary called
 `magecli` under `./bin`. To use:
 
 ```bash
@@ -67,6 +87,21 @@ Usage: magecli -a [application name] -d [domain] [-p [protocol]] [-h]
 Some real-life examples:
 
 ![Screenshot](./img/screenshot.png)
+
+This application can be useful for manually interacting
+with a remote MAGE instance without having to write code
+yourself; great for testing and debugging.
+
+**Note**: In the future, we would love to add some manual
+commands to do the following:
+
+* List available commands
+* Destroy current session (if it is set)
+* Store, manipulate and use JSON blobs in your user commands
+  (instead of having to paste long strings all the time)
+
+Please let us know if any of those feature would be really
+useful/critical to you.
 
 ### Building the example scripts
 
@@ -87,7 +122,7 @@ Coming soon
 
 ### With Unity/Unreal/Cry/etc.
 
-We haven't tried to integrate with these technologies yet. We
+We haven't tried to integrate with these platforms yet. We
 will add some integration notes for each of those projects
 as soon as we have experimented with them.
 

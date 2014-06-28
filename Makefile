@@ -29,6 +29,10 @@ EXAMPLES_BIN = $(EXAMPLES_SRCS:.cpp=)
 
 all: bin
 
+platorms: android
+
+android:
+	cd platforms/android && $(MAKE)
 
 lib: vendors dirs build/libmage.a
 
