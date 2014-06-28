@@ -2,8 +2,8 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := mage-sdk-cpp
-LOCAL_MODULE_FILENAME := libmagecpp
+LOCAL_MODULE := mage-sdk
+LOCAL_MODULE_FILENAME := libmage
 
 MAGE_SRC_DIR := $(LOCAL_PATH)/../../../src
 LIBJSONRPC_SRC_DIR := $(LOCAL_PATH)/../../../vendor/libjson-rpc-cpp/src
