@@ -1,0 +1,625 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6E203781195F1B96009D14D5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E203780195F1B96009D14D5 /* Foundation.framework */; };
+		6E203786195F1B96009D14D5 /* mage_sdk.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6E203785195F1B96009D14D5 /* mage_sdk.h */; };
+		6E203788195F1B96009D14D5 /* mage_sdk.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E203787195F1B96009D14D5 /* mage_sdk.m */; };
+		6E20378F195F1B96009D14D5 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E20378E195F1B96009D14D5 /* XCTest.framework */; };
+		6E203790195F1B96009D14D5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E203780195F1B96009D14D5 /* Foundation.framework */; };
+		6E203792195F1B96009D14D5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E203791195F1B96009D14D5 /* UIKit.framework */; };
+		6E203795195F1B96009D14D5 /* libmage-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E20377D195F1B96009D14D5 /* libmage-sdk.a */; };
+		6E20379B195F1B96009D14D5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E203799195F1B96009D14D5 /* InfoPlist.strings */; };
+		6E20379D195F1B96009D14D5 /* mage_sdkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E20379C195F1B96009D14D5 /* mage_sdkTests.m */; };
+		6E2037A7195F1C98009D14D5 /* libcurl_arm64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E2037A6195F1C98009D14D5 /* libcurl_arm64.a */; };
+		6E2037AC195F1CC8009D14D5 /* exceptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037A8195F1CC8009D14D5 /* exceptions.cpp */; };
+		6E2037AD195F1CC8009D14D5 /* mage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037AA195F1CC8009D14D5 /* mage.cpp */; };
+		6E2037E7195F1D47009D14D5 /* client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037B2195F1D47009D14D5 /* client.cpp */; };
+		6E2037E8195F1D47009D14D5 /* clientconnector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037B4195F1D47009D14D5 /* clientconnector.cpp */; };
+		6E2037E9195F1D47009D14D5 /* httpclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037B8195F1D47009D14D5 /* httpclient.cpp */; };
+		6E2037EA195F1D47009D14D5 /* httpserver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037BA195F1D47009D14D5 /* httpserver.cpp */; };
+		6E2037EB195F1D47009D14D5 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037BC195F1D47009D14D5 /* mongoose.c */; };
+		6E2037EC195F1D47009D14D5 /* errors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037C0195F1D47009D14D5 /* errors.cpp */; };
+		6E2037ED195F1D47009D14D5 /* exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037C2195F1D47009D14D5 /* exception.cpp */; };
+		6E2037EE195F1D47009D14D5 /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037CD195F1D47009D14D5 /* json_reader.cpp */; };
+		6E2037EF195F1D47009D14D5 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037CE195F1D47009D14D5 /* json_value.cpp */; };
+		6E2037F0195F1D47009D14D5 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037D0195F1D47009D14D5 /* json_writer.cpp */; };
+		6E2037F1195F1D47009D14D5 /* procedure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037D6195F1D47009D14D5 /* procedure.cpp */; };
+		6E2037F2195F1D47009D14D5 /* rpcprotocolclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037D9195F1D47009D14D5 /* rpcprotocolclient.cpp */; };
+		6E2037F3195F1D47009D14D5 /* rpcprotocolserver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037DB195F1D47009D14D5 /* rpcprotocolserver.cpp */; };
+		6E2037F4195F1D47009D14D5 /* server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037DD195F1D47009D14D5 /* server.cpp */; };
+		6E2037F5195F1D47009D14D5 /* serverconnector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037DF195F1D47009D14D5 /* serverconnector.cpp */; };
+		6E2037F6195F1D47009D14D5 /* specificationparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037E2195F1D47009D14D5 /* specificationparser.cpp */; };
+		6E2037F7195F1D47009D14D5 /* specificationwriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037E4195F1D47009D14D5 /* specificationwriter.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6E203793195F1B96009D14D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E203775195F1B96009D14D5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E20377C195F1B96009D14D5;
+			remoteInfo = "mage-sdk";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6E20377B195F1B96009D14D5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				6E203786195F1B96009D14D5 /* mage_sdk.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		6E20377D195F1B96009D14D5 /* libmage-sdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libmage-sdk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E203780195F1B96009D14D5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		6E203784195F1B96009D14D5 /* mage-sdk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mage-sdk-Prefix.pch"; sourceTree = "<group>"; };
+		6E203785195F1B96009D14D5 /* mage_sdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mage_sdk.h; sourceTree = "<group>"; };
+		6E203787195F1B96009D14D5 /* mage_sdk.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mage_sdk.m; sourceTree = "<group>"; };
+		6E20378D195F1B96009D14D5 /* mage-sdkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "mage-sdkTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E20378E195F1B96009D14D5 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		6E203791195F1B96009D14D5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		6E203798195F1B96009D14D5 /* mage-sdkTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mage-sdkTests-Info.plist"; sourceTree = "<group>"; };
+		6E20379A195F1B96009D14D5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6E20379C195F1B96009D14D5 /* mage_sdkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mage_sdkTests.m; sourceTree = "<group>"; };
+		6E2037A6195F1C98009D14D5 /* libcurl_arm64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl_arm64.a; path = ../externals/curl/prebuilt/ios/libcurl_arm64.a; sourceTree = "<group>"; };
+		6E2037A8195F1CC8009D14D5 /* exceptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exceptions.cpp; path = ../../../src/exceptions.cpp; sourceTree = "<group>"; };
+		6E2037A9195F1CC8009D14D5 /* exceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exceptions.h; path = ../../../src/exceptions.h; sourceTree = "<group>"; };
+		6E2037AA195F1CC8009D14D5 /* mage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mage.cpp; path = ../../../src/mage.cpp; sourceTree = "<group>"; };
+		6E2037AB195F1CC8009D14D5 /* mage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mage.h; path = ../../../src/mage.h; sourceTree = "<group>"; };
+		6E2037B0195F1D47009D14D5 /* abstractauthenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = abstractauthenticator.h; sourceTree = "<group>"; };
+		6E2037B1195F1D47009D14D5 /* abstractrequesthandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = abstractrequesthandler.h; sourceTree = "<group>"; };
+		6E2037B2195F1D47009D14D5 /* client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = client.cpp; sourceTree = "<group>"; };
+		6E2037B3195F1D47009D14D5 /* client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client.h; sourceTree = "<group>"; };
+		6E2037B4195F1D47009D14D5 /* clientconnector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = clientconnector.cpp; sourceTree = "<group>"; };
+		6E2037B5195F1D47009D14D5 /* clientconnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clientconnector.h; sourceTree = "<group>"; };
+		6E2037B6195F1D47009D14D5 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		6E2037B8195F1D47009D14D5 /* httpclient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = httpclient.cpp; sourceTree = "<group>"; };
+		6E2037B9195F1D47009D14D5 /* httpclient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = httpclient.h; sourceTree = "<group>"; };
+		6E2037BA195F1D47009D14D5 /* httpserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = httpserver.cpp; sourceTree = "<group>"; };
+		6E2037BB195F1D47009D14D5 /* httpserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = httpserver.h; sourceTree = "<group>"; };
+		6E2037BC195F1D47009D14D5 /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mongoose.c; sourceTree = "<group>"; };
+		6E2037BD195F1D47009D14D5 /* mongoose.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mongoose.h; sourceTree = "<group>"; };
+		6E2037BE195F1D47009D14D5 /* MONGOOSE_LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MONGOOSE_LICENSE; sourceTree = "<group>"; };
+		6E2037BF195F1D47009D14D5 /* MONGOOSE_README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MONGOOSE_README.md; sourceTree = "<group>"; };
+		6E2037C0195F1D47009D14D5 /* errors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = errors.cpp; sourceTree = "<group>"; };
+		6E2037C1195F1D47009D14D5 /* errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errors.h; sourceTree = "<group>"; };
+		6E2037C2195F1D47009D14D5 /* exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = exception.cpp; sourceTree = "<group>"; };
+		6E2037C3195F1D47009D14D5 /* exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = exception.h; sourceTree = "<group>"; };
+		6E2037C5195F1D47009D14D5 /* autolink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = autolink.h; sourceTree = "<group>"; };
+		6E2037C6195F1D47009D14D5 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		6E2037C7195F1D47009D14D5 /* features.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = features.h; sourceTree = "<group>"; };
+		6E2037C8195F1D47009D14D5 /* forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forwards.h; sourceTree = "<group>"; };
+		6E2037C9195F1D47009D14D5 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		6E2037CA195F1D47009D14D5 /* json_batchallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_batchallocator.h; sourceTree = "<group>"; };
+		6E2037CB195F1D47009D14D5 /* json_internalarray.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_internalarray.inl; sourceTree = "<group>"; };
+		6E2037CC195F1D47009D14D5 /* json_internalmap.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_internalmap.inl; sourceTree = "<group>"; };
+		6E2037CD195F1D47009D14D5 /* json_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_reader.cpp; sourceTree = "<group>"; };
+		6E2037CE195F1D47009D14D5 /* json_value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_value.cpp; sourceTree = "<group>"; };
+		6E2037CF195F1D47009D14D5 /* json_valueiterator.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_valueiterator.inl; sourceTree = "<group>"; };
+		6E2037D0195F1D47009D14D5 /* json_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_writer.cpp; sourceTree = "<group>"; };
+		6E2037D1195F1D47009D14D5 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		6E2037D2195F1D47009D14D5 /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
+		6E2037D3195F1D47009D14D5 /* value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = value.h; sourceTree = "<group>"; };
+		6E2037D4195F1D47009D14D5 /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
+		6E2037D5195F1D47009D14D5 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		6E2037D6195F1D47009D14D5 /* procedure.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = procedure.cpp; sourceTree = "<group>"; };
+		6E2037D7195F1D47009D14D5 /* procedure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = procedure.h; sourceTree = "<group>"; };
+		6E2037D8195F1D47009D14D5 /* rpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rpc.h; sourceTree = "<group>"; };
+		6E2037D9195F1D47009D14D5 /* rpcprotocolclient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rpcprotocolclient.cpp; sourceTree = "<group>"; };
+		6E2037DA195F1D47009D14D5 /* rpcprotocolclient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rpcprotocolclient.h; sourceTree = "<group>"; };
+		6E2037DB195F1D47009D14D5 /* rpcprotocolserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rpcprotocolserver.cpp; sourceTree = "<group>"; };
+		6E2037DC195F1D47009D14D5 /* rpcprotocolserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rpcprotocolserver.h; sourceTree = "<group>"; };
+		6E2037DD195F1D47009D14D5 /* server.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = server.cpp; sourceTree = "<group>"; };
+		6E2037DE195F1D47009D14D5 /* server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = server.h; sourceTree = "<group>"; };
+		6E2037DF195F1D47009D14D5 /* serverconnector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = serverconnector.cpp; sourceTree = "<group>"; };
+		6E2037E0195F1D47009D14D5 /* serverconnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serverconnector.h; sourceTree = "<group>"; };
+		6E2037E1195F1D47009D14D5 /* specification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = specification.h; sourceTree = "<group>"; };
+		6E2037E2195F1D47009D14D5 /* specificationparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = specificationparser.cpp; sourceTree = "<group>"; };
+		6E2037E3195F1D47009D14D5 /* specificationparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = specificationparser.h; sourceTree = "<group>"; };
+		6E2037E4195F1D47009D14D5 /* specificationwriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = specificationwriter.cpp; sourceTree = "<group>"; };
+		6E2037E5195F1D47009D14D5 /* specificationwriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = specificationwriter.h; sourceTree = "<group>"; };
+		6E2037E6195F1D47009D14D5 /* version.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version.h.in; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6E20377A195F1B96009D14D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E2037A7195F1C98009D14D5 /* libcurl_arm64.a in Frameworks */,
+				6E203781195F1B96009D14D5 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E20378A195F1B96009D14D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E203795195F1B96009D14D5 /* libmage-sdk.a in Frameworks */,
+				6E20378F195F1B96009D14D5 /* XCTest.framework in Frameworks */,
+				6E203792195F1B96009D14D5 /* UIKit.framework in Frameworks */,
+				6E203790195F1B96009D14D5 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6E203774195F1B96009D14D5 = {
+			isa = PBXGroup;
+			children = (
+				6E203782195F1B96009D14D5 /* mage-sdk */,
+				6E203796195F1B96009D14D5 /* mage-sdkTests */,
+				6E20377F195F1B96009D14D5 /* Frameworks */,
+				6E20377E195F1B96009D14D5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6E20377E195F1B96009D14D5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E20377D195F1B96009D14D5 /* libmage-sdk.a */,
+				6E20378D195F1B96009D14D5 /* mage-sdkTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E20377F195F1B96009D14D5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6E2037A6195F1C98009D14D5 /* libcurl_arm64.a */,
+				6E203780195F1B96009D14D5 /* Foundation.framework */,
+				6E20378E195F1B96009D14D5 /* XCTest.framework */,
+				6E203791195F1B96009D14D5 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6E203782195F1B96009D14D5 /* mage-sdk */ = {
+			isa = PBXGroup;
+			children = (
+				6E2037AF195F1D47009D14D5 /* jsonrpc */,
+				6E2037A8195F1CC8009D14D5 /* exceptions.cpp */,
+				6E2037A9195F1CC8009D14D5 /* exceptions.h */,
+				6E2037AA195F1CC8009D14D5 /* mage.cpp */,
+				6E2037AB195F1CC8009D14D5 /* mage.h */,
+				6E203785195F1B96009D14D5 /* mage_sdk.h */,
+				6E203787195F1B96009D14D5 /* mage_sdk.m */,
+				6E203783195F1B96009D14D5 /* Supporting Files */,
+			);
+			path = "mage-sdk";
+			sourceTree = "<group>";
+		};
+		6E203783195F1B96009D14D5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6E203784195F1B96009D14D5 /* mage-sdk-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6E203796195F1B96009D14D5 /* mage-sdkTests */ = {
+			isa = PBXGroup;
+			children = (
+				6E20379C195F1B96009D14D5 /* mage_sdkTests.m */,
+				6E203797195F1B96009D14D5 /* Supporting Files */,
+			);
+			path = "mage-sdkTests";
+			sourceTree = "<group>";
+		};
+		6E203797195F1B96009D14D5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6E203798195F1B96009D14D5 /* mage-sdkTests-Info.plist */,
+				6E203799195F1B96009D14D5 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6E2037AF195F1D47009D14D5 /* jsonrpc */ = {
+			isa = PBXGroup;
+			children = (
+				6E2037B0195F1D47009D14D5 /* abstractauthenticator.h */,
+				6E2037B1195F1D47009D14D5 /* abstractrequesthandler.h */,
+				6E2037B2195F1D47009D14D5 /* client.cpp */,
+				6E2037B3195F1D47009D14D5 /* client.h */,
+				6E2037B4195F1D47009D14D5 /* clientconnector.cpp */,
+				6E2037B5195F1D47009D14D5 /* clientconnector.h */,
+				6E2037B6195F1D47009D14D5 /* CMakeLists.txt */,
+				6E2037B7195F1D47009D14D5 /* connectors */,
+				6E2037C0195F1D47009D14D5 /* errors.cpp */,
+				6E2037C1195F1D47009D14D5 /* errors.h */,
+				6E2037C2195F1D47009D14D5 /* exception.cpp */,
+				6E2037C3195F1D47009D14D5 /* exception.h */,
+				6E2037C4195F1D47009D14D5 /* json */,
+				6E2037D5195F1D47009D14D5 /* LICENSE */,
+				6E2037D6195F1D47009D14D5 /* procedure.cpp */,
+				6E2037D7195F1D47009D14D5 /* procedure.h */,
+				6E2037D8195F1D47009D14D5 /* rpc.h */,
+				6E2037D9195F1D47009D14D5 /* rpcprotocolclient.cpp */,
+				6E2037DA195F1D47009D14D5 /* rpcprotocolclient.h */,
+				6E2037DB195F1D47009D14D5 /* rpcprotocolserver.cpp */,
+				6E2037DC195F1D47009D14D5 /* rpcprotocolserver.h */,
+				6E2037DD195F1D47009D14D5 /* server.cpp */,
+				6E2037DE195F1D47009D14D5 /* server.h */,
+				6E2037DF195F1D47009D14D5 /* serverconnector.cpp */,
+				6E2037E0195F1D47009D14D5 /* serverconnector.h */,
+				6E2037E1195F1D47009D14D5 /* specification.h */,
+				6E2037E2195F1D47009D14D5 /* specificationparser.cpp */,
+				6E2037E3195F1D47009D14D5 /* specificationparser.h */,
+				6E2037E4195F1D47009D14D5 /* specificationwriter.cpp */,
+				6E2037E5195F1D47009D14D5 /* specificationwriter.h */,
+				6E2037E6195F1D47009D14D5 /* version.h.in */,
+			);
+			name = jsonrpc;
+			path = "../../../vendor/libjson-rpc-cpp/src/jsonrpc";
+			sourceTree = "<group>";
+		};
+		6E2037B7195F1D47009D14D5 /* connectors */ = {
+			isa = PBXGroup;
+			children = (
+				6E2037B8195F1D47009D14D5 /* httpclient.cpp */,
+				6E2037B9195F1D47009D14D5 /* httpclient.h */,
+				6E2037BA195F1D47009D14D5 /* httpserver.cpp */,
+				6E2037BB195F1D47009D14D5 /* httpserver.h */,
+				6E2037BC195F1D47009D14D5 /* mongoose.c */,
+				6E2037BD195F1D47009D14D5 /* mongoose.h */,
+				6E2037BE195F1D47009D14D5 /* MONGOOSE_LICENSE */,
+				6E2037BF195F1D47009D14D5 /* MONGOOSE_README.md */,
+			);
+			path = connectors;
+			sourceTree = "<group>";
+		};
+		6E2037C4195F1D47009D14D5 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				6E2037C5195F1D47009D14D5 /* autolink.h */,
+				6E2037C6195F1D47009D14D5 /* config.h */,
+				6E2037C7195F1D47009D14D5 /* features.h */,
+				6E2037C8195F1D47009D14D5 /* forwards.h */,
+				6E2037C9195F1D47009D14D5 /* json.h */,
+				6E2037CA195F1D47009D14D5 /* json_batchallocator.h */,
+				6E2037CB195F1D47009D14D5 /* json_internalarray.inl */,
+				6E2037CC195F1D47009D14D5 /* json_internalmap.inl */,
+				6E2037CD195F1D47009D14D5 /* json_reader.cpp */,
+				6E2037CE195F1D47009D14D5 /* json_value.cpp */,
+				6E2037CF195F1D47009D14D5 /* json_valueiterator.inl */,
+				6E2037D0195F1D47009D14D5 /* json_writer.cpp */,
+				6E2037D1195F1D47009D14D5 /* LICENSE */,
+				6E2037D2195F1D47009D14D5 /* reader.h */,
+				6E2037D3195F1D47009D14D5 /* value.h */,
+				6E2037D4195F1D47009D14D5 /* writer.h */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6E20377C195F1B96009D14D5 /* mage-sdk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E2037A0195F1B96009D14D5 /* Build configuration list for PBXNativeTarget "mage-sdk" */;
+			buildPhases = (
+				6E203779195F1B96009D14D5 /* Sources */,
+				6E20377A195F1B96009D14D5 /* Frameworks */,
+				6E20377B195F1B96009D14D5 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "mage-sdk";
+			productName = "mage-sdk";
+			productReference = 6E20377D195F1B96009D14D5 /* libmage-sdk.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		6E20378C195F1B96009D14D5 /* mage-sdkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E2037A3195F1B96009D14D5 /* Build configuration list for PBXNativeTarget "mage-sdkTests" */;
+			buildPhases = (
+				6E203789195F1B96009D14D5 /* Sources */,
+				6E20378A195F1B96009D14D5 /* Frameworks */,
+				6E20378B195F1B96009D14D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E203794195F1B96009D14D5 /* PBXTargetDependency */,
+			);
+			name = "mage-sdkTests";
+			productName = "mage-sdkTests";
+			productReference = 6E20378D195F1B96009D14D5 /* mage-sdkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6E203775195F1B96009D14D5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = Wizcorp;
+			};
+			buildConfigurationList = 6E203778195F1B96009D14D5 /* Build configuration list for PBXProject "mage-sdk" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 6E203774195F1B96009D14D5;
+			productRefGroup = 6E20377E195F1B96009D14D5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6E20377C195F1B96009D14D5 /* mage-sdk */,
+				6E20378C195F1B96009D14D5 /* mage-sdkTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6E20378B195F1B96009D14D5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E20379B195F1B96009D14D5 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6E203779195F1B96009D14D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E2037E9195F1D47009D14D5 /* httpclient.cpp in Sources */,
+				6E2037F4195F1D47009D14D5 /* server.cpp in Sources */,
+				6E2037EF195F1D47009D14D5 /* json_value.cpp in Sources */,
+				6E2037E8195F1D47009D14D5 /* clientconnector.cpp in Sources */,
+				6E2037EB195F1D47009D14D5 /* mongoose.c in Sources */,
+				6E2037F3195F1D47009D14D5 /* rpcprotocolserver.cpp in Sources */,
+				6E2037EC195F1D47009D14D5 /* errors.cpp in Sources */,
+				6E2037F6195F1D47009D14D5 /* specificationparser.cpp in Sources */,
+				6E203788195F1B96009D14D5 /* mage_sdk.m in Sources */,
+				6E2037AC195F1CC8009D14D5 /* exceptions.cpp in Sources */,
+				6E2037F7195F1D47009D14D5 /* specificationwriter.cpp in Sources */,
+				6E2037F0195F1D47009D14D5 /* json_writer.cpp in Sources */,
+				6E2037EA195F1D47009D14D5 /* httpserver.cpp in Sources */,
+				6E2037E7195F1D47009D14D5 /* client.cpp in Sources */,
+				6E2037F5195F1D47009D14D5 /* serverconnector.cpp in Sources */,
+				6E2037F2195F1D47009D14D5 /* rpcprotocolclient.cpp in Sources */,
+				6E2037F1195F1D47009D14D5 /* procedure.cpp in Sources */,
+				6E2037EE195F1D47009D14D5 /* json_reader.cpp in Sources */,
+				6E2037ED195F1D47009D14D5 /* exception.cpp in Sources */,
+				6E2037AD195F1CC8009D14D5 /* mage.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E203789195F1B96009D14D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E20379D195F1B96009D14D5 /* mage_sdkTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6E203794195F1B96009D14D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E20377C195F1B96009D14D5 /* mage-sdk */;
+			targetProxy = 6E203793195F1B96009D14D5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		6E203799195F1B96009D14D5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6E20379A195F1B96009D14D5 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6E20379E195F1B96009D14D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		6E20379F195F1B96009D14D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6E2037A1195F1B96009D14D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/mage_sdk.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mage-sdk/mage-sdk-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/include,
+					../externals/curl/include/ios,
+					"../../vendor/libjson-rpc-cpp/src",
+					../../src,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					../externals/curl/prebuilt/ios,
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		6E2037A2195F1B96009D14D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/mage_sdk.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mage-sdk/mage-sdk-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/include,
+					../externals/curl/include/ios,
+					"../../vendor/libjson-rpc-cpp/src",
+					../../src,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					../externals/curl/prebuilt/ios,
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		6E2037A4195F1B96009D14D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mage-sdk/mage-sdk-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "mage-sdkTests/mage-sdkTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		6E2037A5195F1B96009D14D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mage-sdk/mage-sdk-Prefix.pch";
+				INFOPLIST_FILE = "mage-sdkTests/mage-sdkTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6E203778195F1B96009D14D5 /* Build configuration list for PBXProject "mage-sdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E20379E195F1B96009D14D5 /* Debug */,
+				6E20379F195F1B96009D14D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6E2037A0195F1B96009D14D5 /* Build configuration list for PBXNativeTarget "mage-sdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E2037A1195F1B96009D14D5 /* Debug */,
+				6E2037A2195F1B96009D14D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6E2037A3195F1B96009D14D5 /* Build configuration list for PBXNativeTarget "mage-sdkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E2037A4195F1B96009D14D5 /* Debug */,
+				6E2037A5195F1B96009D14D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6E203775195F1B96009D14D5 /* Project object */;
+}
