@@ -31,6 +31,9 @@ all: bin
 
 platorms: android
 
+clean-android:
+	rm -rf ./platforms/android/obj
+
 android:
 	cd platforms/android && $(MAKE)
 
