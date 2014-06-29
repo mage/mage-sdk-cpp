@@ -41,4 +41,4 @@ LOCAL_STATIC_LIBRARIES := curl_static_prebuilt
 
 LOCAL_CPPFLAGS := -fexceptions -std=c++11
 
-include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)
