@@ -5,20 +5,6 @@ using namespace std;
 
 namespace mage
 {
-	static std::string defaultDomain = "localhost:8080";
-	static std::string defaultProtocol = "http";
-
-	RPC::RPC(std::string mageApplication) :
-		protocol(defaultProtocol), domain(defaultDomain), application(mageApplication)
-	{
-		init();
-	}
-
-	RPC::RPC(std::string mageApplication, std::string mageDomain) :
-		protocol(defaultProtocol), domain(mageDomain), application(mageApplication)
-	{
-		init();
-	}
 
 	RPC::RPC(std::string mageApplication, std::string mageDomain, std::string mageProtocol) :
 		protocol(mageProtocol), domain(mageDomain), application(mageApplication)
