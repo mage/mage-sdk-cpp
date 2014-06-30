@@ -23,6 +23,8 @@ namespace mage
 			void SetProtocol(const std::string mageProtocol);
 			void SetDomain(const std::string mageDomain);
 			void SetApplication(const std::string mageApplication);
+			void SetSession(const std::string sessionKey);
+			void ClearSession();
 
 		private:
 			void init();

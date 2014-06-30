@@ -77,6 +77,14 @@ namespace mage
 		httpClient->SetUrl(url);
 	}
 
+	void RPC::SetSession(const std::string sessionKey) {
+		httpClient->AddHeader("X-MAGE-SESSION", sessionKey);
+	}
+
+	void RPC::ClearSession() {
+		httpClient->RemoveHeader("X-MAGE-SESSION");
+	}
+
 	void RPC::buildConnector() {
 		url = protocol + "://" + domain + "/" + application + "/jsonrpc";
 	}
