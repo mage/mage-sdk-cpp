@@ -38,7 +38,7 @@ namespace mage
 		 *   foreach Event
 		 *     call event callback
 		 */
-		return res["response"];
+		return res;
 	}
 
 	void RPC::RegisterCallback(const std::string &eventName, std::function<void(Json::Value)> callback) {
