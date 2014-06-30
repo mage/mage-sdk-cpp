@@ -29,6 +29,15 @@ EXAMPLES_BIN = $(EXAMPLES_SRCS:.cpp=)
 
 all: bin
 
+clean-ios:
+	rm -rf platforms/ios/build/Release-iphoneos
+
+ios: platforms/ios/build/Release-iphoneos/libmage-sdk.a
+
+platforms/ios/build/Release-iphoneos/libmage-sdk.a:
+	xcodebuild ONLY_ACTIVE_ARCH=NO \
+		-project "./platforms/ios/mage-sdk.xcodeproj" \
+		-configuration "Release"
 
 lib: vendors dirs build/libmage.a
 
