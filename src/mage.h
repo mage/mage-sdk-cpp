@@ -13,9 +13,9 @@ namespace mage
 	class RPC
 	{
 		public:
-			RPC(std::string mageApplication);
-			RPC(std::string mageApplication, std::string mageDomain);
-			RPC(std::string mageApplication, std::string mageDomain, std::string mageProtocol);
+			RPC(std::string mageApplication,
+			    std::string mageDomain = "localhost:8080",
+			    std::string mageProtocol = "http");
 
 			virtual Json::Value Call(const std::string &name, const Json::Value &params);
 			virtual void RegisterCallback(const std::string &eventName, std::function<void(Json::Value)> callback);
