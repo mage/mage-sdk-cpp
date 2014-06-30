@@ -29,8 +29,17 @@ EXAMPLES_BIN = $(EXAMPLES_SRCS:.cpp=)
 
 all: bin
 
+#
+# If you want a library to build
+# on iOS, Android, etc...
+#
+platorms: ios android
+
 clean-ios:
 	rm -rf platforms/ios/build/Release-iphoneos
+
+clean-android:
+	rm -rf ./platforms/android/obj
 
 ios: platforms/ios/build/Release-iphoneos/libmage-sdk.a
 
@@ -39,6 +48,12 @@ platforms/ios/build/Release-iphoneos/libmage-sdk.a:
 		-project "./platforms/ios/mage-sdk.xcodeproj" \
 		-configuration "Release"
 
+android:
+	cd platforms/android && $(MAKE)
+
+#
+# Build libraries for OS X, Linux
+#
 lib: vendors dirs build/libmage.a
 
 vendors:
