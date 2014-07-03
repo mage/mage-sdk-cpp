@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
 
 	std::string command;
 	std::string userCommand;
-	std::string jsonString;
+	std::string data;
 
 	std::size_t pos;
 
@@ -141,17 +141,27 @@ int main(int argc, char *argv[]) {
 
 		if (pos == std::string::npos) {
 			userCommand = command;
-			jsonString = "{}";
+			data = "{}";
 
 			if (userCommand == "") {
 				continue;
 			}
 		} else {
 			userCommand = command.substr(0, pos);
-			jsonString = command.substr(pos + 1);
+			data = command.substr(pos + 1);
 		}
 
-		if (!reader.parse(jsonString, params)) {
+		if (userCommand == "setSession") {
+			client.SetSession(data);
+			continue;
+		}
+
+		if (userCommand == "clearSession") {
+			client.ClearSession();
+			continue;
+		}
+
+		if (!reader.parse(data, params)) {
 			cerr << red("Invalid JSON data") << endl;
 			continue;
 		}
