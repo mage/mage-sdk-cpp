@@ -12,6 +12,12 @@ namespace mage
 		init();
 	}
 
+	RPC::~RPC()
+	{
+		delete jsonRpcClient;
+		delete httpClient;
+	}
+
 	void RPC::init()
 	{
 		buildConnector();
