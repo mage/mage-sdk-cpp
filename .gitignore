@@ -9,5 +9,6 @@ build
 *.dSYM
 examples/*
 !examples/*.cpp
+!examples/CMakeLists.txt
 
 platforms/android/obj
