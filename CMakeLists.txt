@@ -9,7 +9,6 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/vendor/libjson-rpc-cpp/src/jsonrpc)
 include_directories(${CMAKE_SOURCE_DIR}/vendor/libjson-rpc-cpp/src)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/src/bin)
-include_directories(${CMAKE_SOURCE_DIR}/examples)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
@@ -43,4 +42,5 @@ add_custom_target(
 
 add_subdirectory(src)
 add_subdirectory(src/bin)
+add_subdirectory(examples)
 
