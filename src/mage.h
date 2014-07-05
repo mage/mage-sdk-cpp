@@ -29,13 +29,11 @@ namespace mage
 
 		private:
 			void init();
-			void buildConnector();
+			std::string GetUrl();
 
 			std::string protocol;
 			std::string domain;
 			std::string application;
-
-			std::string url;
 
 			HttpClient *httpClient;
 			Client *jsonRpcClient;

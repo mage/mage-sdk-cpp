@@ -20,8 +20,7 @@ namespace mage
 
 	void RPC::init()
 	{
-		buildConnector();
-		httpClient = new HttpClient(url);
+		httpClient = new HttpClient(GetUrl());
 		jsonRpcClient = new Client(httpClient);
 	}
 
@@ -53,20 +52,17 @@ namespace mage
 
 	void RPC::SetDomain(const std::string mageDomain) {
 		domain = mageDomain;
-		buildConnector();
-		httpClient->SetUrl(url);
+		httpClient->SetUrl(GetUrl());
 	}
 
 	void RPC::SetApplication(const std::string mageApplication) {
 		application = mageApplication;
-		buildConnector();
-		httpClient->SetUrl(url);
+		httpClient->SetUrl(GetUrl());
 	}
 
 	void RPC::SetProtocol(const std::string mageProtocol) {
 		protocol = mageProtocol;
-		buildConnector();
-		httpClient->SetUrl(url);
+		httpClient->SetUrl(GetUrl());
 	}
 
 	void RPC::SetSession(const std::string sessionKey) {
@@ -77,7 +73,7 @@ namespace mage
 		httpClient->RemoveHeader("X-MAGE-SESSION");
 	}
 
-	void RPC::buildConnector() {
-		url = protocol + "://" + domain + "/" + application + "/jsonrpc";
+	std::string RPC::GetUrl() {
+		return protocol + "://" + domain + "/" + application + "/jsonrpc";
 	}
 }
