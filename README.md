@@ -34,6 +34,8 @@ You will need OS X 10.9 and up, with XCode installed.
 sudo yum install cmake automake autoconf libtool libcurl-devel
 ```
 
+CMake 2.8+ is required. It can be found in the [rpmforge-extras](http://repoforge.org/use/) repository.
+
 #### Ubuntu/Debian
 
 ```
@@ -51,7 +53,10 @@ git submodule update --init
 ### OS X/Linux
 
 ```
-make
+mkdir build
+cd build
+cmake ..
+make all
 ```
 
 ### Building for iOS, Android, WP8, etc

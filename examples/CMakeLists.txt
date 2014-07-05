@@ -8,3 +8,8 @@ foreach(file ${examples_source})
   target_link_libraries(${executable_name} mage jsonrpc)
 endforeach()
 
+add_custom_target(
+  examples
+  DEPENDS simple authentication
+)
+
