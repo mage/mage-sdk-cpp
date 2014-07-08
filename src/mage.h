@@ -28,7 +28,6 @@ namespace mage
 			void ClearSession();
 
 		private:
-			void init();
 			void buildConnector();
 
 			std::string protocol;
@@ -38,7 +37,7 @@ namespace mage
 			std::string url;
 
 			HttpClient *httpClient;
-			Client *jsonRpcClient;
+			Client     *jsonRpcClient;
 	};
 
 } /* namespace mage */

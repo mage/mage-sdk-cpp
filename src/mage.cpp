@@ -1,7 +1,6 @@
 #include "mage.h"
 
 using namespace jsonrpc;
-using namespace std;
 
 namespace mage
 {
@@ -9,20 +8,15 @@ namespace mage
 	RPC::RPC(std::string mageApplication, std::string mageDomain, std::string mageProtocol) :
 		protocol(mageProtocol), domain(mageDomain), application(mageApplication)
 	{
-		init();
+		buildConnector();
+		httpClient = new HttpClient(url);
+		jsonRpcClient = new Client(httpClient);
 	}
 
 	RPC::~RPC()
 	{
 		delete jsonRpcClient;
 		delete httpClient;
-	}
-
-	void RPC::init()
-	{
-		buildConnector();
-		httpClient = new HttpClient(url);
-		jsonRpcClient = new Client(httpClient);
 	}
 
 	Json::Value RPC::Call(const std::string &name, const Json::Value &params)
@@ -48,7 +42,7 @@ namespace mage
 	}
 
 	void RPC::RegisterCallback(const std::string &eventName, std::function<void(Json::Value)> callback) {
-		cout << "Registering callback for event:" << eventName << endl;
+		std::cout << "Registering callback for event:" << eventName << std::endl;
 	}
 
 	void RPC::SetDomain(const std::string mageDomain) {
