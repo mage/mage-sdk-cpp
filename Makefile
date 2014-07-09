@@ -33,7 +33,7 @@ all: bin
 # If you want a library to build
 # on iOS, Android, etc...
 #
-platorms: ios android
+platforms: ios android
 
 clean-ios:
 	rm -rf platforms/ios/build/Release-iphoneos
