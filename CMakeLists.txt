@@ -22,7 +22,7 @@ SET(CMAKE_C_FLAGS_DEBUG     "-std=c++0x -Wall -g ${CMAKE_C_FLAGS_DEBUG}")
 
 add_custom_command(
   OUTPUT platforms/ios/build/Release-iphoneos/libmage-sdk.a
-  COMMAND xcodebuild ONLY_ACTIVE_ARCH=NO -project "./platforms/ios/mage-sdk.xcodeproj" -configuration "Release"
+  COMMAND xcodebuild ONLY_ACTIVE_ARCH=NO -project "${CMAKE_SOURCE_DIR}/platforms/ios/mage-sdk.xcodeproj" -configuration "Release"
 )
 
 add_custom_target(
@@ -31,8 +31,18 @@ add_custom_target(
 )
 
 add_custom_target(
+  clean-ios
+  COMMAND rm -rf ${CMAKE_SOURCE_DIR}/platforms/ios/build/Release-iphoneos
+)
+
+add_custom_target(
   android
   COMMAND cd ${CMAKE_SOURCE_DIR}/platforms/android && \${MAKE}
+)
+
+add_custom_target(
+  clean-android
+  COMMAND rm -rf ${CMAKE_SOURCE_DIR}/platforms/android/obj 
 )
 
 add_custom_target(
