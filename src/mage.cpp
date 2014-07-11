@@ -15,7 +15,6 @@ namespace mage
 	RPC::~RPC()
 	{
 		delete jsonRpcClient;
-		delete httpClient;
 	}
 
 	void RPC::init()
