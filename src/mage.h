@@ -27,9 +27,9 @@ namespace mage
 			void SetSession(const std::string sessionKey);
 			void ClearSession();
 
-		private:
 			std::string GetUrl();
 
+		private:
 			std::string protocol;
 			std::string domain;
 			std::string application;
