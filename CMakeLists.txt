@@ -4,7 +4,12 @@ project(mage-sdk-cpp)
 find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIRS})
 
+SET(HTTP_CONNECTOR YES CACHE BOOL "Include HTTP connector inside library")
 add_subdirectory(${CMAKE_SOURCE_DIR}/vendor/libjson-rpc-cpp/src/jsonrpc)
+
+if (HTTP_CONNECTOR)
+  ADD_DEFINITIONS(-DHTTP_CONNECTOR)
+endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/vendor/libjson-rpc-cpp/src)
 include_directories(${CMAKE_SOURCE_DIR}/src)
