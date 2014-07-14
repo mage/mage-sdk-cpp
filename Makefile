@@ -11,7 +11,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 CC = g++
-CFLAGS  = -g -Wall -std=c++0x
+CFLAGS  = -g -Wall -std=c++0x -DHTTP_CONNECTOR
 
 INCLUDES = -I ./src -I ./vendor/libjson-rpc-cpp/src
 
