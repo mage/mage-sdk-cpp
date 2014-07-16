@@ -27,14 +27,12 @@ namespace mage
 			void SetSession(const std::string sessionKey);
 			void ClearSession();
 
-		private:
-			void buildConnector();
+			std::string GetUrl();
 
+		private:
 			std::string protocol;
 			std::string domain;
 			std::string application;
-
-			std::string url;
 
 			HttpClient *httpClient;
 			Client     *jsonRpcClient;
