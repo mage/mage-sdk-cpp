@@ -78,7 +78,10 @@ bin: lib $(BIN)
 bin/%: $(BIN_SRCS)
 	$(CC) $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS) $< -o $@
 
-examples: lib $(EXAMPLES_BIN)
+examples: clean-examples lib $(EXAMPLES_BIN)
+
+clean-examples:
+	find ./examples -depth 1 -not -iname "*.cpp" -exec rm -rf {} \; || true
 
 examples/%:
 	$(CC) $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS) $@.cpp -o $@
