@@ -80,8 +80,8 @@ bin/%: $(BIN_SRCS)
 
 examples: lib $(EXAMPLES_BIN)
 
-examples/%: $(EXAMPLES_SRCS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS) $< -o $@
+examples/%:
+	$(CC) $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS) $@.cpp -o $@
 
 clean: clean-bin clean-build clean-vendor
 

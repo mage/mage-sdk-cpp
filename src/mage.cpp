@@ -40,6 +40,18 @@ namespace mage
 		return res;
 	}
 
+	std::future<Json::Value> RPC::Call(const std::string &name, const Json::Value &params, bool doAsync) {
+		if (doAsync) {
+			return std::async(std::launch::async, [this, name, params]{
+				return Call(name, params);
+			});
+		} else {
+			return std::async(std::launch::deferred, [this, name, params]{
+				return Call(name, params);
+			});
+		}
+	}
+
 	void RPC::RegisterCallback(const std::string &eventName, std::function<void(Json::Value)> callback) {
 		std::cout << "Registering callback for event:" << eventName << std::endl;
 	}
