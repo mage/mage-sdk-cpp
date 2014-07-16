@@ -15,7 +15,6 @@ namespace mage
 	RPC::~RPC()
 	{
 		delete jsonRpcClient;
-		delete httpClient;
 	}
 
 	Json::Value RPC::Call(const std::string &name, const Json::Value &params)
