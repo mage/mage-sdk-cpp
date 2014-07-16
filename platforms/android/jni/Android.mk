@@ -39,6 +39,6 @@ LOCAL_LDLIBS  := -lz -ldl
 LOCAL_WHOLE_STATIC_LIBRARIES += curl_static
 LOCAL_STATIC_LIBRARIES := curl_static_prebuilt
 
-LOCAL_CPPFLAGS := -fexceptions -std=c++11
+LOCAL_CPPFLAGS := -fexceptions -std=c++11 -DHTTP_CONNECTOR
 
 include $(BUILD_STATIC_LIBRARY)
