@@ -9,6 +9,7 @@ using namespace std;
 // All the code (well, almost)
 // is the same as simple.cpp
 //
+
 int main() {
 	mage::RPC client("game", "localhost:8080");
 
@@ -34,9 +35,9 @@ int main() {
 	//  - true: Run asynchronously
 	//
 	try {
-		res = client.Call("user.register", params, true);
-		cout << "this runs" << endl;
-		cout << "user.register: " << res.get() << endl;
+		client.Call("user.register", params, [](Json::Value res){
+			cout << "user.register: " << res << endl;
+		}, true);
 	} catch (mage::MageRPCError e) {
 		cerr << "An RPC error has occured: "  << e.what() << " (code " << e.code() << ")" << endl;
 	} catch (mage::MageErrorMessage e) {
