@@ -3,7 +3,9 @@
 
 #include "exceptions.h"
 #include <iostream>
-#include <functional>
+#if __cplusplus >= 201103L
+	#include <functional>
+#endif
 #include <jsonrpc/rpc.h>
 
 using namespace jsonrpc;
@@ -19,7 +21,9 @@ namespace mage
 			~RPC();
 
 			virtual Json::Value Call(const std::string &name, const Json::Value &params);
+#if __cplusplus >= 201103L
 			virtual void RegisterCallback(const std::string &eventName, std::function<void(Json::Value)> callback);
+#endif
 
 			void SetProtocol(const std::string mageProtocol);
 			void SetDomain(const std::string mageDomain);

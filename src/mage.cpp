@@ -40,9 +40,11 @@ namespace mage
 		return res;
 	}
 
+#if __cplusplus >= 201103L
 	void RPC::RegisterCallback(const std::string &eventName, std::function<void(Json::Value)> callback) {
 		std::cout << "Registering callback for event:" << eventName << std::endl;
 	}
+#endif
 
 	void RPC::SetDomain(const std::string mageDomain) {
 		domain = mageDomain;

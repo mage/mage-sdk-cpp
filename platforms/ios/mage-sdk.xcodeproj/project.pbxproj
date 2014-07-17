@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		211816131977BA6C00D7B787 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 211816121977BA6C00D7B787 /* libcurl.a */; };
 		6E203781195F1B96009D14D5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E203780195F1B96009D14D5 /* Foundation.framework */; };
 		6E203786195F1B96009D14D5 /* mage_sdk.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6E203785195F1B96009D14D5 /* mage_sdk.h */; };
 		6E203788195F1B96009D14D5 /* mage_sdk.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E203787195F1B96009D14D5 /* mage_sdk.m */; };
@@ -62,6 +63,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		211816121977BA6C00D7B787 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../externals/curl/prebuilt/ios/libcurl.a; sourceTree = "<group>"; };
 		6E20377D195F1B96009D14D5 /* libmage-sdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libmage-sdk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E203780195F1B96009D14D5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6E203784195F1B96009D14D5 /* mage-sdk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mage-sdk-Prefix.pch"; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				211816131977BA6C00D7B787 /* libcurl.a in Frameworks */,
 				6E2037A7195F1C98009D14D5 /* libcurl_arm64.a in Frameworks */,
 				6E203781195F1B96009D14D5 /* Foundation.framework in Frameworks */,
 			);
@@ -179,6 +182,7 @@
 		6E20377F195F1B96009D14D5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				211816121977BA6C00D7B787 /* libcurl.a */,
 				6E2037A6195F1C98009D14D5 /* libcurl_arm64.a */,
 				6E203780195F1B96009D14D5 /* Foundation.framework */,
 				6E20378E195F1B96009D14D5 /* XCTest.framework */,
@@ -439,6 +443,77 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		2118160F1977B9E700D7B787 /* UnityRelease */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "HTTP_CONNECTOR=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = UnityRelease;
+		};
+		211816101977B9E700D7B787 /* UnityRelease */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/mage_sdk.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mage-sdk/mage-sdk-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/include,
+					../externals/curl/include/ios,
+					"../../vendor/libjson-rpc-cpp/src",
+					../../src,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					../externals/curl/prebuilt/ios,
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = UnityRelease;
+		};
+		211816111977B9E700D7B787 /* UnityRelease */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mage-sdk/mage-sdk-Prefix.pch";
+				INFOPLIST_FILE = "mage-sdkTests/mage-sdkTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = UnityRelease;
+		};
 		6E20379E195F1B96009D14D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -460,6 +535,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"HTTP_CONNECTOR=1",
 					"DEBUG=1",
 					"$(inherited)",
 				);
@@ -495,6 +571,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "HTTP_CONNECTOR=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -597,6 +674,7 @@
 			buildConfigurations = (
 				6E20379E195F1B96009D14D5 /* Debug */,
 				6E20379F195F1B96009D14D5 /* Release */,
+				2118160F1977B9E700D7B787 /* UnityRelease */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -606,6 +684,7 @@
 			buildConfigurations = (
 				6E2037A1195F1B96009D14D5 /* Debug */,
 				6E2037A2195F1B96009D14D5 /* Release */,
+				211816101977B9E700D7B787 /* UnityRelease */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -615,6 +694,7 @@
 			buildConfigurations = (
 				6E2037A4195F1B96009D14D5 /* Debug */,
 				6E2037A5195F1B96009D14D5 /* Release */,
+				211816111977B9E700D7B787 /* UnityRelease */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

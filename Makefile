@@ -33,10 +33,13 @@ all: bin
 # If you want a library to build
 # on iOS, Android, etc...
 #
-platforms: ios android
+platforms: ios ios-unity android
 
 clean-ios:
 	rm -rf platforms/ios/build/Release-iphoneos
+
+clean-ios-unity:
+	rm -rf platforms/ios/build/UnityRelease-iphoneos
 
 clean-android:
 	rm -rf ./platforms/android/obj
@@ -47,6 +50,13 @@ platforms/ios/build/Release-iphoneos/libmage-sdk.a:
 	xcodebuild ONLY_ACTIVE_ARCH=NO \
 		-project "./platforms/ios/mage-sdk.xcodeproj" \
 		-configuration "Release"
+
+ios-unity: platforms/ios/build/UnityRelease-iphoneos/libmage-sdk.a
+
+platforms/ios/build/UnityRelease-iphoneos/libmage-sdk.a:
+	xcodebuild ONLY_ACTIVE_ARCH=NO \
+		-project "./platforms/ios/mage-sdk.xcodeproj" \
+		-configuration "UnityRelease"
 
 android:
 	cd platforms/android && $(MAKE)
