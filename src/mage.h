@@ -4,6 +4,7 @@
 #include "exceptions.h"
 #include <iostream>
 #include <functional>
+#include <future>
 #include <jsonrpc/rpc.h>
 
 using namespace jsonrpc;
@@ -19,6 +20,7 @@ namespace mage
 			~RPC();
 
 			virtual Json::Value Call(const std::string &name, const Json::Value &params);
+			virtual std::future<Json::Value> Call(const std::string &name, const Json::Value &params, bool doAsync);
 			virtual void RegisterCallback(const std::string &eventName, std::function<void(Json::Value)> callback);
 
 			void SetProtocol(const std::string mageProtocol);
