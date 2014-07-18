@@ -18,7 +18,6 @@ int main() {
 	// a future object
 	//
 	Json::Value params;
-	std::future<Json::Value> res;
 
 	//
 	// I put things in my Json::Value.
@@ -34,13 +33,17 @@ int main() {
 	//  - false: Run at call time (when you call res.get())
 	//  - true: Run asynchronously
 	//
-	try {
-		client.Call("user.register", params, [](Json::Value res){
-			cout << "user.register: " << res << endl;
-		}, true);
-	} catch (mage::MageRPCError e) {
-		cerr << "An RPC error has occured: "  << e.what() << " (code " << e.code() << ")" << endl;
-	} catch (mage::MageErrorMessage e) {
-		cerr << "mymodule.mycommand responded with an error: "  << e.code() << endl;
-	}
+	client.Call("user.register", params, [](mage::MageError err, Json::Value res){
+		if (err.type == "MageRPCError") {
+			cerr << "An RPC error has occured: "  << err.what() << " (code " << err.code() << ")" << endl;
+			return;
+		}
+
+		if (err.type == "MageErrorMessage") {
+			cerr << "mymodule.mycommand responded with an error: "  << err.code() << endl;
+			return;
+		}
+
+		cout << "user.register: " << res << endl;
+	}, true);
 }

@@ -21,7 +21,7 @@ namespace mage
 
 			virtual Json::Value Call(const std::string &name, const Json::Value &params);
 			virtual std::future<Json::Value> Call(const std::string &name, const Json::Value &params, bool doAsync);
-			virtual void Call(const std::string &name, const Json::Value &params, const std::function<void(Json::Value)>& callback, bool doAsync);
+			virtual void Call(const std::string &name, const Json::Value &params, const std::function<void(mage::MageError, Json::Value)>& callback, bool doAsync);
 			virtual void RegisterCallback(const std::string &eventName, std::function<void(Json::Value)> callback);
 
 			void SetProtocol(const std::string mageProtocol);

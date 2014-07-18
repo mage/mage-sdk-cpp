@@ -10,6 +10,15 @@ namespace mage
 	{
 		public:
 			MageError(const std::string message);
+			std::string code();
+			std::string type;
+	};
+
+	class MageSuccess: public MageError
+	{
+		public:
+			MageSuccess(const std::string message = "");
+			std::string code();
 	};
 
 	class MageRPCError: public MageError
@@ -19,7 +28,7 @@ namespace mage
 
 			virtual ~MageRPCError() throw();
 
-			int code();
+			std::string code();
 
 		private:
 			const int errorCode;
@@ -39,7 +48,4 @@ namespace mage
 			const std::string errorCode;
 	};
 };
-
 #endif
-
-
