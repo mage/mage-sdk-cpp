@@ -5,7 +5,7 @@ using namespace jsonrpc;
 namespace mage
 {
 
-	RPC::RPC(std::string mageApplication, std::string mageDomain, std::string mageProtocol) :
+	RPC::RPC(const std::string &mageApplication, const std::string &mageDomain, const std::string &mageProtocol) :
 		protocol(mageProtocol), domain(mageDomain), application(mageApplication)
 	{
 		httpClient = new HttpClient(GetUrl());
@@ -18,8 +18,8 @@ namespace mage
 		delete httpClient;
 	}
 
-	Json::Value RPC::Call(const std::string &name, const Json::Value &params)
-	{
+	Json::Value RPC::Call(const std::string &name,
+	                      const Json::Value &params) const {
 		Json::Value res;
 
 		try {
@@ -40,7 +40,9 @@ namespace mage
 		return res;
 	}
 
-	std::future<Json::Value> RPC::Call(const std::string &name, const Json::Value &params, bool doAsync) {
+	std::future<Json::Value> RPC::Call(const std::string &name,
+	                                   const Json::Value &params,
+	                                   bool doAsync) const {
 		std::launch policy = doAsync ? std::launch::async : std::launch::deferred;
 
 		return std::async(policy, [this, name, params]{
@@ -48,34 +50,35 @@ namespace mage
 		});
 	}
 
-	void RPC::RegisterCallback(const std::string &eventName, std::function<void(Json::Value)> callback) {
+	void RPC::RegisterCallback(const std::string &eventName,
+	                           std::function<void(Json::Value)> callback) {
 		std::cout << "Registering callback for event:" << eventName << std::endl;
 	}
 
-	void RPC::SetDomain(const std::string mageDomain) {
+	void RPC::SetDomain(const std::string &mageDomain) {
 		domain = mageDomain;
 		httpClient->SetUrl(GetUrl());
 	}
 
-	void RPC::SetApplication(const std::string mageApplication) {
+	void RPC::SetApplication(const std::string &mageApplication) {
 		application = mageApplication;
 		httpClient->SetUrl(GetUrl());
 	}
 
-	void RPC::SetProtocol(const std::string mageProtocol) {
+	void RPC::SetProtocol(const std::string &mageProtocol) {
 		protocol = mageProtocol;
 		httpClient->SetUrl(GetUrl());
 	}
 
-	void RPC::SetSession(const std::string sessionKey) {
+	void RPC::SetSession(const std::string &sessionKey) const {
 		httpClient->AddHeader("X-MAGE-SESSION", sessionKey);
 	}
 
-	void RPC::ClearSession() {
+	void RPC::ClearSession() const {
 		httpClient->RemoveHeader("X-MAGE-SESSION");
 	}
 
-	std::string RPC::GetUrl() {
+	std::string RPC::GetUrl() const {
 		return protocol + "://" + domain + "/" + application + "/jsonrpc";
 	}
 }
