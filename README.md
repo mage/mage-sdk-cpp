@@ -43,7 +43,7 @@ sudo apt-get install libcurl4-openssl-dev cmake
 ### Setup
 
 ```bash
-git clone git@github.com:mage/mage-sdk-cpp.git
+git clone https://github.com/mage/mage-sdk-cpp.git
 cd mage-sdk-cpp
 git submodule update --init
 ```

@@ -53,6 +53,25 @@ namespace mage
 		});
 	}
 
+	void RPC::Call(const std::string &name,
+	               const Json::Value &params,
+	               const std::function<void(mage::MageError, Json::Value)>& callback,
+	               bool doAsync) const {
+		std::launch policy = doAsync ? std::launch::async : std::launch::deferred;
+
+		std::async(policy, [this, name, params, callback]{
+			Json::Value res;
+			mage::MageSuccess ok;
+
+			try {
+				res = Call(name, params);
+				callback(ok, res);
+			} catch (mage::MageError e) {
+				callback(e, res);
+			}
+		});
+	}
+
 	void RPC::RegisterCallback(const std::string &eventName,
 	                           std::function<void(Json::Value)> callback) {
 		std::cout << "Registering callback for event:" << eventName << std::endl;
