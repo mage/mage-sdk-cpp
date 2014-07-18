@@ -5,15 +5,18 @@ using namespace jsonrpc;
 namespace mage
 {
 
-	RPC::RPC(const std::string &mageApplication, const std::string &mageDomain, const std::string &mageProtocol) :
-		protocol(mageProtocol), domain(mageDomain), application(mageApplication)
+	RPC::RPC(const std::string &mageApplication,
+	         const std::string &mageDomain,
+	         const std::string &mageProtocol)
+	: protocol(mageProtocol)
+	, domain(mageDomain)
+	, application(mageApplication)
 	{
-		httpClient = new HttpClient(GetUrl());
+		httpClient    = new HttpClient(GetUrl());
 		jsonRpcClient = new Client(httpClient);
 	}
 
-	RPC::~RPC()
-	{
+	RPC::~RPC() {
 		delete jsonRpcClient;
 		delete httpClient;
 	}
