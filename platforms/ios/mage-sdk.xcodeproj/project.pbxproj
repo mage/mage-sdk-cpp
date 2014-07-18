@@ -590,6 +590,7 @@
 				DSTROOT = /tmp/mage_sdk.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "mage-sdk/mage-sdk-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "HTTP_CONNECTOR=1";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/include,
@@ -601,6 +602,7 @@
 					"$(inherited)",
 					../externals/curl/prebuilt/ios,
 				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -613,6 +615,7 @@
 				DSTROOT = /tmp/mage_sdk.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "mage-sdk/mage-sdk-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "HTTP_CONNECTOR=1";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/include,
@@ -624,6 +627,7 @@
 					"$(inherited)",
 					../externals/curl/prebuilt/ios,
 				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

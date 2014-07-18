@@ -5,6 +5,7 @@
 #include <iostream>
 #if __cplusplus >= 201103L
 	#include <functional>
+	#include <future>
 #endif
 #include <jsonrpc/rpc.h>
 
@@ -22,6 +23,7 @@ namespace mage
 
 			virtual Json::Value Call(const std::string &name, const Json::Value &params);
 #if __cplusplus >= 201103L
+			virtual std::future<Json::Value> Call(const std::string &name, const Json::Value &params, bool doAsync);
 			virtual void RegisterCallback(const std::string &eventName, std::function<void(Json::Value)> callback);
 #endif
 

@@ -41,6 +41,14 @@ namespace mage
 	}
 
 #if __cplusplus >= 201103L
+	std::future<Json::Value> RPC::Call(const std::string &name, const Json::Value &params, bool doAsync) {
+		std::launch policy = doAsync ? std::launch::async : std::launch::deferred;
+
+		return std::async(policy, [this, name, params]{
+			return Call(name, params);
+		});
+	}
+
 	void RPC::RegisterCallback(const std::string &eventName, std::function<void(Json::Value)> callback) {
 		std::cout << "Registering callback for event:" << eventName << std::endl;
 	}
