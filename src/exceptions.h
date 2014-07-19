@@ -16,19 +16,19 @@ namespace mage
 	class MageError: public std::runtime_error
 	{
 		public:
-			MageError(const std::string message);
+			MageError(const std::string& message);
 			virtual ~MageError() {}
 			virtual std::string code() const;
 			int type() const { return m_iType; }
 		protected:
-			MageError(mage_error_t _type, const std::string message);
+			MageError(mage_error_t _type, const std::string& message);
 			const mage_error_t m_iType;
 	};
 
 	class MageSuccess: public MageError
 	{
 		public:
-			MageSuccess(const std::string message = "");
+			MageSuccess(const std::string& message = "");
 			virtual ~MageSuccess() {}
 			virtual std::string code() const;
 	};
@@ -36,7 +36,7 @@ namespace mage
 	class MageRPCError: public MageError
 	{
 		public:
-			MageRPCError(const int code, const std::string message);
+			MageRPCError(int code, const std::string& message);
 			virtual ~MageRPCError() {}
 			virtual std::string code() const;
 
@@ -47,8 +47,8 @@ namespace mage
 	class MageErrorMessage:  public MageError
 	{
 		public:
-			MageErrorMessage(const std::string code,
-			                 const std::string message = "");
+			MageErrorMessage(const std::string& code,
+			                 const std::string& message = "");
 			virtual ~MageErrorMessage() {}
 			virtual std::string code() const;
 
