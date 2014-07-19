@@ -34,12 +34,12 @@ int main() {
 	//  - true: Run asynchronously
 	//
 	client.Call("user.register", params, [](mage::MageError err, Json::Value res){
-		if (err.type == "MageRPCError") {
+		if (err.type() == MAGE_RPC_ERROR) {
 			cerr << "An RPC error has occured: "  << err.what() << " (code " << err.code() << ")" << endl;
 			return;
 		}
 
-		if (err.type == "MageErrorMessage") {
+		if (err.type() == MAGE_ERROR_MESSAGE) {
 			cerr << "mymodule.mycommand responded with an error: "  << err.code() << endl;
 			return;
 		}

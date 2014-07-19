@@ -1,57 +1,50 @@
 #include "exceptions.h"
 
 namespace mage {
-	MageError::MageError(const std::string message) :
-		std::runtime_error(message)
+	MageError::MageError(const std::string message)
+	: MageError::MageError(MAGE_ERROR, message)
 	{
-		type = "MageError";
 	};
 
-	std::string MageError::code() {
+	MageError::MageError(mage_error_t _type, const std::string message)
+	: std::runtime_error(message)
+	, m_iType(_type)
+	{
+	};
+
+	std::string MageError::code() const {
 		return "unknown";
 	};
 
-	MageSuccess::MageSuccess(const std::string message) :
-		MageError::MageError(message)
+	MageSuccess::MageSuccess(const std::string message)
+	: MageError::MageError(MAGE_SUCCESS, message)
 	{
-		type = "MageSuccess";
 	};
 
-	std::string MageSuccess::code() {
+	std::string MageSuccess::code() const {
 		return "success";
 	};
 
-	MageRPCError::MageRPCError(const int code, const std::string message) :
-		MageError::MageError("MAGE RPC error: " + message), errorCode(code)
-	{
-		type = "MageRPCError";
-	};
-
-	MageRPCError::~MageRPCError() throw()
+	MageRPCError::MageRPCError(const int code, const std::string message)
+	: MageError::MageError(MAGE_RPC_ERROR, "MAGE RPC error: " + message)
+	, errorCode(code)
 	{
 	};
 
-	std::string MageRPCError::code() {
+	std::string MageRPCError::code() const {
 		return std::to_string(errorCode);
 	};
 
-	MageErrorMessage::MageErrorMessage(const std::string code) :
-		MageError::MageError("MAGE error message received"), errorCode(code)
-	{
-		type = "MageErrorMessage";
-	};
-
-	MageErrorMessage::MageErrorMessage(const std::string code, const std::string message) :
-		MageError::MageError("MAGE error message received: " + message), errorCode(code)
-	{
-		type = "MageErrorMessage";
-	};
-
-	MageErrorMessage::~MageErrorMessage() throw()
+	MageErrorMessage::MageErrorMessage(const std::string code,
+	                                   const std::string message)
+	: MageError::MageError(MAGE_ERROR_MESSAGE,
+	                       "MAGE error message received" + 
+	                       ((message != "") ?  ": " + message : ""))
+	, errorCode(code)
 	{
 	};
 
-	std::string MageErrorMessage::code() {
+	std::string MageErrorMessage::code() const {
 		return errorCode;
 	};
 };

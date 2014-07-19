@@ -6,29 +6,39 @@
 
 namespace mage
 {
+	enum mage_error_t : int {
+		MAGE_ERROR = 0,
+		MAGE_SUCCESS,
+		MAGE_RPC_ERROR,
+		MAGE_ERROR_MESSAGE
+	};
+
 	class MageError: public std::runtime_error
 	{
 		public:
 			MageError(const std::string message);
-			std::string code();
-			std::string type;
+			virtual ~MageError() {}
+			virtual std::string code() const;
+			int type() const { return m_iType; }
+		protected:
+			MageError(mage_error_t _type, const std::string message);
+			const mage_error_t m_iType;
 	};
 
 	class MageSuccess: public MageError
 	{
 		public:
 			MageSuccess(const std::string message = "");
-			std::string code();
+			virtual ~MageSuccess() {}
+			virtual std::string code() const;
 	};
 
 	class MageRPCError: public MageError
 	{
 		public:
 			MageRPCError(const int code, const std::string message);
-
-			virtual ~MageRPCError() throw();
-
-			std::string code();
+			virtual ~MageRPCError() {}
+			virtual std::string code() const;
 
 		private:
 			const int errorCode;
@@ -37,12 +47,10 @@ namespace mage
 	class MageErrorMessage:  public MageError
 	{
 		public:
-			MageErrorMessage(const std::string code);
-			MageErrorMessage(const std::string code, const std::string message);
-
-			virtual ~MageErrorMessage() throw();
-
-			std::string code();
+			MageErrorMessage(const std::string code,
+			                 const std::string message = "");
+			virtual ~MageErrorMessage() {}
+			virtual std::string code() const;
 
 		private:
 			const std::string errorCode;
