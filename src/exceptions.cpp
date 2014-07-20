@@ -2,49 +2,44 @@
 
 namespace mage {
 	MageError::MageError(const std::string& message)
-	: MageError::MageError(MAGE_ERROR, message)
-	{
-	};
+	: MageError::MageError(MAGE_ERROR, message) {
+	}
 
-	MageError::MageError(mage_error_t _type, const std::string& message)
+	MageError::MageError(mage_error_t type, const std::string& message)
 	: std::runtime_error(message)
-	, m_iType(_type)
-	{
-	};
+	, m_iType(type) {
+	}
 
 	std::string MageError::code() const {
 		return "unknown";
-	};
+	}
 
 	MageSuccess::MageSuccess(const std::string& message)
-	: MageError::MageError(MAGE_SUCCESS, message)
-	{
-	};
+	: MageError::MageError(MAGE_SUCCESS, message) {
+	}
 
 	std::string MageSuccess::code() const {
 		return "success";
-	};
+	}
 
 	MageRPCError::MageRPCError(int code, const std::string& message)
 	: MageError::MageError(MAGE_RPC_ERROR, "MAGE RPC error: " + message)
-	, errorCode(code)
-	{
-	};
+	, m_iErrorCode(code) {
+	}
 
 	std::string MageRPCError::code() const {
-		return std::to_string(errorCode);
-	};
+		return std::to_string(m_iErrorCode);
+	}
 
 	MageErrorMessage::MageErrorMessage(const std::string& code,
 	                                   const std::string& message)
 	: MageError::MageError(MAGE_ERROR_MESSAGE,
-	                       "MAGE error message received" + 
+	                       "MAGE error message received" +
 	                       ((message != "") ?  ": " + message : ""))
-	, errorCode(code)
-	{
-	};
+	, m_sErrorCode(code) {
+	}
 
 	std::string MageErrorMessage::code() const {
-		return errorCode;
-	};
-};
+		return m_sErrorCode;
+	}
+}  // namespace mage

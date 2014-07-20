@@ -141,8 +141,29 @@ Todo
 - [ ] Message stream event handling
 - [ ] CLI: Have the option to list and describe the remote calls
 
+Conding Style
+-------------
+
+We try to follow the [Google C++ Style Guide](http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml).
+There are some exceptions:
+* We use default arguments in functions;
+* We use C++ exceptions;
+* We use lambda expressions;
+* We use tabs for indentation and spaces for alignment.
+
+We use the [Hungarian Notation](http://en.wikipedia.org/wiki/Hungarian_notation) to name class attributes.
+More references on Hungarian Notation:
+* [http://web.mst.edu/~cpp/common/hungarian.html](http://web.mst.edu/~cpp/common/hungarian.html)
+* [http://www.cse.iitk.ac.in/users/dsrkg/cs245/html/Guide.htm](http://www.cse.iitk.ac.in/users/dsrkg/cs245/html/Guide.htm)
+
+You can check if you follow the rules by running:
+```bash
+make lint
+```
+
 See also
 ---------
 
 - [JSONCPP, the library we use for our JSON operations](http://jsoncpp.sourceforge.net/)
 - [libjson-rpc-cpp](https://github.com/cinemast/libjson-rpc-cpp)
+

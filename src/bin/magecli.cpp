@@ -5,59 +5,59 @@
 using namespace mage;
 using namespace std;
 
-std::string red(std::string text){
+std::string red(const std::string& text) {
 	return "\033[0;31m" + text + "\033[0m";
 }
 
-std::string redBold(std::string text){
+std::string redBold(const std::string& text) {
 	return "\033[1;31m" + text + "\033[0m";
 }
 
-std::string green(std::string text){
+std::string green(const std::string& text) {
 	return "\033[0;32m" + text + "\033[0m";
 }
 
-std::string greenBold(std::string text){
+std::string greenBold(const std::string& text) {
 	return "\033[1;32m" + text + "\033[0m";
 }
 
-std::string yellow(std::string text){
+std::string yellow(const std::string& text) {
 	return "\033[0;33m" + text + "\033[0m";
 }
 
-std::string yellowBold(std::string text){
+std::string yellowBold(const std::string& text) {
 	return "\033[1;33m" + text + "\033[0m";
 }
 
-std::string blue(std::string text){
+std::string blue(const std::string& text) {
 	return "\033[0;34m" + text + "\033[0m";
 }
 
-std::string blueBold(std::string text){
+std::string blueBold(const std::string& text) {
 	return "\033[1;34m" + text + "\033[0m";
 }
 
-std::string magenta(std::string text){
+std::string magenta(const std::string& text) {
 	return "\033[0;35m" + text + "\033[0m";
 }
 
-std::string magentaBold(std::string text){
+std::string magentaBold(const std::string& text) {
 	return "\033[1;35m" + text + "\033[0m";
 }
 
-std::string cyan(std::string text){
+std::string cyan(const std::string& text) {
 	return "\033[0;36m" + text + "\033[0m";
 }
 
-std::string cyanBold(std::string text){
+std::string cyanBold(const std::string& text) {
 	return "\033[1;36m" + text + "\033[0m";
 }
 
-std::string grey(std::string text){
+std::string grey(const std::string& text) {
 	return "\033[0;37m" + text + "\033[0m";
 }
 
-std::string greyBold(std::string text){
+std::string greyBold(const std::string& text) {
 	return "\033[1;37m" + text + "\033[0m";
 }
 
@@ -132,7 +132,7 @@ int main(int argc, char *argv[]) {
 		// Show prompt and wait
 		//
 		std::cout << cyanBold("mage") << yellowBold("> ");
-		std::getline (std::cin,command);
+		std::getline(std::cin, command);
 
 		//
 		// Make sure we have a command and an object

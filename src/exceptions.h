@@ -4,8 +4,8 @@
 #include <iostream>
 #include <stdexcept>
 
-namespace mage
-{
+namespace mage {
+
 	enum mage_error_t : int {
 		MAGE_ERROR = 0,
 		MAGE_SUCCESS,
@@ -13,8 +13,7 @@ namespace mage
 		MAGE_ERROR_MESSAGE
 	};
 
-	class MageError: public std::runtime_error
-	{
+	class MageError: public std::runtime_error {
 		public:
 			MageError(const std::string& message);
 			virtual ~MageError() {}
@@ -25,27 +24,24 @@ namespace mage
 			const mage_error_t m_iType;
 	};
 
-	class MageSuccess: public MageError
-	{
+	class MageSuccess: public MageError {
 		public:
 			MageSuccess(const std::string& message = "");
 			virtual ~MageSuccess() {}
 			virtual std::string code() const;
 	};
 
-	class MageRPCError: public MageError
-	{
+	class MageRPCError: public MageError {
 		public:
 			MageRPCError(int code, const std::string& message);
 			virtual ~MageRPCError() {}
 			virtual std::string code() const;
 
 		private:
-			const int errorCode;
+			const int m_iErrorCode;
 	};
 
-	class MageErrorMessage:  public MageError
-	{
+	class MageErrorMessage:  public MageError {
 		public:
 			MageErrorMessage(const std::string& code,
 			                 const std::string& message = "");
@@ -53,7 +49,7 @@ namespace mage
 			virtual std::string code() const;
 
 		private:
-			const std::string errorCode;
+			const std::string m_sErrorCode;
 	};
-};
+}  // namespace mage
 #endif
