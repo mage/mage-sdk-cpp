@@ -25,8 +25,6 @@ namespace mage {
 			                  const Json::Value& params,
 			                  const std::function<void(mage::MageError, Json::Value)>& callback,
 			                  bool doAsync) const;
-			virtual std::future<void> RegisterCallback(const std::string& eventName,
-			                              const std::function<void(Json::Value)>& callback);
 
 			void SetProtocol(const std::string& mageProtocol);
 			void SetDomain(const std::string& mageDomain);

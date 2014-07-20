@@ -70,11 +70,6 @@ namespace mage {
 		});
 	}
 
-	std::future<void> RPC::RegisterCallback(const std::string& eventName,
-	                           const std::function<void(Json::Value)>& callback) {
-		std::cout << "Registering callback for event:" << eventName << std::endl;
-	}
-
 	void RPC::SetDomain(const std::string& mageDomain) {
 		m_sDomain = mageDomain;
 		m_pHttpClient->SetUrl(GetUrl());
