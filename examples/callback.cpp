@@ -1,4 +1,5 @@
 #include <mage.h>
+#include <unistd.h>
 #include <future>
 #include <iostream>
 
@@ -33,7 +34,10 @@ int main() {
 	//  - false: Run at call time (when you call res.get())
 	//  - true: Run asynchronously
 	//
-	client.Call("user.register", params, [](mage::MageError err, Json::Value res){
+	std::future<void> ret = client.Call("user.register", params, [](mage::MageError err, Json::Value res){
+		std::cout << "Executed, we will now sleep for 1 second..." << std::endl;
+		usleep(1000000);
+
 		if (err.type() == MAGE_RPC_ERROR) {
 			cerr << "An RPC error has occured: "  << err.what() << " (code " << err.code() << ")" << endl;
 			return;
@@ -46,4 +50,6 @@ int main() {
 
 		cout << "user.register: " << res << endl;
 	}, true);
+
+	cout << "Scheduled" << endl;
 }

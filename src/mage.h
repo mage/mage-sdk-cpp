@@ -21,11 +21,11 @@ namespace mage {
 			virtual std::future<Json::Value> Call(const std::string& name,
 			                                      const Json::Value& params,
 			                                      bool doAsync) const;
-			virtual void Call(const std::string& name,
+			virtual std::future<void> Call(const std::string& name,
 			                  const Json::Value& params,
 			                  const std::function<void(mage::MageError, Json::Value)>& callback,
 			                  bool doAsync) const;
-			virtual void RegisterCallback(const std::string& eventName,
+			virtual std::future<void> RegisterCallback(const std::string& eventName,
 			                              const std::function<void(Json::Value)>& callback);
 
 			void SetProtocol(const std::string& mageProtocol);
