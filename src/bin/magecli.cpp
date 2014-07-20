@@ -64,10 +64,23 @@ std::string greyBold(const std::string& text) {
 void showHelp() {
 	cout << magentaBold("  Usage: magecli -a [application name] -d [domain] [-p [protocol]] [-h]") << endl;
 	cout << endl;
-	cout << cyan("    -a\t") << grey("The name of the MAGE application you wish to access") << endl;
-	cout << cyan("    -d\t") << grey("The domain name or IP address where the MAGE instance is hosted") << endl;
-	cout << cyan("    -p\t") << grey("The protocol through which you wish to communicate with MAGE (default: http)") << endl;
-	cout << cyan("    -h\t") << grey("Show this help screen") << endl;
+
+	cout << cyan("    -a\t");
+	cout << grey("The name of the MAGE application you wish to access");
+	cout << endl;
+
+	cout << cyan("    -d\t");
+	cout << grey("The domain name or IP address where the MAGE instance is hosted");
+	cout << endl;
+
+	cout << cyan("    -p\t");
+	cout << grey("The protocol through which you wish to communicate with MAGE (default: http)");
+	cout << endl;
+
+	cout << cyan("    -h\t");
+	cout << grey("Show this help screen");
+	cout << endl;
+
 	cout << endl;
 }
 
@@ -110,7 +123,12 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	cout << cyan("Connecting to application ") << magentaBold(application) << yellowBold("@") << magentaBold(domain) << endl;
+	cout << cyan("Connecting to application ");
+	cout << magentaBold(application);
+	cout << yellowBold("@");
+	cout << magentaBold(domain);
+	cout << endl;
+
 	mage::RPC client(application, domain);
 
 	std::string command;

@@ -101,5 +101,6 @@ clean-build:
 lint:
 	python tools/cpplint.py \
 	--filter=-whitespace/tab,-legal,-build,-readability/streams,-runtime/explicit,-whitespace/indent \
-	src/*.{h,cpp} src/bin/*.cpp
+	--linelength=120 \
+	src/*.{h,cpp} src/bin/*.cpp examples/*.cpp
 
