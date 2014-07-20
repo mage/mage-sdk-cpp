@@ -7,8 +7,6 @@
 #include <future>
 #include <jsonrpc/rpc.h>
 
-using namespace jsonrpc;
-
 namespace mage
 {
 	class RPC
@@ -44,8 +42,8 @@ namespace mage
 			std::string domain;
 			std::string application;
 
-			HttpClient *httpClient;
-			Client     *jsonRpcClient;
+			jsonrpc::HttpClient *httpClient;
+			jsonrpc::Client     *jsonRpcClient;
 	};
 
 } /* namespace mage */
