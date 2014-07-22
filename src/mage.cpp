@@ -41,7 +41,7 @@ namespace mage {
 		return res;
 	}
 
-#if __cplusplus >= 201103L
+#ifndef UNITY
 	std::future<Json::Value> RPC::Call(const std::string& name,
 	                                   const Json::Value& params,
 	                                   bool doAsync) const {

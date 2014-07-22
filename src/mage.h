@@ -3,7 +3,7 @@
 
 #include "exceptions.h"
 #include <iostream>
-#if __cplusplus >= 201103L
+#ifndef UNITY
 	#include <functional>
 	#include <future>
 #endif
@@ -20,7 +20,7 @@ namespace mage {
 
 			virtual Json::Value Call(const std::string& name,
 			                         const Json::Value& params) const;
-#if __cplusplus >= 201103L
+#ifndef UNITY
 			virtual std::future<Json::Value> Call(const std::string& name,
 			                                      const Json::Value& params,
 			                                      bool doAsync) const;
