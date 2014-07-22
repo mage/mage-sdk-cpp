@@ -107,3 +107,10 @@ clean-bin:
 
 clean-build:
 	rm -rf $(BUILD_DIRECTORY)
+
+lint:
+	python tools/cpplint.py \
+	--filter=-whitespace/tab,-legal,-build,-readability/streams,-runtime/explicit,-whitespace/indent \
+	--linelength=120 \
+	src/*.{h,cpp} src/bin/*.cpp examples/*.cpp
+

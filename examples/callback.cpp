@@ -1,4 +1,5 @@
 #include <mage.h>
+#include <unistd.h>
 #include <future>
 #include <iostream>
 
@@ -9,6 +10,7 @@ using namespace std;
 // All the code (well, almost)
 // is the same as simple.cpp
 //
+
 int main() {
 	mage::RPC client("game", "localhost:8080");
 
@@ -17,7 +19,6 @@ int main() {
 	// a future object
 	//
 	Json::Value params;
-	std::future<Json::Value> res;
 
 	//
 	// I put things in my Json::Value.
@@ -33,12 +34,22 @@ int main() {
 	//  - false: Run at call time (when you call res.get())
 	//  - true: Run asynchronously
 	//
-	try {
-		res = client.Call("user.register", params, true);
-		cout << "user.register: " << res.get() << endl;
-	} catch (mage::MageRPCError e) {
-		cerr << "An RPC error has occured: "  << e.what() << " (code " << e.code() << ")" << endl;
-	} catch (mage::MageErrorMessage e) {
-		cerr << "mymodule.mycommand responded with an error: "  << e.code() << endl;
-	}
+	std::future<void> ret = client.Call("user.register", params, [](mage::MageError err, Json::Value res){
+		std::cout << "Executed, we will now sleep for 1 second..." << std::endl;
+		usleep(1000000);
+
+		if (err.type() == MAGE_RPC_ERROR) {
+			cerr << "An RPC error has occured: "  << err.what() << " (code " << err.code() << ")" << endl;
+			return;
+		}
+
+		if (err.type() == MAGE_ERROR_MESSAGE) {
+			cerr << "mymodule.mycommand responded with an error: "  << err.code() << endl;
+			return;
+		}
+
+		cout << "user.register: " << res << endl;
+	}, true);
+
+	cout << "Scheduled" << endl;
 }

@@ -5,69 +5,82 @@
 using namespace mage;
 using namespace std;
 
-std::string red(std::string text){
+std::string red(const std::string& text) {
 	return "\033[0;31m" + text + "\033[0m";
 }
 
-std::string redBold(std::string text){
+std::string redBold(const std::string& text) {
 	return "\033[1;31m" + text + "\033[0m";
 }
 
-std::string green(std::string text){
+std::string green(const std::string& text) {
 	return "\033[0;32m" + text + "\033[0m";
 }
 
-std::string greenBold(std::string text){
+std::string greenBold(const std::string& text) {
 	return "\033[1;32m" + text + "\033[0m";
 }
 
-std::string yellow(std::string text){
+std::string yellow(const std::string& text) {
 	return "\033[0;33m" + text + "\033[0m";
 }
 
-std::string yellowBold(std::string text){
+std::string yellowBold(const std::string& text) {
 	return "\033[1;33m" + text + "\033[0m";
 }
 
-std::string blue(std::string text){
+std::string blue(const std::string& text) {
 	return "\033[0;34m" + text + "\033[0m";
 }
 
-std::string blueBold(std::string text){
+std::string blueBold(const std::string& text) {
 	return "\033[1;34m" + text + "\033[0m";
 }
 
-std::string magenta(std::string text){
+std::string magenta(const std::string& text) {
 	return "\033[0;35m" + text + "\033[0m";
 }
 
-std::string magentaBold(std::string text){
+std::string magentaBold(const std::string& text) {
 	return "\033[1;35m" + text + "\033[0m";
 }
 
-std::string cyan(std::string text){
+std::string cyan(const std::string& text) {
 	return "\033[0;36m" + text + "\033[0m";
 }
 
-std::string cyanBold(std::string text){
+std::string cyanBold(const std::string& text) {
 	return "\033[1;36m" + text + "\033[0m";
 }
 
-std::string grey(std::string text){
+std::string grey(const std::string& text) {
 	return "\033[0;37m" + text + "\033[0m";
 }
 
-std::string greyBold(std::string text){
+std::string greyBold(const std::string& text) {
 	return "\033[1;37m" + text + "\033[0m";
 }
 
 void showHelp() {
 	cout << magentaBold("  Usage: magecli -a [application name] -d [domain] [-p [protocol]] [-h]") << endl;
 	cout << endl;
-	cout << cyan("    -a\t") << grey("The name of the MAGE application you wish to access") << endl;
-	cout << cyan("    -d\t") << grey("The domain name or IP address where the MAGE instance is hosted") << endl;
-	cout << cyan("    -p\t") << grey("The protocol through which you wish to communicate with MAGE (default: http)") << endl;
-	cout << cyan("    -h\t") << grey("Show this help screen") << endl;
+
+	cout << cyan("    -a\t");
+	cout << grey("The name of the MAGE application you wish to access");
+	cout << endl;
+
+	cout << cyan("    -d\t");
+	cout << grey("The domain name or IP address where the MAGE instance is hosted");
+	cout << endl;
+
+	cout << cyan("    -p\t");
+	cout << grey("The protocol through which you wish to communicate with MAGE (default: http)");
+	cout << endl;
+
+	cout << cyan("    -h\t");
+	cout << grey("Show this help screen");
+	cout << endl;
+
 	cout << endl;
 }
 
@@ -110,7 +123,12 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	cout << cyan("Connecting to application ") << magentaBold(application) << yellowBold("@") << magentaBold(domain) << endl;
+	cout << cyan("Connecting to application ");
+	cout << magentaBold(application);
+	cout << yellowBold("@");
+	cout << magentaBold(domain);
+	cout << endl;
+
 	mage::RPC client(application, domain);
 
 	std::string command;
@@ -132,7 +150,7 @@ int main(int argc, char *argv[]) {
 		// Show prompt and wait
 		//
 		std::cout << cyanBold("mage") << yellowBold("> ");
-		std::getline (std::cin,command);
+		std::getline(std::cin, command);
 
 		//
 		// Make sure we have a command and an object
