@@ -16,7 +16,7 @@ CFLAGS  = -g -Wall -std=c++0x -DHTTP_CONNECTOR
 INCLUDES = -I ./src -I ./vendor/libjson-rpc-cpp/src
 
 LFLAGS = -L ./vendor/libjson-rpc-cpp/build/out -L ./build
-LIBS = -ljsonrpc -lmage -ldl $(LIBCURL_DYLIB)
+LIBS = -ljsonrpc -lmage -lreadline -ldl $(LIBCURL_DYLIB)
 
 LIB_SRCS = $(wildcard ./src/*.cpp)
 LIB_OBJS = $(addprefix ./build/,$(notdir $(LIB_SRCS:.cpp=.o)))
