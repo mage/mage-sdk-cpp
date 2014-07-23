@@ -34,20 +34,25 @@ namespace mage {
 			                          const Json::Value& data = Json::Value::null) const;
 			void AddObserver(EventObserver* observer);
 
+			void PullEvents();
+
 			void SetProtocol(const std::string& mageProtocol);
 			void SetDomain(const std::string& mageDomain);
 			void SetApplication(const std::string& mageApplication);
-			void SetSession(const std::string& sessionKey) const;
+			void SetSession(const std::string& sessionKey);
 			void ClearSession() const;
 
 			std::string GetUrl() const;
+			std::string GetMsgStreamUrl() const;
 
 		private:
 			std::string m_sProtocol;
 			std::string m_sDomain;
 			std::string m_sApplication;
+			std::string m_sSessionKey;
 
 			std::list<EventObserver*> m_oObjserverList;
+			std::list<std::string>            m_oMsgToConfirm;
 
 			jsonrpc::HttpClient *m_pHttpClient;
 			jsonrpc::Client     *m_pJsonRpcClient;

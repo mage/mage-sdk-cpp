@@ -206,6 +206,11 @@ int main(int argc, char *argv[]) {
 			continue;
 		}
 
+		if (userCommand == "pullEvents") {
+			client.PullEvents();
+			continue;
+		}
+
 		if (!reader.parse(data, params)) {
 			cerr << red("Invalid JSON data") << endl;
 			continue;

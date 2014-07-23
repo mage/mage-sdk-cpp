@@ -1,5 +1,7 @@
 #include "mage.h"
 
+#include <curl/curl.h>
+
 using namespace jsonrpc;
 
 namespace mage {
@@ -108,6 +110,89 @@ namespace mage {
 		m_oObjserverList.push_back(observer);
 	}
 
+	static int writer(char *data, size_t size, size_t nmemb,
+	                  std::string *writerData) {
+		if (writerData == NULL) return 0;
+		writerData->append(data, size*nmemb);
+		return size * nmemb;
+	}
+
+	void RPC::PullEvents() {
+		if (m_sSessionKey.empty()) {
+			std::cerr << "No session ke registered." << std::endl;
+			return;
+		}
+
+		CURL* c;
+		static std::string buffer;
+
+		c = curl_easy_init();
+		if (!c) {
+			std::cerr << "Unable to pull events. "
+			          << "Unable to initialize curl."
+			          << std::endl;
+			return;
+		}
+
+		std::string url = GetMsgStreamUrl();
+		if (!m_oMsgToConfirm.empty()) {
+			url.append("&confirmIds=");
+			bool first = true;
+			std::list<std::string>::const_iterator citr;
+			for (citr = m_oMsgToConfirm.cbegin();
+			     citr != m_oMsgToConfirm.cend();
+			     ++citr) {
+				if (!first) {
+					url.append(",");
+				} else {
+					first = false;
+				}
+				url.append(*citr);
+			}
+			m_oMsgToConfirm.clear();
+		}
+
+		curl_easy_setopt(c, CURLOPT_URL, url.c_str());
+		curl_easy_setopt(c, CURLOPT_WRITEFUNCTION, writer);
+		curl_easy_setopt(c, CURLOPT_WRITEDATA, &buffer);
+
+		CURLcode res = curl_easy_perform(c);
+		if(res != CURLE_OK) {
+			std::cerr << "Unable to pull events. Curl error: "
+			          << curl_easy_strerror(res) << std::endl;
+			curl_easy_cleanup(c);
+			return;
+		}
+
+		curl_easy_cleanup(c);
+
+		Json::Reader reader;
+		Json::Value messages;
+		if (!reader.parse(buffer.c_str(), messages)) {
+			std::cerr << "Unable to parse the received content from "
+			          << "the message stream." << std::endl;
+			return;
+		}
+		std::cout << "Messages: " << messages.toStyledString() << std::endl;
+		std::cout << "# events: " << messages.getMemberNames().size() << std::endl;
+		std::vector<std::string> members = messages.getMemberNames();
+		std::vector<std::string>::const_iterator citr;
+		for (citr = members.begin();
+		    citr != members.end();
+		    ++citr) {
+			std::cout << "Message: " << (*citr) << std::endl;
+			for (int i = 0; i < messages[(*citr)].size(); ++i) {
+				Json::Value event = messages[(*citr)][i];
+				std::cout << "Event: " << event[0u].asString();
+				if (event.size() > 1) {
+					std::cout << " - data: " << (event[1u]).toStyledString();
+				}
+				std::cout << std::endl;
+			}
+			m_oMsgToConfirm.push_back(*citr);
+		}
+	}
+
 	void RPC::SetDomain(const std::string& mageDomain) {
 		m_sDomain = mageDomain;
 		m_pHttpClient->SetUrl(GetUrl());
@@ -123,8 +208,9 @@ namespace mage {
 		m_pHttpClient->SetUrl(GetUrl());
 	}
 
-	void RPC::SetSession(const std::string& sessionKey) const {
+	void RPC::SetSession(const std::string& sessionKey) {
 		m_pHttpClient->AddHeader("X-MAGE-SESSION", sessionKey);
+		m_sSessionKey = sessionKey;
 	}
 
 	void RPC::ClearSession() const {
@@ -133,5 +219,9 @@ namespace mage {
 
 	std::string RPC::GetUrl() const {
 		return m_sProtocol + "://" + m_sDomain + "/" + m_sApplication + "/jsonrpc";
+	}
+
+	std::string RPC::GetMsgStreamUrl() const {
+		return m_sProtocol + "://" + m_sDomain + "/msgstream?transport=shortpolling&sessionKey=" + m_sSessionKey;
 	}
 }  // namespace mage
