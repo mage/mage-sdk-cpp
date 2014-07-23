@@ -7,60 +7,89 @@
 using namespace mage;
 using namespace std;
 
+enum Color {
+	RED     = 31,
+	GREEN   = 32,
+	YELLOW  = 33,
+	BLUE    = 34,
+	MAGENTA = 35,
+	CYAN    = 36,
+	GREY	= 37
+};
+
+std::string format(const std::string& text, Color color, bool bold = false) {
+	std::stringstream ss;
+	char* colorStr = (char*)malloc(2 * sizeof(char));
+	sprintf(colorStr, "%d", color);
+	ss << RL_PROMPT_START_IGNORE
+	   << "\033["
+	   << (bold ? "1" : "0")
+	   << ";"
+	   << colorStr
+	   << "m"
+	   << RL_PROMPT_END_IGNORE
+	   << text
+	   << RL_PROMPT_START_IGNORE
+	   << "\033[0m"
+	   << RL_PROMPT_END_IGNORE;
+	free(colorStr);
+	return ss.str();
+}
+
 std::string red(const std::string& text) {
-	return "\033[0;31m" + text + "\033[0m";
+	return format(text, RED);
 }
 
 std::string redBold(const std::string& text) {
-	return "\033[1;31m" + text + "\033[0m";
+	return format(text, RED, true);
 }
 
 std::string green(const std::string& text) {
-	return "\033[0;32m" + text + "\033[0m";
+	return format(text, GREEN);
 }
 
 std::string greenBold(const std::string& text) {
-	return "\033[1;32m" + text + "\033[0m";
+	return format(text, GREEN, true);
 }
 
 std::string yellow(const std::string& text) {
-	return "\033[0;33m" + text + "\033[0m";
+	return format(text, YELLOW);
 }
 
 std::string yellowBold(const std::string& text) {
-	return "\033[1;33m" + text + "\033[0m";
+	return format(text, YELLOW, true);
 }
 
 std::string blue(const std::string& text) {
-	return "\033[0;34m" + text + "\033[0m";
+	return format(text, BLUE);
 }
 
 std::string blueBold(const std::string& text) {
-	return "\033[1;34m" + text + "\033[0m";
+	return format(text, BLUE, true);
 }
 
 std::string magenta(const std::string& text) {
-	return "\033[0;35m" + text + "\033[0m";
+	return format(text, MAGENTA);
 }
 
 std::string magentaBold(const std::string& text) {
-	return "\033[1;35m" + text + "\033[0m";
+	return format(text, MAGENTA, true);
 }
 
 std::string cyan(const std::string& text) {
-	return "\033[0;36m" + text + "\033[0m";
+	return format(text, CYAN);
 }
 
 std::string cyanBold(const std::string& text) {
-	return "\033[1;36m" + text + "\033[0m";
+	return format(text, CYAN, true);
 }
 
 std::string grey(const std::string& text) {
-	return "\033[0;37m" + text + "\033[0m";
+	return format(text, GREY);
 }
 
 std::string greyBold(const std::string& text) {
-	return "\033[1;37m" + text + "\033[0m";
+	return format(text, GREY, true);
 }
 
 void showHelp() {
