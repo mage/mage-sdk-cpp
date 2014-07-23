@@ -33,11 +33,37 @@ namespace mage {
 			throw MageErrorMessage(res["errorCode"].asString());
 		}
 
-		/**
-		 * Todo?:
-		 *   foreach Event
-		 *     call event callback
-		 */
+		// If the myEvents array is present
+		if (res.isMember("myEvents") && res["myEvents"].isArray()) {
+			Json::Value myEvents = res["myEvents"];
+			for (unsigned int i = 0; i < myEvents.size(); ++i) {
+				// We can only handle string
+				if (!myEvents[i].isString()) {
+					continue;
+				}
+
+				Json::Reader reader;
+				Json::Value event;
+				if (!reader.parse(myEvents[i].asString(), event)) {
+					std::cerr << "Unable to read the following event: "
+					          << myEvents[i] << std::endl;
+					continue;
+				}
+
+				switch (event.size()) {
+					case 1:
+						ReceiveEvent(event[0u].asString());
+						break;
+					case 2:
+						ReceiveEvent(event[0u].asString(), event[1u]);
+						break;
+					default:
+						std::cerr << "The event doesn't have the correct "
+						          << "amount of data." << std::endl;
+				}
+			}
+		}
+
 		return res;
 	}
 
@@ -68,6 +94,18 @@ namespace mage {
 				callback(e, res);
 			}
 		});
+	}
+
+	void RPC::ReceiveEvent(const std::string& name, const Json::Value& data) const {
+		std::list<EventObserver*>::const_iterator citr;
+		for(citr = m_oObjserverList.cbegin();
+		    citr != m_oObjserverList.cend(); ++citr) {
+			(*citr)->ReceiveEvent(name, data);
+		}
+	}
+
+	void RPC::AddObserver(EventObserver* observer) {
+		m_oObjserverList.push_back(observer);
 	}
 
 	void RPC::SetDomain(const std::string& mageDomain) {

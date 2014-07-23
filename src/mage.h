@@ -1,11 +1,15 @@
 #ifndef MAGERPC_H
 #define MAGERPC_H
 
-#include "exceptions.h"
 #include <iostream>
+#include <list>
 #include <functional>
 #include <future>
+
 #include <jsonrpc/rpc.h>
+
+#include "exceptions.h"
+#include "eventObserver.h"
 
 namespace mage {
 
@@ -26,6 +30,10 @@ namespace mage {
 			                  const std::function<void(mage::MageError, Json::Value)>& callback,
 			                  bool doAsync) const;
 
+			virtual void ReceiveEvent(const std::string& name,
+			                          const Json::Value& data = Json::Value::null) const;
+			void AddObserver(EventObserver* observer);
+
 			void SetProtocol(const std::string& mageProtocol);
 			void SetDomain(const std::string& mageDomain);
 			void SetApplication(const std::string& mageApplication);
@@ -38,6 +46,8 @@ namespace mage {
 			std::string m_sProtocol;
 			std::string m_sDomain;
 			std::string m_sApplication;
+
+			std::list<EventObserver*> m_oObjserverList;
 
 			jsonrpc::HttpClient *m_pHttpClient;
 			jsonrpc::Client     *m_pJsonRpcClient;

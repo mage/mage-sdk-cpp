@@ -1,6 +1,7 @@
-#include <mage.h>
 #include <getopt.h>
 #include <iostream>
+
+#include <mage.h>
 
 using namespace mage;
 using namespace std;
@@ -84,6 +85,29 @@ void showHelp() {
 	cout << endl;
 }
 
+class CliEventObserver : public mage::EventObserver {
+	public:
+		explicit CliEventObserver(mage::RPC* client) : m_pClient(client) {}
+		virtual void ReceiveEvent(const std::string& name,
+		                          const Json::Value& data = Json::Value::null) const {
+			std::cout << "Receive event: " << name;
+			if (data != Json::Value::null) {
+				Json::FastWriter writer;
+				std::cout << " - data: " << writer.write(data);
+			}
+			std::cout << std::endl;
+			if (name == "session:set") {
+				HandleSessionSet(data);
+			}
+		}
+		void HandleSessionSet(const Json::Value& data) const {
+			m_pClient->SetSession(data["key"].asString());
+		}
+
+	private:
+		mage::RPC* m_pClient;
+};
+
 int main(int argc, char *argv[]) {
 	std::string application = "";
 	std::string domain = "";
@@ -130,6 +154,9 @@ int main(int argc, char *argv[]) {
 	cout << endl;
 
 	mage::RPC client(application, domain);
+
+	CliEventObserver eventObserver(&client);
+	client.AddObserver(&eventObserver);
 
 	std::string command;
 	std::string userCommand;
