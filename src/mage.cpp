@@ -120,7 +120,7 @@ namespace mage {
 		return size * nmemb;
 	}
 
-	void RPC::PullEvents() {
+	void RPC::PullEvents(const std::string& transport) {
 		if (m_sSessionKey.empty()) {
 			std::cerr << "No session ke registered." << std::endl;
 			return;
@@ -137,7 +137,7 @@ namespace mage {
 			return;
 		}
 
-		std::string url = GetMsgStreamUrl();
+		std::string url = GetMsgStreamUrl(transport);
 		if (!m_oMsgToConfirm.empty()) {
 			url.append("&confirmIds=");
 			bool first = true;
@@ -171,6 +171,11 @@ namespace mage {
 
 		// No messages to read
 		if (buffer.empty()) {
+			return;
+		}
+
+		// Heartbeat sent by MAGE
+		if (buffer == "HB") {
 			return;
 		}
 
@@ -235,7 +240,7 @@ namespace mage {
 		return m_sProtocol + "://" + m_sDomain + "/" + m_sApplication + "/jsonrpc";
 	}
 
-	std::string RPC::GetMsgStreamUrl() const {
-		return m_sProtocol + "://" + m_sDomain + "/msgstream?transport=shortpolling&sessionKey=" + m_sSessionKey;
+	std::string RPC::GetMsgStreamUrl(const std::string& transport) const {
+		return m_sProtocol + "://" + m_sDomain + "/msgstream?transport=" + transport + "&sessionKey=" + m_sSessionKey;
 	}
 }  // namespace mage

@@ -34,7 +34,7 @@ namespace mage {
 			                          const Json::Value& data = Json::Value::null) const;
 			void AddObserver(EventObserver* observer);
 
-			void PullEvents();
+			void PullEvents(const std::string& transport = "shortpolling");
 
 			void SetProtocol(const std::string& mageProtocol);
 			void SetDomain(const std::string& mageDomain);
@@ -43,7 +43,7 @@ namespace mage {
 			void ClearSession() const;
 
 			std::string GetUrl() const;
-			std::string GetMsgStreamUrl() const;
+			std::string GetMsgStreamUrl(const std::string& transport = "shortpolling") const;
 
 		private:
 			std::string m_sProtocol;

@@ -90,12 +90,10 @@ class CliEventObserver : public mage::EventObserver {
 		explicit CliEventObserver(mage::RPC* client) : m_pClient(client) {}
 		virtual void ReceiveEvent(const std::string& name,
 		                          const Json::Value& data = Json::Value::null) const {
-			std::cout << "Receive event: " << name;
+			std::cout << greenBold("Receive event") << ": " << name << std::endl;
 			if (data != Json::Value::null) {
-				Json::FastWriter writer;
-				std::cout << " - data: " << writer.write(data);
+				std::cout << cyanBold("data") << ": " << data.toStyledString() << std::endl;
 			}
-			std::cout << std::endl;
 			if (name == "session:set") {
 				HandleSessionSet(data);
 			}
@@ -207,7 +205,11 @@ int main(int argc, char *argv[]) {
 		}
 
 		if (userCommand == "pullEvents") {
-			client.PullEvents();
+			if (data == "longpolling") {
+				client.PullEvents(data);
+			} else {
+				client.PullEvents();
+			}
 			continue;
 		}
 
