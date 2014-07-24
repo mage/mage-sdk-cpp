@@ -52,6 +52,11 @@ namespace mage {
 			std::string GetMsgStreamUrl(Transport transport = SHORTPOLLING) const;
 
 		private:
+			void DoHttpGet(std::string *buffer, const std::string& url) const;
+			void ExtractEventsFromMsgStreamResponse(const std::string& response);
+			void ExtractEventsFromCommandResponse(const Json::Value& myEvents) const;
+			std::string GetConfirmIds() const;
+
 			std::string m_sProtocol;
 			std::string m_sDomain;
 			std::string m_sApplication;

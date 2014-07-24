@@ -28,6 +28,38 @@ namespace mage {
 		delete m_pHttpClient;
 	}
 
+	void RPC::ExtractEventsFromCommandResponse(const Json::Value& myEvents) const {
+		for (unsigned int i = 0; i < myEvents.size(); ++i) {
+			// We can only handle string
+			if (!myEvents[i].isString()) {
+				continue;
+			}
+
+			Json::Reader reader;
+			Json::Value event;
+			if (!reader.parse(myEvents[i].asString(), event)) {
+				std::cerr << "Unable to read the following event: "
+						  << myEvents[i] << std::endl;
+				continue;
+			}
+
+			switch (event.size()) {
+				case 1:
+					ReceiveEvent(event[0u].asString());
+					break;
+				case 2:
+					ReceiveEvent(event[0u].asString(), event[1u]);
+					break;
+				default:
+					std::cerr << "The event doesn't have the correct "
+							  << "amount of data."
+							  << std::endl
+							  << event.toStyledString()
+							  << std::endl;
+			}
+		}
+	}
+
 	Json::Value RPC::Call(const std::string& name,
 	                      const Json::Value& params) const {
 		Json::Value res;
@@ -44,36 +76,7 @@ namespace mage {
 
 		// If the myEvents array is present
 		if (res.isMember("myEvents") && res["myEvents"].isArray()) {
-			Json::Value myEvents = res["myEvents"];
-			for (unsigned int i = 0; i < myEvents.size(); ++i) {
-				// We can only handle string
-				if (!myEvents[i].isString()) {
-					continue;
-				}
-
-				Json::Reader reader;
-				Json::Value event;
-				if (!reader.parse(myEvents[i].asString(), event)) {
-					std::cerr << "Unable to read the following event: "
-					          << myEvents[i] << std::endl;
-					continue;
-				}
-
-				switch (event.size()) {
-					case 1:
-						ReceiveEvent(event[0u].asString());
-						break;
-					case 2:
-						ReceiveEvent(event[0u].asString(), event[1u]);
-						break;
-					default:
-						std::cerr << "The event doesn't have the correct "
-						          << "amount of data."
-						          << std::endl
-						          << event.toStyledString()
-						          << std::endl;
-				}
-			}
+			ExtractEventsFromCommandResponse(res["myEvents"]);
 		}
 
 		return res;
@@ -127,72 +130,41 @@ namespace mage {
 		return size * nmemb;
 	}
 
-	void RPC::PullEvents(Transport transport) {
-		if (m_sSessionKey.empty()) {
-			std::cerr << "No session key registered." << std::endl;
-			return;
-		}
-
-		CURL* c;
-		std::string buffer;
-
-		c = curl_easy_init();
+	void RPC::DoHttpGet(std::string *buffer, const std::string& url) const {
+		CURL* c = curl_easy_init();
 		if (!c) {
+			// TODO throw
 			std::cerr << "Unable to pull events. "
 			          << "Unable to initialize curl."
 			          << std::endl;
 			return;
 		}
 
-		std::string url = GetMsgStreamUrl(transport);
-		if (!m_oMsgToConfirm.empty()) {
-			url.append("&confirmIds=");
-			bool first = true;
-			std::list<std::string>::const_iterator citr;
-			for (citr = m_oMsgToConfirm.cbegin();
-			     citr != m_oMsgToConfirm.cend();
-			     ++citr) {
-				if (!first) {
-					url.append(",");
-				} else {
-					first = false;
-				}
-				url.append(*citr);
-			}
-			m_oMsgToConfirm.clear();
-		}
-
 		curl_easy_setopt(c, CURLOPT_URL, url.c_str());
 		curl_easy_setopt(c, CURLOPT_WRITEFUNCTION, writer);
-		curl_easy_setopt(c, CURLOPT_WRITEDATA, &buffer);
+		curl_easy_setopt(c, CURLOPT_WRITEDATA, buffer);
 
 		CURLcode res = curl_easy_perform(c);
-		if(res != CURLE_OK) {
-			std::cerr << "Unable to pull events. Curl error: "
-			          << curl_easy_strerror(res) << std::endl;
-			curl_easy_cleanup(c);
-			return;
-		}
 
 		curl_easy_cleanup(c);
 
-		// No messages to read
-		if (buffer.empty()) {
-			return;
+		if(res != CURLE_OK) {
+			std::cerr << "Unable to pull events. Curl error: "
+			          << curl_easy_strerror(res) << std::endl;
+			// TODO throw
 		}
+	}
 
-		// Heartbeat sent by MAGE
-		if (buffer == "HB") {
-			return;
-		}
-
+	void RPC::ExtractEventsFromMsgStreamResponse(const std::string& response) {
 		Json::Reader reader;
 		Json::Value messages;
-		if (!reader.parse(buffer.c_str(), messages)) {
+		if (!reader.parse(response.c_str(), messages)) {
 			std::cerr << "Unable to parse the received content from "
 			          << "the message stream." << std::endl;
+			// TODO throw
 			return;
 		}
+
 		std::vector<std::string> members = messages.getMemberNames();
 		std::vector<std::string>::const_iterator citr;
 		for (citr = members.begin();
@@ -208,20 +180,45 @@ namespace mage {
 						ReceiveEvent(event[0u].asString(), event[1u]);
 						break;
 					default:
-						std::cerr << "The event doesn't have the correct "
+						// Don't throw here to not loose any valid event
+						std::cerr << "This event doesn't have the correct "
 						          << "amount of data."
 						          << std::endl
 						          << event.toStyledString()
 						          << std::endl;
+						break;
 				}
 			}
 			m_oMsgToConfirm.push_back(*citr);
 		}
 	}
 
+	void RPC::PullEvents(Transport transport) {
+		const std::string url = GetMsgStreamUrl(transport);
+		std::string buffer;
+
+		DoHttpGet(&buffer, url);
+
+		// The previous messages were confirmed
+		m_oMsgToConfirm.clear();
+
+		// No messages to read
+		if (buffer.empty()) {
+			return;
+		}
+
+		// Heartbeat sent by MAGE
+		if (buffer == "HB") {
+			return;
+		}
+
+		ExtractEventsFromMsgStreamResponse(buffer);
+	}
+
 	void RPC::StartPolling(Transport transport) {
 		if (m_sSessionKey.empty()) {
 			std::cerr << "No session key registered." << std::endl;
+			// TODO throw
 			return;
 		}
 
@@ -273,14 +270,39 @@ namespace mage {
 		return m_sProtocol + "://" + m_sDomain + "/" + m_sApplication + "/jsonrpc";
 	}
 
+	std::string RPC::GetConfirmIds() const {
+		std::stringstream ss;
+
+		bool first = true;
+
+		std::list<std::string>::const_iterator citr;
+		for (citr = m_oMsgToConfirm.cbegin();
+			 citr != m_oMsgToConfirm.cend();
+			 ++citr) {
+			if (!first) {
+				ss << ",";
+			} else {
+				first = false;
+			}
+			ss << (*citr);
+		}
+
+		return ss.str();
+	}
+
 	std::string RPC::GetMsgStreamUrl(Transport transport) const {
-		std::string transportStr;
+		std::stringstream ss;
+		ss << m_sProtocol
+		   << "://"
+		   << m_sDomain
+		   << "/msgstream?transport=";
+
 		switch (transport) {
 			case SHORTPOLLING:
-				transportStr = "shortpolling";
+				ss << "shortpolling";
 				break;
 			case LONGPOLLING:
-				transportStr = "longpolling";
+				ss << "longpolling";
 				break;
 			default:
 				// TODO throw
@@ -288,6 +310,19 @@ namespace mage {
 				return "";
 				break;
 		}
-		return m_sProtocol + "://" + m_sDomain + "/msgstream?transport=" + transportStr + "&sessionKey=" + m_sSessionKey;
+
+		if (m_sSessionKey.empty()) {
+			// TODO throw
+		}
+
+		ss << "&sessionKey="
+		   << m_sSessionKey;
+
+		if (!m_oMsgToConfirm.empty()) {
+			ss << "&confirmIds="
+			   << GetConfirmIds();
+		}
+
+		return ss.str();
 	}
 }  // namespace mage
