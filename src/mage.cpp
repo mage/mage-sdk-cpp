@@ -133,11 +133,8 @@ namespace mage {
 	void RPC::DoHttpGet(std::string *buffer, const std::string& url) const {
 		CURL* c = curl_easy_init();
 		if (!c) {
-			// TODO throw
-			std::cerr << "Unable to pull events. "
-			          << "Unable to initialize curl."
-			          << std::endl;
-			return;
+			throw MageClientError("Unable to pull events. "
+			                      "Unable to initialize curl.");
 		}
 
 		curl_easy_setopt(c, CURLOPT_URL, url.c_str());
@@ -149,9 +146,9 @@ namespace mage {
 		curl_easy_cleanup(c);
 
 		if(res != CURLE_OK) {
-			std::cerr << "Unable to pull events. Curl error: "
-			          << curl_easy_strerror(res) << std::endl;
-			// TODO throw
+			throw MageClientError(std::string("Unable to pull events. "
+			                                  "Curl error: ") +
+                                  curl_easy_strerror(res));
 		}
 	}
 
@@ -159,10 +156,8 @@ namespace mage {
 		Json::Reader reader;
 		Json::Value messages;
 		if (!reader.parse(response.c_str(), messages)) {
-			std::cerr << "Unable to parse the received content from "
-			          << "the message stream." << std::endl;
-			// TODO throw
-			return;
+			throw MageClientError("Unable to parse the received content from "
+			                      "the message stream.");
 		}
 
 		std::vector<std::string> members = messages.getMemberNames();
@@ -217,14 +212,16 @@ namespace mage {
 
 	void RPC::StartPolling(Transport transport) {
 		if (m_sSessionKey.empty()) {
-			std::cerr << "No session key registered." << std::endl;
-			// TODO throw
-			return;
+			throw MageClientError("No session key registered.");
 		}
 
 		auto f = [this, transport](){
 			for (;;) {
-				PullEvents(transport);
+				try {
+					PullEvents(transport);
+				} catch (MageClientError error) {
+					std::cerr << error.what() << std::endl;
+				}
 
 				// In case of shortpolling we have to wait
 				if (transport == SHORTPOLLING) {
@@ -306,13 +303,11 @@ namespace mage {
 				break;
 			default:
 				// TODO throw
-				std::cerr << "Unsupported transport." << std::endl;
-				return "";
-				break;
+				throw MageClientError("Unsupported transport.");
 		}
 
 		if (m_sSessionKey.empty()) {
-			// TODO throw
+			throw MageClientError("No session key registered.");
 		}
 
 		ss << "&sessionKey="

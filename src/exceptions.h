@@ -9,6 +9,7 @@ namespace mage {
 	enum mage_error_t : int {
 		MAGE_ERROR = 0,
 		MAGE_SUCCESS,
+		MAGE_CLIENT_ERROR,
 		MAGE_RPC_ERROR,
 		MAGE_ERROR_MESSAGE
 	};
@@ -31,6 +32,13 @@ namespace mage {
 			virtual std::string code() const;
 	};
 
+	class MageClientError: public MageError {
+		public:
+			MageClientError(const std::string& message = "");
+			virtual ~MageClientError() {}
+			virtual std::string code() const;
+	};
+
 	class MageRPCError: public MageError {
 		public:
 			MageRPCError(int code, const std::string& message);
@@ -41,7 +49,7 @@ namespace mage {
 			const int m_iErrorCode;
 	};
 
-	class MageErrorMessage:  public MageError {
+	class MageErrorMessage: public MageError {
 		public:
 			MageErrorMessage(const std::string& code,
 			                 const std::string& message = "");
