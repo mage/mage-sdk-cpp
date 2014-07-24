@@ -52,10 +52,10 @@ namespace mage {
 					break;
 				default:
 					std::cerr << "The event doesn't have the correct "
-							  << "amount of data."
-							  << std::endl
-							  << event.toStyledString()
-							  << std::endl;
+					          << "amount of data."
+					          << std::endl
+					          << event.toStyledString()
+					          << std::endl;
 			}
 		}
 	}
@@ -302,7 +302,6 @@ namespace mage {
 				ss << "longpolling";
 				break;
 			default:
-				// TODO throw
 				throw MageClientError("Unsupported transport.");
 		}
 
