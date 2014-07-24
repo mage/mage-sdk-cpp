@@ -18,12 +18,21 @@ namespace mage {
 	         const std::string& mageProtocol)
 	: m_sProtocol(mageProtocol)
 	, m_sDomain(mageDomain)
-	, m_sApplication(mageApplication) {
+	, m_sApplication(mageApplication)
+	, m_bShouldRunPollingThread(false)
+	, m_pPollingThread(nullptr) {
 		m_pHttpClient    = new HttpClient(GetUrl());
 		m_pJsonRpcClient = new Client(m_pHttpClient);
 	}
 
 	RPC::~RPC() {
+		if (m_pPollingThread != nullptr) {
+			if (m_pPollingThread->joinable() == true) {
+				m_pPollingThread->join();
+			}
+			delete m_pPollingThread;
+		}
+
 		delete m_pJsonRpcClient;
 		delete m_pHttpClient;
 	}
@@ -215,8 +224,17 @@ namespace mage {
 			throw MageClientError("No session key registered.");
 		}
 
+		if (m_pPollingThread != nullptr &&
+		    m_pPollingThread->joinable() == true) {
+			throw MageClientError("A polling thread is already running.");
+		}
+
+		if (m_pPollingThread != nullptr) {
+			delete m_pPollingThread;
+		}
+
 		auto f = [this, transport](){
-			for (;;) {
+			while (m_bShouldRunPollingThread) {
 				try {
 					PullEvents(transport);
 				} catch (MageClientError error) {
@@ -231,12 +249,13 @@ namespace mage {
 		};
 
 		// Execute the lambda in a new thread
-		std::thread t(f);
+		m_bShouldRunPollingThread = true;
+		m_pPollingThread = new std::thread(f);
+	}
 
-		// Separates the thread of execution from the thread object,
-		// allowing execution to continue independently.
-		// Any allocated resources will be freed once the thread exits.
-		t.detach();
+	void RPC::StopPolling() {
+		m_bShouldRunPollingThread = false;
+		m_pPollingThread->join();
 	}
 
 	void RPC::SetProtocol(const std::string& mageProtocol) {

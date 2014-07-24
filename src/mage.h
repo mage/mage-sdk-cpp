@@ -41,6 +41,7 @@ namespace mage {
 
 			void PullEvents(Transport transport = SHORTPOLLING);
 			void StartPolling(Transport transport = LONGPOLLING);
+			void StopPolling();
 
 			void SetProtocol(const std::string& mageProtocol);
 			void SetDomain(const std::string& mageDomain);
@@ -62,8 +63,12 @@ namespace mage {
 			std::string m_sApplication;
 			std::string m_sSessionKey;
 
+			bool m_bShouldRunPollingThread;
+
 			std::list<EventObserver*> m_oObjserverList;
 			std::list<std::string>    m_oMsgToConfirm;
+
+			std::thread *m_pPollingThread;
 
 			jsonrpc::HttpClient *m_pHttpClient;
 			jsonrpc::Client     *m_pJsonRpcClient;
