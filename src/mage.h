@@ -13,6 +13,11 @@
 
 namespace mage {
 
+	enum Transport {
+		SHORTPOLLING = 0,
+		LONGPOLLING
+	};
+
 	class RPC {
 		public:
 			RPC(const std::string& mageApplication,
@@ -34,7 +39,8 @@ namespace mage {
 			                          const Json::Value& data = Json::Value::null) const;
 			void AddObserver(EventObserver* observer);
 
-			void PullEvents(const std::string& transport = "shortpolling");
+			void PullEvents(Transport transport = SHORTPOLLING);
+			void StartPolling(Transport transport = LONGPOLLING);
 
 			void SetProtocol(const std::string& mageProtocol);
 			void SetDomain(const std::string& mageDomain);
@@ -43,7 +49,7 @@ namespace mage {
 			void ClearSession() const;
 
 			std::string GetUrl() const;
-			std::string GetMsgStreamUrl(const std::string& transport = "shortpolling") const;
+			std::string GetMsgStreamUrl(Transport transport = SHORTPOLLING) const;
 
 		private:
 			std::string m_sProtocol;
@@ -52,7 +58,7 @@ namespace mage {
 			std::string m_sSessionKey;
 
 			std::list<EventObserver*> m_oObjserverList;
-			std::list<std::string>            m_oMsgToConfirm;
+			std::list<std::string>    m_oMsgToConfirm;
 
 			jsonrpc::HttpClient *m_pHttpClient;
 			jsonrpc::Client     *m_pJsonRpcClient;

@@ -2,6 +2,13 @@
 
 #include <curl/curl.h>
 
+#include <chrono>
+#include <thread>
+
+#ifndef SHORTPOLLING_INTERVAL
+	#define SHORTPOLLING_INTERVAL 5
+#endif
+
 using namespace jsonrpc;
 
 namespace mage {
@@ -120,9 +127,9 @@ namespace mage {
 		return size * nmemb;
 	}
 
-	void RPC::PullEvents(const std::string& transport) {
+	void RPC::PullEvents(Transport transport) {
 		if (m_sSessionKey.empty()) {
-			std::cerr << "No session ke registered." << std::endl;
+			std::cerr << "No session key registered." << std::endl;
 			return;
 		}
 
@@ -212,6 +219,37 @@ namespace mage {
 		}
 	}
 
+	void RPC::StartPolling(Transport transport) {
+		if (m_sSessionKey.empty()) {
+			std::cerr << "No session key registered." << std::endl;
+			return;
+		}
+
+		auto f = [this, transport](){
+			for (;;) {
+				PullEvents(transport);
+
+				// In case of shortpolling we have to wait
+				if (transport == SHORTPOLLING) {
+					std::this_thread::sleep_for(std::chrono::seconds(SHORTPOLLING_INTERVAL));
+				}
+			}
+		};
+
+		// Execute the lambda in a new thread
+		std::thread t(f);
+
+		// Separates the thread of execution from the thread object,
+		// allowing execution to continue independently.
+		// Any allocated resources will be freed once the thread exits.
+		t.detach();
+	}
+
+	void RPC::SetProtocol(const std::string& mageProtocol) {
+		m_sProtocol = mageProtocol;
+		m_pHttpClient->SetUrl(GetUrl());
+	}
+
 	void RPC::SetDomain(const std::string& mageDomain) {
 		m_sDomain = mageDomain;
 		m_pHttpClient->SetUrl(GetUrl());
@@ -219,11 +257,6 @@ namespace mage {
 
 	void RPC::SetApplication(const std::string& mageApplication) {
 		m_sApplication = mageApplication;
-		m_pHttpClient->SetUrl(GetUrl());
-	}
-
-	void RPC::SetProtocol(const std::string& mageProtocol) {
-		m_sProtocol = mageProtocol;
 		m_pHttpClient->SetUrl(GetUrl());
 	}
 
@@ -240,7 +273,21 @@ namespace mage {
 		return m_sProtocol + "://" + m_sDomain + "/" + m_sApplication + "/jsonrpc";
 	}
 
-	std::string RPC::GetMsgStreamUrl(const std::string& transport) const {
-		return m_sProtocol + "://" + m_sDomain + "/msgstream?transport=" + transport + "&sessionKey=" + m_sSessionKey;
+	std::string RPC::GetMsgStreamUrl(Transport transport) const {
+		std::string transportStr;
+		switch (transport) {
+			case SHORTPOLLING:
+				transportStr = "shortpolling";
+				break;
+			case LONGPOLLING:
+				transportStr = "longpolling";
+				break;
+			default:
+				// TODO throw
+				std::cerr << "Unsupported transport." << std::endl;
+				return "";
+				break;
+		}
+		return m_sProtocol + "://" + m_sDomain + "/msgstream?transport=" + transportStr + "&sessionKey=" + m_sSessionKey;
 	}
 }  // namespace mage

@@ -206,9 +206,18 @@ int main(int argc, char *argv[]) {
 
 		if (userCommand == "pullEvents") {
 			if (data == "longpolling") {
-				client.PullEvents(data);
+				client.PullEvents(LONGPOLLING);
 			} else {
 				client.PullEvents();
+			}
+			continue;
+		}
+
+		if (userCommand == "startPolling") {
+			if (data == "shortpolling") {
+				client.StartPolling(SHORTPOLLING);
+			} else {
+				client.StartPolling();
 			}
 			continue;
 		}
