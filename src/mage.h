@@ -5,6 +5,7 @@
 #include <list>
 #include <functional>
 #include <future>
+#include <mutex>
 
 #include <jsonrpc/rpc.h>
 
@@ -72,6 +73,9 @@ namespace mage {
 
 			jsonrpc::HttpClient *m_pHttpClient;
 			jsonrpc::Client     *m_pJsonRpcClient;
+
+			std::mutex m_bShouldRunPollingThread_mutex;
+			std::mutex msgStreamUrl_mutex;
 	};
 
 }  // namespace mage

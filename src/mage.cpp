@@ -193,18 +193,24 @@ namespace mage {
 						break;
 				}
 			}
+			msgStreamUrl_mutex.lock();
 			m_oMsgToConfirm.push_back(*citr);
+			msgStreamUrl_mutex.unlock();
 		}
 	}
 
 	void RPC::PullEvents(Transport transport) {
+		msgStreamUrl_mutex.lock();
 		const std::string url = GetMsgStreamUrl(transport);
+		msgStreamUrl_mutex.unlock();
 		std::string buffer;
 
 		DoHttpGet(&buffer, url);
 
 		// The previous messages were confirmed
+		msgStreamUrl_mutex.lock();
 		m_oMsgToConfirm.clear();
+		msgStreamUrl_mutex.unlock();
 
 		// No messages to read
 		if (buffer.empty()) {
@@ -234,7 +240,9 @@ namespace mage {
 		}
 
 		auto f = [this, transport](){
+			m_bShouldRunPollingThread_mutex.lock();
 			while (m_bShouldRunPollingThread) {
+				m_bShouldRunPollingThread_mutex.unlock();
 				try {
 					PullEvents(transport);
 				} catch (MageClientError error) {
@@ -245,37 +253,51 @@ namespace mage {
 				if (transport == SHORTPOLLING) {
 					std::this_thread::sleep_for(std::chrono::seconds(SHORTPOLLING_INTERVAL));
 				}
+				m_bShouldRunPollingThread_mutex.lock();
 			}
+			m_bShouldRunPollingThread_mutex.unlock();
 		};
 
 		// Execute the lambda in a new thread
+		m_bShouldRunPollingThread_mutex.lock();
 		m_bShouldRunPollingThread = true;
+		m_bShouldRunPollingThread_mutex.unlock();
 		m_pPollingThread = new std::thread(f);
 	}
 
 	void RPC::StopPolling() {
+		m_bShouldRunPollingThread_mutex.lock();
 		m_bShouldRunPollingThread = false;
+		m_bShouldRunPollingThread_mutex.unlock();
 		m_pPollingThread->join();
 	}
 
 	void RPC::SetProtocol(const std::string& mageProtocol) {
+		msgStreamUrl_mutex.lock();
 		m_sProtocol = mageProtocol;
+		msgStreamUrl_mutex.unlock();
 		m_pHttpClient->SetUrl(GetUrl());
 	}
 
 	void RPC::SetDomain(const std::string& mageDomain) {
+		msgStreamUrl_mutex.lock();
 		m_sDomain = mageDomain;
+		msgStreamUrl_mutex.unlock();
 		m_pHttpClient->SetUrl(GetUrl());
 	}
 
 	void RPC::SetApplication(const std::string& mageApplication) {
+		msgStreamUrl_mutex.lock();
 		m_sApplication = mageApplication;
+		msgStreamUrl_mutex.unlock();
 		m_pHttpClient->SetUrl(GetUrl());
 	}
 
 	void RPC::SetSession(const std::string& sessionKey) {
 		m_pHttpClient->AddHeader("X-MAGE-SESSION", sessionKey);
+		msgStreamUrl_mutex.lock();
 		m_sSessionKey = sessionKey;
+		msgStreamUrl_mutex.unlock();
 	}
 
 	void RPC::ClearSession() const {
