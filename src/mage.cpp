@@ -61,7 +61,10 @@ namespace mage {
 						break;
 					default:
 						std::cerr << "The event doesn't have the correct "
-						          << "amount of data." << std::endl;
+						          << "amount of data."
+						          << std::endl
+						          << event.toStyledString()
+						          << std::endl;
 				}
 			}
 		}
@@ -124,7 +127,7 @@ namespace mage {
 		}
 
 		CURL* c;
-		static std::string buffer;
+		std::string buffer;
 
 		c = curl_easy_init();
 		if (!c) {
@@ -166,6 +169,11 @@ namespace mage {
 
 		curl_easy_cleanup(c);
 
+		// No messages to read
+		if (buffer.empty()) {
+			return;
+		}
+
 		Json::Reader reader;
 		Json::Value messages;
 		if (!reader.parse(buffer.c_str(), messages)) {
@@ -173,21 +181,27 @@ namespace mage {
 			          << "the message stream." << std::endl;
 			return;
 		}
-		std::cout << "Messages: " << messages.toStyledString() << std::endl;
-		std::cout << "# events: " << messages.getMemberNames().size() << std::endl;
 		std::vector<std::string> members = messages.getMemberNames();
 		std::vector<std::string>::const_iterator citr;
 		for (citr = members.begin();
 		    citr != members.end();
 		    ++citr) {
-			std::cout << "Message: " << (*citr) << std::endl;
 			for (int i = 0; i < messages[(*citr)].size(); ++i) {
 				Json::Value event = messages[(*citr)][i];
-				std::cout << "Event: " << event[0u].asString();
-				if (event.size() > 1) {
-					std::cout << " - data: " << (event[1u]).toStyledString();
+				switch (event.size()) {
+					case 1:
+						ReceiveEvent(event[0u].asString());
+						break;
+					case 2:
+						ReceiveEvent(event[0u].asString(), event[1u]);
+						break;
+					default:
+						std::cerr << "The event doesn't have the correct "
+						          << "amount of data."
+						          << std::endl
+						          << event.toStyledString()
+						          << std::endl;
 				}
-				std::cout << std::endl;
 			}
 			m_oMsgToConfirm.push_back(*citr);
 		}
