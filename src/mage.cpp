@@ -121,15 +121,19 @@ namespace mage {
 	}
 
 	void RPC::ReceiveEvent(const std::string& name, const Json::Value& data) const {
+		std::lock_guard<std::mutex> lock(observerList_mutex);
+
 		std::list<EventObserver*>::const_iterator citr;
-		for(citr = m_oObjserverList.cbegin();
-		    citr != m_oObjserverList.cend(); ++citr) {
+		for(citr = m_oObserverList.cbegin();
+		    citr != m_oObserverList.cend(); ++citr) {
 			(*citr)->ReceiveEvent(name, data);
 		}
 	}
 
 	void RPC::AddObserver(EventObserver* observer) {
-		m_oObjserverList.push_back(observer);
+		std::lock_guard<std::mutex> lock(observerList_mutex);
+
+		m_oObserverList.push_back(observer);
 	}
 
 	static int writer(char *data, size_t size, size_t nmemb,
@@ -224,9 +228,12 @@ namespace mage {
 	}
 
 	void RPC::StartPolling(Transport transport) {
+		sessionKey_mutex.lock();
 		if (m_sSessionKey.empty()) {
+			sessionKey_mutex.unlock();
 			throw MageClientError("No session key registered.");
 		}
+		sessionKey_mutex.unlock();
 
 		if (m_pPollingThread != nullptr &&
 		    m_pPollingThread->joinable() == true) {
@@ -252,7 +259,8 @@ namespace mage {
 			// If a notification is received, it will execute the lamdba
 			// If it returns true, it will stop
 			// else it should continue
-			while (pollingThread_cv.wait_for(lock, duration, [this]() {
+			while (m_bShouldRunPollingThread &&
+			       pollingThread_cv.wait_for(lock, duration, [this]() {
 				// To stop the waiting, we should return true
 				return !m_bShouldRunPollingThread;
 			}) == false) {
@@ -276,6 +284,8 @@ namespace mage {
 	}
 
 	void RPC::SetProtocol(const std::string& mageProtocol) {
+		std::lock_guard<std::mutex> lock(jsonrpcUrl_mutex);
+
 		msgStreamUrl_mutex.lock();
 		m_sProtocol = mageProtocol;
 		msgStreamUrl_mutex.unlock();
@@ -283,6 +293,8 @@ namespace mage {
 	}
 
 	void RPC::SetDomain(const std::string& mageDomain) {
+		std::lock_guard<std::mutex> lock(jsonrpcUrl_mutex);
+
 		msgStreamUrl_mutex.lock();
 		m_sDomain = mageDomain;
 		msgStreamUrl_mutex.unlock();
@@ -290,6 +302,8 @@ namespace mage {
 	}
 
 	void RPC::SetApplication(const std::string& mageApplication) {
+		std::lock_guard<std::mutex> lock(jsonrpcUrl_mutex);
+
 		msgStreamUrl_mutex.lock();
 		m_sApplication = mageApplication;
 		msgStreamUrl_mutex.unlock();
@@ -297,6 +311,8 @@ namespace mage {
 	}
 
 	void RPC::SetSession(const std::string& sessionKey) {
+		std::lock_guard<std::mutex> lock(sessionKey_mutex);
+
 		m_pHttpClient->AddHeader("X-MAGE-SESSION", sessionKey);
 		msgStreamUrl_mutex.lock();
 		m_sSessionKey = sessionKey;
@@ -304,14 +320,20 @@ namespace mage {
 	}
 
 	void RPC::ClearSession() const {
+		std::lock_guard<std::mutex> lock(sessionKey_mutex);
+
 		m_pHttpClient->RemoveHeader("X-MAGE-SESSION");
 	}
 
 	std::string RPC::GetUrl() const {
+		std::lock_guard<std::mutex> lock(jsonrpcUrl_mutex);
+
 		return m_sProtocol + "://" + m_sDomain + "/" + m_sApplication + "/jsonrpc";
 	}
 
 	std::string RPC::GetConfirmIds() const {
+		std::lock_guard<std::recursive_mutex> lock(msgStreamUrl_mutex);
+
 		std::stringstream ss;
 
 		bool first = true;
@@ -332,7 +354,7 @@ namespace mage {
 	}
 
 	std::string RPC::GetMsgStreamUrl(Transport transport) const {
-		std::lock_guard<std::mutex> lock(msgStreamUrl_mutex);
+		std::lock_guard<std::recursive_mutex> lock(msgStreamUrl_mutex);
 
 		std::stringstream ss;
 		ss << m_sProtocol
@@ -351,12 +373,16 @@ namespace mage {
 				throw MageClientError("Unsupported transport.");
 		}
 
+		sessionKey_mutex.lock();
 		if (m_sSessionKey.empty()) {
+			sessionKey_mutex.unlock();
 			throw MageClientError("No session key registered.");
 		}
 
 		ss << "&sessionKey="
 		   << m_sSessionKey;
+
+		sessionKey_mutex.unlock();
 
 		if (!m_oMsgToConfirm.empty()) {
 			ss << "&confirmIds="

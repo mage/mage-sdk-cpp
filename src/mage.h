@@ -68,7 +68,7 @@ namespace mage {
 
 			std::atomic<bool> m_bShouldRunPollingThread;
 
-			std::list<EventObserver*> m_oObjserverList;
+			std::list<EventObserver*> m_oObserverList;
 			std::list<std::string>    m_oMsgToConfirm;
 
 			std::thread *m_pPollingThread;
@@ -78,7 +78,10 @@ namespace mage {
 
 			std::condition_variable pollingThread_cv;
 			std::mutex pollingThread_mutex;
-			mutable std::mutex msgStreamUrl_mutex;
+			mutable std::recursive_mutex msgStreamUrl_mutex;
+			mutable std::mutex jsonrpcUrl_mutex;
+			mutable std::mutex sessionKey_mutex;
+			mutable std::mutex observerList_mutex;
 	};
 
 }  // namespace mage
