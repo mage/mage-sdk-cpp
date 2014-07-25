@@ -75,7 +75,7 @@ namespace mage {
 			jsonrpc::Client     *m_pJsonRpcClient;
 
 			std::mutex m_bShouldRunPollingThread_mutex;
-			std::mutex msgStreamUrl_mutex;
+			mutable std::mutex msgStreamUrl_mutex;
 	};
 
 }  // namespace mage

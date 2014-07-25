@@ -200,9 +200,7 @@ namespace mage {
 	}
 
 	void RPC::PullEvents(Transport transport) {
-		msgStreamUrl_mutex.lock();
 		const std::string url = GetMsgStreamUrl(transport);
-		msgStreamUrl_mutex.unlock();
 		std::string buffer;
 
 		DoHttpGet(&buffer, url);
@@ -329,6 +327,8 @@ namespace mage {
 	}
 
 	std::string RPC::GetMsgStreamUrl(Transport transport) const {
+		std::lock_guard<std::mutex> lock(msgStreamUrl_mutex);
+
 		std::stringstream ss;
 		ss << m_sProtocol
 		   << "://"
