@@ -131,6 +131,30 @@ We haven't tried to integrate with these platforms yet. We
 will add some integration notes for each of those projects
 as soon as we have experimented with them.
 
+Events polling
+--------------
+
+You can pull events from the `msgStream` of your MAGE server by using
+the `void PullEvents(Transport transport);` function.
+
+Two transports are available:
+* `LONGPOLLING`: the request will be kept open by the server,
+  until an event becomes available, or the server send a heartbeat.
+* `SHORTPOLLING`: the request will return immediatly with the response
+  from the server.
+
+When you use `void StartPolling(transport transport);`,
+a loop is run in another thread to call `PullEvents()`.
+
+If you use `LONGPOLLING`, after each request a new one will be sent.
+If you use `SHORTPOLLING`, the loop will wait `SHORTPOLLING_INTERVAL_SECS`
+seconds before sending a new request.
+
+By default `SHORTPOLLING_INTERVAL_SECS` is set to 5 seconds.
+You change it, by adding a new flag in the `Makefile`.
+You need to add `-DSHORTPOLLING_INTERVAL_SECS=5` with your value,
+at the en of the `CFGLAGS` line.
+
 Concurrency
 -----------
 

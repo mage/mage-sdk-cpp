@@ -5,8 +5,8 @@
 #include <chrono>
 #include <thread>
 
-#ifndef SHORTPOLLING_INTERVAL
-	#define SHORTPOLLING_INTERVAL 5
+#ifndef SHORTPOLLING_INTERVAL_SECS
+	#define SHORTPOLLING_INTERVAL_SECS 5
 #endif
 
 using namespace jsonrpc;
@@ -251,7 +251,7 @@ namespace mage {
 
 				// In case of shortpolling we have to wait
 				if (transport == SHORTPOLLING) {
-					std::this_thread::sleep_for(std::chrono::seconds(SHORTPOLLING_INTERVAL));
+					std::this_thread::sleep_for(std::chrono::seconds(SHORTPOLLING_INTERVAL_SECS));
 				}
 				m_bShouldRunPollingThread_mutex.lock();
 			}
