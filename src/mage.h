@@ -6,6 +6,8 @@
 #include <functional>
 #include <future>
 #include <mutex>
+#include <condition_variable>
+#include <atomic>
 
 #include <jsonrpc/rpc.h>
 
@@ -64,7 +66,7 @@ namespace mage {
 			std::string m_sApplication;
 			std::string m_sSessionKey;
 
-			bool m_bShouldRunPollingThread;
+			std::atomic<bool> m_bShouldRunPollingThread;
 
 			std::list<EventObserver*> m_oObjserverList;
 			std::list<std::string>    m_oMsgToConfirm;
@@ -74,7 +76,8 @@ namespace mage {
 			jsonrpc::HttpClient *m_pHttpClient;
 			jsonrpc::Client     *m_pJsonRpcClient;
 
-			std::mutex m_bShouldRunPollingThread_mutex;
+			std::condition_variable pollingThread_cv;
+			std::mutex pollingThread_mutex;
 			mutable std::mutex msgStreamUrl_mutex;
 	};
 

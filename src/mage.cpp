@@ -238,35 +238,40 @@ namespace mage {
 		}
 
 		auto f = [this, transport](){
-			m_bShouldRunPollingThread_mutex.lock();
-			while (m_bShouldRunPollingThread) {
-				m_bShouldRunPollingThread_mutex.unlock();
+			std::unique_lock<std::mutex> lock(pollingThread_mutex);
+
+			std::chrono::seconds duration;
+			// In case of shortpolling we have to wait
+			if (transport == SHORTPOLLING) {
+				duration = std::chrono::seconds(SHORTPOLLING_INTERVAL_SECS);
+			} else {
+				duration = std::chrono::seconds::zero();
+			}
+
+			// Wait for duration
+			// If a notification is received, it will execute the lamdba
+			// If it returns true, it will stop
+			// else it should continue
+			while (pollingThread_cv.wait_for(lock, duration, [this]() {
+				// To stop the waiting, we should return true
+				return !m_bShouldRunPollingThread;
+			}) == false) {
 				try {
 					PullEvents(transport);
 				} catch (MageClientError error) {
 					std::cerr << error.what() << std::endl;
 				}
-
-				// In case of shortpolling we have to wait
-				if (transport == SHORTPOLLING) {
-					std::this_thread::sleep_for(std::chrono::seconds(SHORTPOLLING_INTERVAL_SECS));
-				}
-				m_bShouldRunPollingThread_mutex.lock();
 			}
-			m_bShouldRunPollingThread_mutex.unlock();
 		};
 
 		// Execute the lambda in a new thread
-		m_bShouldRunPollingThread_mutex.lock();
 		m_bShouldRunPollingThread = true;
-		m_bShouldRunPollingThread_mutex.unlock();
 		m_pPollingThread = new std::thread(f);
 	}
 
 	void RPC::StopPolling() {
-		m_bShouldRunPollingThread_mutex.lock();
 		m_bShouldRunPollingThread = false;
-		m_bShouldRunPollingThread_mutex.unlock();
+		pollingThread_cv.notify_all();
 		m_pPollingThread->join();
 	}
 
