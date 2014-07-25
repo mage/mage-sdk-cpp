@@ -131,6 +131,32 @@ We haven't tried to integrate with these platforms yet. We
 will add some integration notes for each of those projects
 as soon as we have experimented with them.
 
+Concurrency
+-----------
+
+```c++
+virtual std::future<void> Call(const std::string& name,
+				  const Json::Value& params,
+				  const std::function<void(mage::MageError, Json::Value)>& callback,
+				  bool doAsync) const;
+```
+
+When you use `mage::RPC::Call()` with a callback and in an asynchronoys way,
+with `doAsync` set to true, the callback will be called in a different thread.
+
+```c++
+void StartPolling(Transport transport = LONGPOLLING);
+```
+
+When you use `mage::RPC::StartPolling()`, all the `mage::RPC::ReceiveEvent()`
+calls we be done in a different thread.
+In consequence, your implementation of `mage::EventObserver::ReceiveEvent()`
+will be called in a different thread too.
+
+In these cases, you need to use `std::mutex` or other locking strategy to
+ensure your data are not accessed at the same time by two differents
+threads.
+
 Todo
 -----
 
@@ -138,7 +164,6 @@ Todo
 - [ ] Test integration against popular game development SDKs
 - [ ] Session handling: save the session when we receive it, and offer an API to interact with it
 - [ ] Make install/clean for the binaries (maybe)
-- [ ] Message stream event handling
 - [ ] CLI: Have the option to list and describe the remote calls
 
 Conding Style
