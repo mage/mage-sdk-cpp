@@ -1,7 +1,7 @@
-#ifndef MAGEEXCEPTIONS_H_
-#define MAGEEXCEPTIONS_H_
+#ifndef MAGEEXCEPTIONS_H
+#define MAGEEXCEPTIONS_H
 
-#include <iostream>
+#include <string>
 #include <stdexcept>
 
 namespace mage {

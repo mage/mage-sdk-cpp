@@ -1,6 +1,7 @@
-#ifndef EVENT_OBSERVER_H
-#define EVENT_OBSERVER_H
+#ifndef MAGEEVENT_OBSERVER_H
+#define MAGEEVENT_OBSERVER_H
 
+#include <string>
 #include <jsonrpc/rpc.h>
 
 namespace mage {
