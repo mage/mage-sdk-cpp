@@ -10,19 +10,24 @@ namespace mage {
 	: m_sProtocol(mageProtocol)
 	, m_sDomain(mageDomain)
 	, m_sApplication(mageApplication)
+#ifndef UNITY
 	, m_bShouldRunPollingThread(false)
-	, m_pPollingThread(nullptr) {
+	, m_pPollingThread(nullptr)
+#endif
+	{
 		m_pHttpClient    = new HttpClient(GetUrl());
 		m_pJsonRpcClient = new Client(m_pHttpClient);
 	}
 
 	RPC::~RPC() {
+#ifndef UNITY
 		if (m_pPollingThread != nullptr) {
 			if (m_pPollingThread->joinable() == true) {
 				m_pPollingThread->join();
 			}
 			delete m_pPollingThread;
 		}
+#endif
 
 		delete m_pJsonRpcClient;
 		delete m_pHttpClient;
@@ -120,49 +125,71 @@ namespace mage {
 #endif
 
 	void RPC::SetProtocol(const std::string& mageProtocol) {
+#ifndef UNITY
 		std::lock_guard<std::mutex> lock(jsonrpcUrl_mutex);
 
 		msgStreamUrl_mutex.lock();
+#endif
 		m_sProtocol = mageProtocol;
+#ifndef UNITY
 		msgStreamUrl_mutex.unlock();
+#endif
 		m_pHttpClient->SetUrl(GetUrl());
 	}
 
 	void RPC::SetDomain(const std::string& mageDomain) {
+#ifndef UNITY
 		std::lock_guard<std::mutex> lock(jsonrpcUrl_mutex);
 
 		msgStreamUrl_mutex.lock();
+#endif
 		m_sDomain = mageDomain;
+#ifndef UNITY
 		msgStreamUrl_mutex.unlock();
+#endif
 		m_pHttpClient->SetUrl(GetUrl());
 	}
 
 	void RPC::SetApplication(const std::string& mageApplication) {
+#ifndef UNITY
 		std::lock_guard<std::mutex> lock(jsonrpcUrl_mutex);
 
 		msgStreamUrl_mutex.lock();
+#endif
 		m_sApplication = mageApplication;
+#ifndef UNITY
 		msgStreamUrl_mutex.unlock();
+#endif
 		m_pHttpClient->SetUrl(GetUrl());
 	}
 
 	void RPC::SetSession(const std::string& sessionKey) {
+#ifndef UNITY
 		std::lock_guard<std::mutex> lock(sessionKey_mutex);
+#endif
 
 		m_pHttpClient->AddHeader("X-MAGE-SESSION", sessionKey);
+#ifndef UNITY
 		msgStreamUrl_mutex.lock();
+#endif
 		m_sSessionKey = sessionKey;
+#ifndef UNITY
 		msgStreamUrl_mutex.unlock();
+#endif
 	}
 
 	void RPC::ClearSession() const {
+#ifndef UNITY
 		std::lock_guard<std::mutex> lock(sessionKey_mutex);
+#endif
 
 		m_pHttpClient->RemoveHeader("X-MAGE-SESSION");
 	}
 
 	std::string RPC::GetUrl() const {
+#ifndef UNITY
 		std::lock_guard<std::mutex> lock(jsonrpcUrl_mutex);
+#endif
 
 		return m_sProtocol + "://" + m_sDomain + "/" + m_sApplication + "/jsonrpc";
 	}

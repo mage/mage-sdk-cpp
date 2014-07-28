@@ -43,7 +43,11 @@ namespace mage {
 	class MageClientError: public MageError {
 		public:
 			MageClientError(const std::string& message = "");
+#ifndef UNITY
 			virtual ~MageClientError() {}
+#else
+			virtual ~MageClientError() throw() {}
+#endif
 			virtual std::string code() const;
 	};
 

@@ -47,8 +47,10 @@ namespace mage {
 			void AddObserver(EventObserver* observer);
 
 			void PullEvents(Transport transport = SHORTPOLLING);
+#ifndef UNITY
 			void StartPolling(Transport transport = LONGPOLLING);
 			void StopPolling();
+#endif
 
 			void SetProtocol(const std::string& mageProtocol);
 			void SetDomain(const std::string& mageDomain);
@@ -70,22 +72,28 @@ namespace mage {
 			std::string m_sApplication;
 			std::string m_sSessionKey;
 
+#ifndef UNITY
 			std::atomic<bool> m_bShouldRunPollingThread;
+#endif
 
 			std::list<EventObserver*> m_oObserverList;
 			std::list<std::string>    m_oMsgToConfirm;
 
+#ifndef UNITY
 			std::thread *m_pPollingThread;
+#endif
 
 			jsonrpc::HttpClient *m_pHttpClient;
 			jsonrpc::Client     *m_pJsonRpcClient;
 
+#ifndef UNITY
 			std::condition_variable pollingThread_cv;
 			std::mutex pollingThread_mutex;
 			mutable std::recursive_mutex msgStreamUrl_mutex;
 			mutable std::mutex jsonrpcUrl_mutex;
 			mutable std::mutex sessionKey_mutex;
 			mutable std::mutex observerList_mutex;
+#endif
 	};
 
 }  // namespace mage
