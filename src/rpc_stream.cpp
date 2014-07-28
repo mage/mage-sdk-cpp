@@ -35,6 +35,10 @@ namespace mage {
 		m_oObserverList.push_back(observer);
 	}
 
+	const std::list<EventObserver*>& RPC::GetObservers() const {
+		return m_oObserverList;
+	}
+
 	static int writer(char *data, size_t size, size_t nmemb,
 	                  std::string *writerData) {
 		if (writerData == NULL) return 0;

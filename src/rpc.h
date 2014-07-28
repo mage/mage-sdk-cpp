@@ -45,6 +45,7 @@ namespace mage {
 			virtual void ReceiveEvent(const std::string& name,
 			                          const Json::Value& data = Json::Value::null) const;
 			void AddObserver(EventObserver* observer);
+			const std::list<EventObserver*>& GetObservers() const;
 
 			void PullEvents(Transport transport = SHORTPOLLING);
 #ifndef UNITY
