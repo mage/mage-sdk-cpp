@@ -1,7 +1,5 @@
 #include "rpc.h"
 
-#include <iostream>
-
 using namespace jsonrpc;
 
 namespace mage {
@@ -31,6 +29,9 @@ namespace mage {
 	}
 
 	void RPC::ExtractEventsFromCommandResponse(const Json::Value& myEvents) const {
+		bool hasParseError = false;
+		bool hasInvalidFormatError = false;
+
 		for (unsigned int i = 0; i < myEvents.size(); ++i) {
 			// We can only handle string
 			if (!myEvents[i].isString()) {
@@ -40,8 +41,7 @@ namespace mage {
 			Json::Reader reader;
 			Json::Value event;
 			if (!reader.parse(myEvents[i].asString(), event)) {
-				std::cerr << "Unable to read the following event: "
-						  << myEvents[i] << std::endl;
+				hasParseError = true;
 				continue;
 			}
 
@@ -53,12 +53,16 @@ namespace mage {
 					ReceiveEvent(event[0u].asString(), event[1u]);
 					break;
 				default:
-					std::cerr << "The event doesn't have the correct "
-					          << "amount of data."
-					          << std::endl
-					          << event.toStyledString()
-					          << std::endl;
+					hasInvalidFormatError = true;
 			}
+		}
+
+		if (hasParseError) {
+			throw new MageClientError("One of the received events can't be read.");
+		}
+
+		if (hasInvalidFormatError) {
+			throw new MageClientError("One of the received events has an invalid format.");
 		}
 	}
 

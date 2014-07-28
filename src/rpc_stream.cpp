@@ -67,6 +67,8 @@ namespace mage {
 			                      "the message stream.");
 		}
 
+		bool hasInvalidFormatError = false;
+
 		std::vector<std::string> members = messages.getMemberNames();
 		std::vector<std::string>::const_iterator citr;
 		for (citr = members.begin();
@@ -82,18 +84,17 @@ namespace mage {
 						ReceiveEvent(event[0u].asString(), event[1u]);
 						break;
 					default:
-						// Don't throw here to not loose any valid event
-						std::cerr << "This event doesn't have the correct "
-						          << "amount of data."
-						          << std::endl
-						          << event.toStyledString()
-						          << std::endl;
+						hasInvalidFormatError = true;
 						break;
 				}
 			}
 			msgStreamUrl_mutex.lock();
 			m_oMsgToConfirm.push_back(*citr);
 			msgStreamUrl_mutex.unlock();
+		}
+
+		if (hasInvalidFormatError) {
+			throw new MageClientError("One of the received events has an invalid format.");
 		}
 	}
 
