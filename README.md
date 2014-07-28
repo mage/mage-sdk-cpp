@@ -131,6 +131,56 @@ We haven't tried to integrate with these platforms yet. We
 will add some integration notes for each of those projects
 as soon as we have experimented with them.
 
+Events polling
+--------------
+
+You can pull events from the `msgStream` of your MAGE server by using
+the `void PullEvents(Transport transport);` function.
+
+Two transports are available:
+* `LONGPOLLING`: the request will be kept open by the server,
+  until an event becomes available, or the server send a heartbeat.
+* `SHORTPOLLING`: the request will return immediately with the response
+  from the server.
+
+When you use `void StartPolling(transport transport);`,
+a loop is started in another thread to call `PullEvents()`.
+
+If you use `LONGPOLLING`, after each request a new one will be sent.
+If you use `SHORTPOLLING`, the loop will wait `SHORTPOLLING_INTERVAL_SECS`
+seconds before sending a new request.
+
+By default `SHORTPOLLING_INTERVAL_SECS` is set to 5 seconds.
+You can change it, by adding a new flag in the `Makefile`.
+You need to add `-DSHORTPOLLING_INTERVAL_SECS=5` with your value,
+at the end of the `CFGLAGS` line.
+
+Concurrency
+-----------
+
+```c++
+virtual std::future<void> Call(const std::string& name,
+				  const Json::Value& params,
+				  const std::function<void(mage::MageError, Json::Value)>& callback,
+				  bool doAsync) const;
+```
+
+When you use `mage::RPC::Call()` with a callback and in an asynchronous way,
+with `doAsync` set to true, the callback will be called in a different thread.
+
+```c++
+void StartPolling(Transport transport = LONGPOLLING);
+```
+
+When you use `mage::RPC::StartPolling()`, all the `mage::RPC::ReceiveEvent()`
+calls will be done in a different thread.
+In consequence, your implementation of `mage::EventObserver::ReceiveEvent()`
+will be called in a different thread too.
+
+In these cases, you need to use `std::mutex` or other locking strategy to
+ensure your data are not accessed at the same time by two different
+threads.
+
 Todo
 -----
 
@@ -138,7 +188,6 @@ Todo
 - [ ] Test integration against popular game development SDKs
 - [ ] Session handling: save the session when we receive it, and offer an API to interact with it
 - [ ] Make install/clean for the binaries (maybe)
-- [ ] Message stream event handling
 - [ ] CLI: Have the option to list and describe the remote calls
 
 Conding Style
