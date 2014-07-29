@@ -16,7 +16,7 @@ class ExampleEventObserver : public mage::EventObserver {
 			}
 
 			// Set the session when it receive the session:set event
-			if (name == "session:set") {
+			if (name == "session.set") {
 				HandleSessionSet(data);
 			}
 		}
