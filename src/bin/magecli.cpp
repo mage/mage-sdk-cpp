@@ -94,7 +94,7 @@ class CliEventObserver : public mage::EventObserver {
 			if (data != Json::Value::null) {
 				std::cout << cyanBold("data") << ": " << data.toStyledString() << std::endl;
 			}
-			if (name == "session:set") {
+			if (name == "session.set") {
 				HandleSessionSet(data);
 			}
 		}
