@@ -70,6 +70,23 @@ namespace mage {
 		});
 	}
 
+    void RPC::Call(const std::string& name,
+                      const Json::Value& params,
+                      const std::function<void(mage::MageError, Json::Value)>& callback)
+    {
+		m_task = std::thread([this, name, params, callback]{
+			Json::Value res;
+			mage::MageSuccess ok;
+            
+			try {
+				res = Call(name, params);
+				if (!m_cancel) callback(ok, res);
+			} catch (mage::MageError e) {
+				if (!m_cancel) callback(e, res);
+			}
+		});
+    }
+
 	void RPC::SetDomain(const std::string& mageDomain) {
 		m_sDomain = mageDomain;
 		m_pHttpClient->SetUrl(GetUrl());
@@ -96,4 +113,11 @@ namespace mage {
 	std::string RPC::GetUrl() const {
 		return m_sProtocol + "://" + m_sDomain + "/" + m_sApplication + "/jsonrpc";
 	}
+
+    void RPC::Cancel() {
+        if (m_task.joinable()) {
+            m_cancel = true;
+            m_task.detach();
+        }
+    }	
 }  // namespace mage

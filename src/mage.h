@@ -26,6 +26,10 @@ namespace mage {
 			                  const std::function<void(mage::MageError, Json::Value)>& callback,
 			                  bool doAsync) const;
 
+            virtual void Call(const std::string& name,
+                                       const Json::Value& params,
+                                       const std::function<void(mage::MageError, Json::Value)>& callback);
+
 			void SetProtocol(const std::string& mageProtocol);
 			void SetDomain(const std::string& mageDomain);
 			void SetApplication(const std::string& mageApplication);
@@ -34,6 +38,8 @@ namespace mage {
 
 			std::string GetUrl() const;
 
+            void Cancel();
+
 		private:
 			std::string m_sProtocol;
 			std::string m_sDomain;
@@ -41,6 +47,9 @@ namespace mage {
 
 			jsonrpc::HttpClient *m_pHttpClient;
 			jsonrpc::Client     *m_pJsonRpcClient;
+
+            std::thread       m_task;
+            std::atomic<bool> m_cancel;			
 	};
 
 }  // namespace mage
