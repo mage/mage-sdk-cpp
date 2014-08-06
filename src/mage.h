@@ -49,7 +49,8 @@ namespace mage {
 			jsonrpc::Client     *m_pJsonRpcClient;
 
             std::thread       m_task;
-            std::atomic<bool> m_cancel;			
+        
+            static bool IsCancelAndCleanThread(std::__thread_id threadId);
 	};
 
 }  // namespace mage

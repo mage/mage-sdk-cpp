@@ -52,9 +52,9 @@ namespace mage {
 	}
 
 	std::future<void> RPC::Call(const std::string& name,
-	               const Json::Value& params,
-	               const std::function<void(mage::MageError, Json::Value)>& callback,
-	               bool doAsync) const {
+	               				const Json::Value& params,
+	               				const std::function<void(mage::MageError, Json::Value)>& callback,
+	               				bool doAsync) const {
 		std::launch policy = doAsync ? std::launch::async : std::launch::deferred;
 
 		return std::async(policy, [this, name, params, callback]{
@@ -71,18 +71,17 @@ namespace mage {
 	}
 
     void RPC::Call(const std::string& name,
-                      const Json::Value& params,
-                      const std::function<void(mage::MageError, Json::Value)>& callback)
-    {
-		m_task = std::thread([this, name, params, callback]{
+                   const Json::Value& params,
+                   const std::function<void(mage::MageError, Json::Value)>& callback) {
+		m_task = std::thread([this, name, params, callback] {
 			Json::Value res;
 			mage::MageSuccess ok;
             
 			try {
 				res = Call(name, params);
-				if (!m_cancel) callback(ok, res);
+				if (!IsCancelAndCleanThread(std::this_thread::get_id())) callback(ok, res);
 			} catch (mage::MageError e) {
-				if (!m_cancel) callback(e, res);
+				if (!IsCancelAndCleanThread(std::this_thread::get_id())) callback(e, res);
 			}
 		});
     }
@@ -116,8 +115,17 @@ namespace mage {
 
     void RPC::Cancel() {
         if (m_task.joinable()) {
-            m_cancel = true;
+            s_cancelThread.push_back(m_task.get_id());
             m_task.detach();
         }
-    }	
+    }
+    
+    bool RPC::IsCancelAndCleanThread(std::__thread_id threadId) {
+        if (find(s_cancelThread.begin(), s_cancelThread.end() , threadId) != s_cancelThread.end()) {
+            s_cancelThread.erase(std::remove(s_cancelThread.begin(), s_cancelThread.end(), threadId), s_cancelThread.end());
+            return true;
+        }
+        
+        return false;
+    }
 }  // namespace mage
