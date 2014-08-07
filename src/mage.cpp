@@ -4,6 +4,8 @@ using namespace jsonrpc;
 
 namespace mage {
 
+    static std::vector<std::__thread_id> s_cancelThread;
+
 	RPC::RPC(const std::string& mageApplication,
 	         const std::string& mageDomain,
 	         const std::string& mageProtocol)
