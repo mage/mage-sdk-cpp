@@ -17,6 +17,8 @@ namespace mage {
 	}
 
 	RPC::~RPC() {
+		this->Cancel();
+
 		delete m_pJsonRpcClient;
 		delete m_pHttpClient;
 	}
