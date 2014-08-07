@@ -22,13 +22,13 @@ namespace mage {
 			                                      const Json::Value& params,
 			                                      bool doAsync) const;
 			virtual std::future<void> Call(const std::string& name,
-			                  const Json::Value& params,
-			                  const std::function<void(mage::MageError, Json::Value)>& callback,
-			                  bool doAsync) const;
+			                               const Json::Value& params,
+			                               const std::function<void(mage::MageError, Json::Value)>& callback,
+			                               bool doAsync) const;
 
-            virtual void Call(const std::string& name,
-                                       const Json::Value& params,
-                                       const std::function<void(mage::MageError, Json::Value)>& callback);
+			virtual void Call(const std::string& name,
+			                  const Json::Value& params,
+			                  const std::function<void(mage::MageError, Json::Value)>& callback);
 
 			void SetProtocol(const std::string& mageProtocol);
 			void SetDomain(const std::string& mageDomain);
@@ -38,7 +38,7 @@ namespace mage {
 
 			std::string GetUrl() const;
 
-            void Cancel();
+			void Cancel();
 
 		private:
 			std::string m_sProtocol;
@@ -48,9 +48,9 @@ namespace mage {
 			jsonrpc::HttpClient *m_pHttpClient;
 			jsonrpc::Client     *m_pJsonRpcClient;
 
-            std::thread       m_task;
-        
-            static bool IsCancelAndCleanThread(std::__thread_id threadId);
+			std::thread          m_task;
+
+			static bool IsCancelAndCleanThread(std::__thread_id threadId);
 	};
 
 }  // namespace mage

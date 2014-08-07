@@ -56,9 +56,9 @@ namespace mage {
 	}
 
 	std::future<void> RPC::Call(const std::string& name,
-	               				const Json::Value& params,
-	               				const std::function<void(mage::MageError, Json::Value)>& callback,
-	               				bool doAsync) const {
+	                            const Json::Value& params,
+	                            const std::function<void(mage::MageError, Json::Value)>& callback,
+	                            bool doAsync) const {
 		std::launch policy = doAsync ? std::launch::async : std::launch::deferred;
 
 		return std::async(policy, [this, name, params, callback]{
@@ -74,13 +74,13 @@ namespace mage {
 		});
 	}
 
-    void RPC::Call(const std::string& name,
-                   const Json::Value& params,
-                   const std::function<void(mage::MageError, Json::Value)>& callback) {
+	void RPC::Call(const std::string& name,
+	               const Json::Value& params,
+	               const std::function<void(mage::MageError, Json::Value)>& callback) {
 		m_task = std::thread([this, name, params, callback] {
 			Json::Value res;
 			mage::MageSuccess ok;
-            
+
 			try {
 				res = Call(name, params);
 				if (!IsCancelAndCleanThread(std::this_thread::get_id())) callback(ok, res);
@@ -88,7 +88,7 @@ namespace mage {
 				if (!IsCancelAndCleanThread(std::this_thread::get_id())) callback(e, res);
 			}
 		});
-    }
+	}
 
 	void RPC::SetDomain(const std::string& mageDomain) {
 		m_sDomain = mageDomain;
@@ -116,20 +116,19 @@ namespace mage {
 	std::string RPC::GetUrl() const {
 		return m_sProtocol + "://" + m_sDomain + "/" + m_sApplication + "/jsonrpc";
 	}
+	void RPC::Cancel() {
+		if (m_task.joinable()) {
+			s_cancelThread.push_back(m_task.get_id());
+			m_task.detach();
+		}
+	}
 
-    void RPC::Cancel() {
-        if (m_task.joinable()) {
-            s_cancelThread.push_back(m_task.get_id());
-            m_task.detach();
-        }
-    }
-    
-    bool RPC::IsCancelAndCleanThread(std::__thread_id threadId) {
-        if (find(s_cancelThread.begin(), s_cancelThread.end() , threadId) != s_cancelThread.end()) {
-            s_cancelThread.erase(std::remove(s_cancelThread.begin(), s_cancelThread.end(), threadId), s_cancelThread.end());
-            return true;
-        }
-        
-        return false;
-    }
+	bool RPC::IsCancelAndCleanThread(std::__thread_id threadId) {
+		if (find(s_cancelThread.begin(), s_cancelThread.end() , threadId) != s_cancelThread.end()) {
+			s_cancelThread.erase(std::remove(s_cancelThread.begin(), s_cancelThread.end(), threadId), s_cancelThread.end());
+			return true;
+		}
+
+		return false;
+	}
 }  // namespace mage
