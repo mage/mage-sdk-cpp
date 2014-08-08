@@ -75,8 +75,8 @@ namespace mage {
 	}
 
 	std::__thread_id RPC::Call(const std::string& name,
-	               const Json::Value& params,
-	               const std::function<void(mage::MageError, Json::Value)>& callback) {
+	                           const Json::Value& params,
+	                           const std::function<void(mage::MageError, Json::Value)>& callback) {
 		std::thread task = std::thread([this, name, params, callback]{
 			Json::Value res;
 			mage::MageSuccess ok;
