@@ -81,13 +81,9 @@ namespace mage {
 			Json::Value res;
 			mage::MageSuccess ok;
 
-			std::this_thread::sleep_for(std::chrono::seconds(20));
-
 			std::__thread_id threadId = std::this_thread::get_id();
 
 			try {
-				if (IsCancelThread(threadId)) return;
-
 				res = Call(name, params);
 				if (!IsCancelThread(threadId)) callback(ok, res);
 			} catch (mage::MageError e) {
