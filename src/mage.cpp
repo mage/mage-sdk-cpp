@@ -4,7 +4,7 @@ using namespace jsonrpc;
 
 namespace mage {
 
-    static std::vector<std::__thread_id> s_cancelThread;
+	static std::vector<std::__thread_id> s_runningThreadIds;
 
 	RPC::RPC(const std::string& mageApplication,
 	         const std::string& mageDomain,
@@ -17,7 +17,7 @@ namespace mage {
 	}
 
 	RPC::~RPC() {
-		this->Cancel();
+		this->CancelAll();
 
 		delete m_pJsonRpcClient;
 		delete m_pHttpClient;
@@ -74,20 +74,35 @@ namespace mage {
 		});
 	}
 
-	void RPC::Call(const std::string& name,
+	std::__thread_id RPC::Call(const std::string& name,
 	               const Json::Value& params,
 	               const std::function<void(mage::MageError, Json::Value)>& callback) {
-		m_task = std::thread([this, name, params, callback] {
+		std::thread task = std::thread([this, name, params, callback]{
 			Json::Value res;
 			mage::MageSuccess ok;
 
+			std::this_thread::sleep_for(std::chrono::seconds(20));
+
+			std::__thread_id threadId = std::this_thread::get_id();
+
 			try {
+				if (IsCancelThread(threadId)) return;
+
 				res = Call(name, params);
-				if (!IsCancelAndCleanThread(std::this_thread::get_id())) callback(ok, res);
+				if (!IsCancelThread(threadId)) callback(ok, res);
 			} catch (mage::MageError e) {
-				if (!IsCancelAndCleanThread(std::this_thread::get_id())) callback(e, res);
+				if (!IsCancelThread(threadId)) callback(e, res);
 			}
+
+			s_runningThreadIds.erase(std::remove(s_runningThreadIds.begin(), s_runningThreadIds.end(), threadId)
+				, s_runningThreadIds.end());
 		});
+
+		std::__thread_id id = task.get_id();
+		s_runningThreadIds.push_back(id);
+		m_taskList[id] = std::move(task);
+
+		return id;
 	}
 
 	void RPC::SetDomain(const std::string& mageDomain) {
@@ -116,19 +131,33 @@ namespace mage {
 	std::string RPC::GetUrl() const {
 		return m_sProtocol + "://" + m_sDomain + "/" + m_sApplication + "/jsonrpc";
 	}
-	void RPC::Cancel() {
-		if (m_task.joinable()) {
-			s_cancelThread.push_back(m_task.get_id());
-			m_task.detach();
+
+	void RPC::Join(std::__thread_id threadId) {
+		if (m_taskList.count(threadId) > 0 && m_taskList[threadId].joinable()) {
+			m_taskList[threadId].join();
 		}
 	}
 
-	bool RPC::IsCancelAndCleanThread(std::__thread_id threadId) {
-		if (find(s_cancelThread.begin(), s_cancelThread.end() , threadId) != s_cancelThread.end()) {
-			s_cancelThread.erase(std::remove(s_cancelThread.begin(), s_cancelThread.end(), threadId), s_cancelThread.end());
-			return true;
+	void RPC::Cancel(std::__thread_id threadId) {
+		if (m_taskList.count(threadId) > 0) {
+			if (m_taskList[threadId].joinable()) {
+				m_taskList[threadId].detach();
+				s_runningThreadIds.erase(std::remove(s_runningThreadIds.begin(), s_runningThreadIds.end(), threadId)
+					, s_runningThreadIds.end());
+				m_taskList.erase(threadId);
+			}
 		}
+	}
 
-		return false;
+	void RPC::CancelAll() {
+		for (std::map<std::__thread_id, std::thread>::iterator it = m_taskList.begin(); it != m_taskList.end(); it++) {
+			if (it->second.joinable()) it->second.detach();
+		}
+		m_taskList.clear();
+		s_runningThreadIds.clear();
+	}
+
+	bool RPC::IsCancelThread(std::__thread_id threadId) {
+		return find(s_runningThreadIds.begin(), s_runningThreadIds.end() , threadId) == s_runningThreadIds.end();
 	}
 }  // namespace mage

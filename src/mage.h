@@ -38,7 +38,8 @@ namespace mage {
 
 			std::string GetUrl() const;
 
-			void Cancel();
+			void Join(std::__thread_id threadId);
+			void Cancel(std::__thread_id threadId);
 
 		private:
 			std::string m_sProtocol;
@@ -48,9 +49,10 @@ namespace mage {
 			jsonrpc::HttpClient *m_pHttpClient;
 			jsonrpc::Client     *m_pJsonRpcClient;
 
-			std::thread          m_task;
+			std::map<std::__thread_id, std::thread> m_taskList;
 
-			static bool IsCancelAndCleanThread(std::__thread_id threadId);
+			static bool IsCancelThread(std::__thread_id threadId);
+			void CancelAll();
 	};
 
 }  // namespace mage
