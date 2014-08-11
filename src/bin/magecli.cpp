@@ -1,64 +1,95 @@
 #include <mage.h>
 #include <getopt.h>
 #include <iostream>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 using namespace mage;
 using namespace std;
 
+enum Color {
+	RED     = 31,
+	GREEN   = 32,
+	YELLOW  = 33,
+	BLUE    = 34,
+	MAGENTA = 35,
+	CYAN    = 36,
+	GREY	= 37
+};
+
+std::string format(const std::string& text, Color color, bool bold = false) {
+	std::stringstream ss;
+	char* colorStr = (char*)malloc(2 * sizeof(char));
+	sprintf(colorStr, "%d", color);
+	ss << RL_PROMPT_START_IGNORE
+	   << "\033["
+	   << (bold ? "1" : "0")
+	   << ";"
+	   << colorStr
+	   << "m"
+	   << RL_PROMPT_END_IGNORE
+	   << text
+	   << RL_PROMPT_START_IGNORE
+	   << "\033[0m"
+	   << RL_PROMPT_END_IGNORE;
+	free(colorStr);
+	return ss.str();
+}
+
 std::string red(const std::string& text) {
-	return "\033[0;31m" + text + "\033[0m";
+	return format(text, RED);
 }
 
 std::string redBold(const std::string& text) {
-	return "\033[1;31m" + text + "\033[0m";
+	return format(text, RED, true);
 }
 
 std::string green(const std::string& text) {
-	return "\033[0;32m" + text + "\033[0m";
+	return format(text, GREEN);
 }
 
 std::string greenBold(const std::string& text) {
-	return "\033[1;32m" + text + "\033[0m";
+	return format(text, GREEN, true);
 }
 
 std::string yellow(const std::string& text) {
-	return "\033[0;33m" + text + "\033[0m";
+	return format(text, YELLOW);
 }
 
 std::string yellowBold(const std::string& text) {
-	return "\033[1;33m" + text + "\033[0m";
+	return format(text, YELLOW, true);
 }
 
 std::string blue(const std::string& text) {
-	return "\033[0;34m" + text + "\033[0m";
+	return format(text, BLUE);
 }
 
 std::string blueBold(const std::string& text) {
-	return "\033[1;34m" + text + "\033[0m";
+	return format(text, BLUE, true);
 }
 
 std::string magenta(const std::string& text) {
-	return "\033[0;35m" + text + "\033[0m";
+	return format(text, MAGENTA);
 }
 
 std::string magentaBold(const std::string& text) {
-	return "\033[1;35m" + text + "\033[0m";
+	return format(text, MAGENTA, true);
 }
 
 std::string cyan(const std::string& text) {
-	return "\033[0;36m" + text + "\033[0m";
+	return format(text, CYAN);
 }
 
 std::string cyanBold(const std::string& text) {
-	return "\033[1;36m" + text + "\033[0m";
+	return format(text, CYAN, true);
 }
 
 std::string grey(const std::string& text) {
-	return "\033[0;37m" + text + "\033[0m";
+	return format(text, GREY);
 }
 
 std::string greyBold(const std::string& text) {
-	return "\033[1;37m" + text + "\033[0m";
+	return format(text, GREY, true);
 }
 
 void showHelp() {
@@ -145,12 +176,18 @@ int main(int argc, char *argv[]) {
 	cout << cyan("Usage: ") << magentaBold("[usercommand.command] ") << blueBold("[JSON object]") << endl;
 	cout << endl;
 
-	while (true) {
-		//
-		// Show prompt and wait
-		//
-		std::cout << cyanBold("mage") << yellowBold("> ");
-		std::getline(std::cin, command);
+	// Readline variables
+	char *buf;
+	std::stringstream prompt;
+	prompt << cyanBold("mage") << yellowBold("> ");
+
+	// disable auto-complete
+	rl_bind_key('\t',rl_insert);
+
+	// Show prompt and wait
+	while((buf = readline(prompt.str().c_str())) != NULL) {
+		command = buf;
+		free(buf);
 
 		//
 		// Make sure we have a command and an object
@@ -169,6 +206,9 @@ int main(int argc, char *argv[]) {
 			data = command.substr(pos + 1);
 		}
 
+		// Add the command to the history
+		add_history(command.c_str());
+
 		if (userCommand == "setSession") {
 			client.SetSession(data);
 			continue;
@@ -177,6 +217,10 @@ int main(int argc, char *argv[]) {
 		if (userCommand == "clearSession") {
 			client.ClearSession();
 			continue;
+		}
+
+		if (userCommand == "exit") {
+			break;
 		}
 
 		if (!reader.parse(data, params)) {
