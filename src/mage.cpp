@@ -11,24 +11,24 @@ namespace mage {
 	         const std::string& mageProtocol)
 	: m_sProtocol(mageProtocol)
 	, m_sDomain(mageDomain)
-	, m_sApplication(mageApplication) {
-		m_pHttpClient    = new HttpClient(GetUrl());
-		m_pJsonRpcClient = new Client(m_pHttpClient);
+	, m_sApplication(mageApplication)
+	, m_sessionKey("") {
 	}
 
 	RPC::~RPC() {
 		this->CancelAll();
-
-		delete m_pJsonRpcClient;
-		delete m_pHttpClient;
 	}
 
 	Json::Value RPC::Call(const std::string& name,
 	                      const Json::Value& params) const {
 		Json::Value res;
 
+		jsonrpc::HttpClient *pHttpClient = new HttpClient(GetUrl());
+		if (!m_sessionKey.empty()) pHttpClient->AddHeader("X-MAGE-SESSION", m_sessionKey);
+		jsonrpc::Client     *pJsonRpcClient = new Client(pHttpClient);
+
 		try {
-			m_pJsonRpcClient->CallMethod(name, params, res);
+			pJsonRpcClient->CallMethod(name, params, res);
 		} catch (JsonRpcException ex) {
 			throw MageRPCError(ex.GetCode(), ex.GetMessage());
 		}
@@ -36,6 +36,10 @@ namespace mage {
 		if (res.isMember("errorCode")) {
 			throw MageErrorMessage(res["errorCode"].asString());
 		}
+
+
+		delete pJsonRpcClient;
+		delete pHttpClient;
 
 		/**
 		 * Todo?:
@@ -104,25 +108,22 @@ namespace mage {
 
 	void RPC::SetDomain(const std::string& mageDomain) {
 		m_sDomain = mageDomain;
-		m_pHttpClient->SetUrl(GetUrl());
 	}
 
 	void RPC::SetApplication(const std::string& mageApplication) {
 		m_sApplication = mageApplication;
-		m_pHttpClient->SetUrl(GetUrl());
 	}
 
 	void RPC::SetProtocol(const std::string& mageProtocol) {
 		m_sProtocol = mageProtocol;
-		m_pHttpClient->SetUrl(GetUrl());
 	}
 
-	void RPC::SetSession(const std::string& sessionKey) const {
-		m_pHttpClient->AddHeader("X-MAGE-SESSION", sessionKey);
+	void RPC::SetSession(const std::string& sessionKey) {
+		m_sessionKey = sessionKey;
 	}
 
-	void RPC::ClearSession() const {
-		m_pHttpClient->RemoveHeader("X-MAGE-SESSION");
+	void RPC::ClearSession() {
+		m_sessionKey = "";
 	}
 
 	std::string RPC::GetUrl() const {
