@@ -1,45 +1,63 @@
-#ifndef MAGEEXCEPTIONS_H_
-#define MAGEEXCEPTIONS_H_
+#ifndef MAGEEXCEPTIONS_H
+#define MAGEEXCEPTIONS_H
 
-#include <iostream>
+#include <string>
 #include <stdexcept>
 
-namespace mage
-{
-	class MageError: public std::runtime_error
-	{
-		public:
-			MageError(const std::string message);
+namespace mage {
+
+	enum mage_error_t : int {
+		MAGE_ERROR = 0,
+		MAGE_SUCCESS,
+		MAGE_CLIENT_ERROR,
+		MAGE_RPC_ERROR,
+		MAGE_ERROR_MESSAGE
 	};
 
-	class MageRPCError: public MageError
-	{
+	class MageError: public std::runtime_error {
 		public:
-			MageRPCError(const int code, const std::string message);
+			MageError(const std::string& message);
+			virtual ~MageError() {}
+			virtual std::string code() const;
+			int type() const { return m_iType; }
+		protected:
+			MageError(mage_error_t _type, const std::string& message);
+			const mage_error_t m_iType;
+	};
 
-			virtual ~MageRPCError() throw();
+	class MageSuccess: public MageError {
+		public:
+			MageSuccess(const std::string& message = "");
+			virtual ~MageSuccess() {}
+			virtual std::string code() const;
+	};
 
-			int code();
+	class MageClientError: public MageError {
+		public:
+			MageClientError(const std::string& message = "");
+			virtual ~MageClientError() {}
+			virtual std::string code() const;
+	};
+
+	class MageRPCError: public MageError {
+		public:
+			MageRPCError(int code, const std::string& message);
+			virtual ~MageRPCError() {}
+			virtual std::string code() const;
 
 		private:
-			const int errorCode;
+			const int m_iErrorCode;
 	};
 
-	class MageErrorMessage:  public MageError
-	{
+	class MageErrorMessage: public MageError {
 		public:
-			MageErrorMessage(const std::string code);
-			MageErrorMessage(const std::string code, const std::string message);
-
-			virtual ~MageErrorMessage() throw();
-
-			std::string code();
+			MageErrorMessage(const std::string& code,
+			                 const std::string& message = "");
+			virtual ~MageErrorMessage() {}
+			virtual std::string code() const;
 
 		private:
-			const std::string errorCode;
+			const std::string m_sErrorCode;
 	};
-};
-
+}  // namespace mage
 #endif
-
-

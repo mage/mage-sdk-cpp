@@ -40,13 +40,16 @@ int main() {
 	//
 	try {
 		user = client.Call("ident.login", auth);
-		cout << "Login succeeded, you are: " << user["user"]["displayName"] << " (id: " << user["user"]["userId"] << ")" << endl;
+
+		cout << "Login succeeded, you are: ";
+		cout << user["user"]["displayName"];
+		cout << " (id: " << user["user"]["userId"];
+		cout << ")" << endl;
 
 		//
 		// We set the session
 		//
 		client.SetSession(user["session"]["key"].asString());
-
 	} catch (mage::MageRPCError e) {
 		cerr << "Could not login, an RPC error has occured: "  << e.what() << " (code " << e.code() << ")" << endl;
 		return 1;

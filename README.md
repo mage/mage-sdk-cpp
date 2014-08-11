@@ -28,10 +28,18 @@ Installation
 
 You will need OS X 10.9 and up, with XCode installed.
 
+For a better user experience with `magecli`,
+we recommend that you install [GNU readline](http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html).
+
+With brew:
+```bash
+brew install readline
+```
+
 #### CentOS
 
 ```
-sudo yum install cmake automake autoconf libtool libcurl-devel
+sudo yum install cmake automake autoconf libtool libcurl-devel readline-devel
 ```
 
 CMake 2.8+ is required. It can be found in the [rpmforge-extras](http://repoforge.org/use/) repository.
@@ -39,13 +47,13 @@ CMake 2.8+ is required. It can be found in the [rpmforge-extras](http://repoforg
 #### Ubuntu/Debian
 
 ```
-sudo apt-get install libcurl4-openssl-dev cmake
+sudo apt-get install libcurl4-openssl-dev cmake libreadline-dev
 ```
 
 ### Setup
 
 ```bash
-git clone git@github.com:mage/mage-sdk-cpp.git
+git clone https://github.com/mage/mage-sdk-cpp.git
 cd mage-sdk-cpp
 git submodule update --init
 ```
@@ -136,6 +144,56 @@ We haven't tried to integrate with these platforms yet. We
 will add some integration notes for each of those projects
 as soon as we have experimented with them.
 
+Events polling
+--------------
+
+You can pull events from the `msgStream` of your MAGE server by using
+the `void PullEvents(Transport transport);` function.
+
+Two transports are available:
+* `LONGPOLLING`: the request will be kept open by the server,
+  until an event becomes available, or the server send a heartbeat.
+* `SHORTPOLLING`: the request will return immediately with the response
+  from the server.
+
+When you use `void StartPolling(transport transport);`,
+a loop is started in another thread to call `PullEvents()`.
+
+If you use `LONGPOLLING`, after each request a new one will be sent.
+If you use `SHORTPOLLING`, the loop will wait `SHORTPOLLING_INTERVAL_SECS`
+seconds before sending a new request.
+
+By default `SHORTPOLLING_INTERVAL_SECS` is set to 5 seconds.
+You can change it, by adding a new flag in the `Makefile`.
+You need to add `-DSHORTPOLLING_INTERVAL_SECS=5` with your value,
+at the end of the `CFGLAGS` line.
+
+Concurrency
+-----------
+
+```c++
+virtual std::future<void> Call(const std::string& name,
+				  const Json::Value& params,
+				  const std::function<void(mage::MageError, Json::Value)>& callback,
+				  bool doAsync) const;
+```
+
+When you use `mage::RPC::Call()` with a callback and in an asynchronous way,
+with `doAsync` set to true, the callback will be called in a different thread.
+
+```c++
+void StartPolling(Transport transport = LONGPOLLING);
+```
+
+When you use `mage::RPC::StartPolling()`, all the `mage::RPC::ReceiveEvent()`
+calls will be done in a different thread.
+In consequence, your implementation of `mage::EventObserver::ReceiveEvent()`
+will be called in a different thread too.
+
+In these cases, you need to use `std::mutex` or other locking strategy to
+ensure your data are not accessed at the same time by two different
+threads.
+
 Todo
 -----
 
@@ -143,11 +201,31 @@ Todo
 - [ ] Test integration against popular game development SDKs
 - [ ] Session handling: save the session when we receive it, and offer an API to interact with it
 - [ ] Make install/clean for the binaries (maybe)
-- [ ] Message stream event handling
 - [ ] CLI: Have the option to list and describe the remote calls
+
+Conding Style
+-------------
+
+We try to follow the [Google C++ Style Guide](http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml).
+There are some exceptions:
+* We use default arguments in functions;
+* We use C++ exceptions;
+* We use lambda expressions;
+* We use tabs for indentation and spaces for alignment.
+
+We use the [Hungarian Notation](http://en.wikipedia.org/wiki/Hungarian_notation) to name class attributes.
+More references on Hungarian Notation:
+* [http://web.mst.edu/~cpp/common/hungarian.html](http://web.mst.edu/~cpp/common/hungarian.html)
+* [http://www.cse.iitk.ac.in/users/dsrkg/cs245/html/Guide.htm](http://www.cse.iitk.ac.in/users/dsrkg/cs245/html/Guide.htm)
+
+You can check if you follow the rules by running:
+```bash
+make lint
+```
 
 See also
 ---------
 
 - [JSONCPP, the library we use for our JSON operations](http://jsoncpp.sourceforge.net/)
 - [libjson-rpc-cpp](https://github.com/cinemast/libjson-rpc-cpp)
+
