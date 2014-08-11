@@ -15,7 +15,7 @@ class ExampleEventObserver : public mage::EventObserver {
 				std::cout << "data: " << data.toStyledString() << std::endl;
 			}
 
-			// Set the session when it receive the session:set event
+			// Set the session when it receive the session.set event
 			if (name == "session.set") {
 				HandleSessionSet(data);
 			}
