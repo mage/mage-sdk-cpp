@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 project(mage-sdk-cpp)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/macros")
+
 find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIRS})
+
+find_package(Readline REQUIRED)
+include_directories(${Readline_INCLUDE_DIR})
 
 SET(HTTP_CONNECTOR YES CACHE BOOL "Include HTTP connector inside library")
 add_subdirectory(${CMAKE_SOURCE_DIR}/vendor/libjson-rpc-cpp/src/jsonrpc)
@@ -53,6 +58,11 @@ add_custom_target(
 add_custom_target(
   platforms
   DEPENDS android ios
+)
+
+add_custom_target(
+  lint
+  COMMAND python tools/cpplint.py --filter=-whitespace/tab,-legal,-build,-readability/streams,-runtime/explicit,-whitespace/indent --linelength=120 src/*.{h,cpp} src/bin/*.cpp examples/*.cpp
 )
 
 add_subdirectory(src)
