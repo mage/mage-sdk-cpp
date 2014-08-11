@@ -42,6 +42,18 @@ brew install readline
 sudo yum install cmake automake autoconf libtool libcurl-devel readline-devel
 ```
 
+CMake 2.8+ is required. It can be found in the [rpmforge-extras](http://repoforge.org/use/) repository.
+
+A recent version of GCC is required to be able to use the C++11 features.
+You can get one using the [Red Hat Developer Toolset](https://access.redhat.com/documentation/en-US/Red_Hat_Developer_Toolset/2/html/User_Guide/index.html).
+
+```bash
+wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
+yum install devtoolset-2-gcc devtoolset-2-gcc-c++ devtoolset-2-libstdc++-devel
+```
+
+Then you will have to run `scl enable devtoolset-2 bash` to start a new shell with the new GCC activated.
+
 #### Ubuntu/Debian
 
 ```
@@ -59,7 +71,10 @@ git submodule update --init
 ### OS X/Linux
 
 ```
-make
+mkdir build
+cd build
+cmake ..
+make all
 ```
 
 ### Building for iOS, Android, WP8, etc
