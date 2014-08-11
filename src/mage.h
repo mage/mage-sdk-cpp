@@ -26,7 +26,7 @@ namespace mage {
 			                               const std::function<void(mage::MageError, Json::Value)>& callback,
 			                               bool doAsync) const;
 
-			virtual std::__thread_id Call(const std::string& name,
+			virtual std::thread::id Call(const std::string& name,
 			                              const Json::Value& params,
 			                              const std::function<void(mage::MageError, Json::Value)>& callback);
 
@@ -38,8 +38,8 @@ namespace mage {
 
 			std::string GetUrl() const;
 
-			void Join(std::__thread_id threadId);
-			void Cancel(std::__thread_id threadId);
+			void Join(std::thread::id threadId);
+			void Cancel(std::thread::id threadId);
 
 		private:
 			std::string m_sProtocol;
@@ -49,9 +49,9 @@ namespace mage {
 			jsonrpc::HttpClient *m_pHttpClient;
 			jsonrpc::Client     *m_pJsonRpcClient;
 
-			std::map<std::__thread_id, std::thread> m_taskList;
+			std::map<std::thread::id, std::thread> m_taskList;
 
-			static bool IsCancelThread(std::__thread_id threadId);
+			static bool IsCancelThread(std::thread::id threadId);
 			void CancelAll();
 	};
 

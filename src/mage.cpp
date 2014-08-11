@@ -4,7 +4,7 @@ using namespace jsonrpc;
 
 namespace mage {
 
-	static std::vector<std::__thread_id> s_runningThreadIds;
+	static std::vector<std::thread::id> s_runningThreadIds;
 
 	RPC::RPC(const std::string& mageApplication,
 	         const std::string& mageDomain,
@@ -74,16 +74,17 @@ namespace mage {
 		});
 	}
 
-	std::__thread_id RPC::Call(const std::string& name,
+	std::thread::id RPC::Call(const std::string& name,
 	                           const Json::Value& params,
 	                           const std::function<void(mage::MageError, Json::Value)>& callback) {
 		std::thread task = std::thread([this, name, params, callback]{
 			Json::Value res;
 			mage::MageSuccess ok;
 
-			std::__thread_id threadId = std::this_thread::get_id();
+			std::thread::id threadId = std::this_thread::get_id();
 
 			try {
+				if (IsCancelThread(threadId)) return;
 				res = Call(name, params);
 				if (!IsCancelThread(threadId)) callback(ok, res);
 			} catch (mage::MageError e) {
@@ -94,7 +95,7 @@ namespace mage {
 				, s_runningThreadIds.end());
 		});
 
-		std::__thread_id id = task.get_id();
+		std::thread::id id = task.get_id();
 		s_runningThreadIds.push_back(id);
 		m_taskList[id] = std::move(task);
 
@@ -128,13 +129,13 @@ namespace mage {
 		return m_sProtocol + "://" + m_sDomain + "/" + m_sApplication + "/jsonrpc";
 	}
 
-	void RPC::Join(std::__thread_id threadId) {
+	void RPC::Join(std::thread::id threadId) {
 		if (m_taskList.count(threadId) > 0 && m_taskList[threadId].joinable()) {
 			m_taskList[threadId].join();
 		}
 	}
 
-	void RPC::Cancel(std::__thread_id threadId) {
+	void RPC::Cancel(std::thread::id threadId) {
 		if (m_taskList.count(threadId) > 0) {
 			if (m_taskList[threadId].joinable()) {
 				m_taskList[threadId].detach();
@@ -146,14 +147,14 @@ namespace mage {
 	}
 
 	void RPC::CancelAll() {
-		for (std::map<std::__thread_id, std::thread>::iterator it = m_taskList.begin(); it != m_taskList.end(); it++) {
+		for (std::map<std::thread::id, std::thread>::iterator it = m_taskList.begin(); it != m_taskList.end(); it++) {
 			if (it->second.joinable()) it->second.detach();
 		}
 		m_taskList.clear();
 		s_runningThreadIds.clear();
 	}
 
-	bool RPC::IsCancelThread(std::__thread_id threadId) {
+	bool RPC::IsCancelThread(std::thread::id threadId) {
 		return find(s_runningThreadIds.begin(), s_runningThreadIds.end() , threadId) == s_runningThreadIds.end();
 	}
 }  // namespace mage
