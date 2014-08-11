@@ -23,12 +23,12 @@ namespace mage {
 	                      const Json::Value& params) const {
 		Json::Value res;
 
-		jsonrpc::HttpClient *pHttpClient = new HttpClient(GetUrl());
-		if (!m_sessionKey.empty()) pHttpClient->AddHeader("X-MAGE-SESSION", m_sessionKey);
-		jsonrpc::Client     *pJsonRpcClient = new Client(pHttpClient);
+		jsonrpc::HttpClient httpClient = HttpClient(GetUrl());
+		if (!m_sessionKey.empty()) httpClient.AddHeader("X-MAGE-SESSION", m_sessionKey);
+		jsonrpc::Client     jsonRpcClient = Client(&httpClient);
 
 		try {
-			pJsonRpcClient->CallMethod(name, params, res);
+			jsonRpcClient.CallMethod(name, params, res);
 		} catch (JsonRpcException ex) {
 			throw MageRPCError(ex.GetCode(), ex.GetMessage());
 		}
@@ -36,10 +36,6 @@ namespace mage {
 		if (res.isMember("errorCode")) {
 			throw MageErrorMessage(res["errorCode"].asString());
 		}
-
-
-		delete pJsonRpcClient;
-		delete pHttpClient;
 
 		/**
 		 * Todo?:
