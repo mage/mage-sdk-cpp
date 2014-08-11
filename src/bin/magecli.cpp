@@ -1,8 +1,9 @@
-#include <mage.h>
 #include <getopt.h>
 #include <iostream>
 #include <readline/readline.h>
 #include <readline/history.h>
+
+#include <mage.h>
 
 using namespace mage;
 using namespace std;
@@ -14,7 +15,7 @@ enum Color {
 	BLUE    = 34,
 	MAGENTA = 35,
 	CYAN    = 36,
-	GREY	= 37
+	GREY    = 37
 };
 
 std::string format(const std::string& text, Color color, bool bold = false) {
@@ -115,6 +116,27 @@ void showHelp() {
 	cout << endl;
 }
 
+class CliEventObserver : public mage::EventObserver {
+	public:
+		explicit CliEventObserver(mage::RPC* client) : m_pClient(client) {}
+		virtual void ReceiveEvent(const std::string& name,
+								  const Json::Value& data = Json::Value::null) const {
+			std::cout << greenBold("Receive event") << ": " << name << std::endl;
+			if (data != Json::Value::null) {
+				std::cout << cyanBold("data") << ": " << data.toStyledString() << std::endl;
+			}
+			if (name == "session.set") {
+				HandleSessionSet(data);
+			}
+		}
+		void HandleSessionSet(const Json::Value& data) const {
+			m_pClient->SetSession(data["key"].asString());
+		}
+
+	private:
+		mage::RPC* m_pClient;
+};
+
 int main(int argc, char *argv[]) {
 	std::string application = "";
 	std::string domain = "";
@@ -161,6 +183,9 @@ int main(int argc, char *argv[]) {
 	cout << endl;
 
 	mage::RPC client(application, domain);
+
+	CliEventObserver eventObserver(&client);
+	client.AddObserver(&eventObserver);
 
 	std::string command;
 	std::string userCommand;
@@ -216,6 +241,24 @@ int main(int argc, char *argv[]) {
 
 		if (userCommand == "clearSession") {
 			client.ClearSession();
+			continue;
+		}
+
+		if (userCommand == "pullEvents") {
+			if (data == "longpolling") {
+				client.PullEvents(LONGPOLLING);
+			} else {
+				client.PullEvents();
+			}
+			continue;
+		}
+
+		if (userCommand == "startPolling") {
+			if (data == "shortpolling") {
+				client.StartPolling(SHORTPOLLING);
+			} else {
+				client.StartPolling();
+			}
 			continue;
 		}
 
