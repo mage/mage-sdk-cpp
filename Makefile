@@ -3,20 +3,27 @@ BUILD_DIRECTORY = ./build
 
 UNAME_S := $(shell uname -s)
 
+RL_LFLAGS =
+RL_INCLUDES =
+
 ifeq ($(UNAME_S),Linux)
 	LIBCURL_DYLIB = /usr/lib64/libcurl.so
 endif
 ifeq ($(UNAME_S),Darwin)
 	LIBCURL_DYLIB = /usr/lib/libcurl.dylib
+	ifneq ($(wildcard /usr/local/opt/readline),)
+		RL_LFLAGS =  -L/usr/local/opt/readline/lib
+		RL_INCLUDES = -I/usr/local/opt/readline/include
+	endif
 endif
 
 CC = g++
 CFLAGS  = -g -Wall -std=c++0x -DHTTP_CONNECTOR
 
-INCLUDES = -I ./src -I ./vendor/libjson-rpc-cpp/src
+INCLUDES = -I ./src -I ./vendor/libjson-rpc-cpp/src $(RL_INCLUDES)
 
-LFLAGS = -L ./vendor/libjson-rpc-cpp/build/out -L ./build
-LIBS = -ljsonrpc -lmage -ldl $(LIBCURL_DYLIB)
+LFLAGS = -L ./vendor/libjson-rpc-cpp/build/out -L ./build $(RL_LFLAGS)
+LIBS = -ljsonrpc -lmage -lreadline -ldl $(LIBCURL_DYLIB)
 
 LIB_SRCS = $(wildcard ./src/*.cpp)
 LIB_OBJS = $(addprefix ./build/,$(notdir $(LIB_SRCS:.cpp=.o)))

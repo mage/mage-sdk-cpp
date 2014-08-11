@@ -28,16 +28,24 @@ Installation
 
 You will need OS X 10.9 and up, with XCode installed.
 
+For a better user experience with `magecli`,
+we recommend that you install [GNU readline](http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html).
+
+With brew:
+```bash
+brew install readline
+```
+
 #### CentOS
 
 ```
-sudo yum install cmake automake autoconf libtool libcurl-devel
+sudo yum install cmake automake autoconf libtool libcurl-devel readline-devel
 ```
 
 #### Ubuntu/Debian
 
 ```
-sudo apt-get install libcurl4-openssl-dev cmake
+sudo apt-get install libcurl4-openssl-dev cmake libreadline-dev
 ```
 
 ### Setup
