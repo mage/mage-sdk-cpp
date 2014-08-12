@@ -33,8 +33,8 @@ namespace mage {
 			void SetProtocol(const std::string& mageProtocol);
 			void SetDomain(const std::string& mageDomain);
 			void SetApplication(const std::string& mageApplication);
-			void SetSession(const std::string& sessionKey);
-			void ClearSession();
+			void SetSession(const std::string& sessionKey) const;
+			void ClearSession() const;
 
 			std::string GetUrl() const;
 
@@ -45,7 +45,9 @@ namespace mage {
 			std::string m_sProtocol;
 			std::string m_sDomain;
 			std::string m_sApplication;
-			std::string m_sessionKey;
+
+			jsonrpc::HttpClient *m_pHttpClient;
+			jsonrpc::Client     *m_pJsonRpcClient;
 
 			std::map<std::thread::id, std::thread> m_taskList;
 
