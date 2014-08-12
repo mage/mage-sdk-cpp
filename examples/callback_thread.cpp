@@ -12,7 +12,7 @@ using namespace std;
 //
 
 int main() {
-	mage::RPC client("game", "tomandjerry.test-node.wizcorp.jp");
+	mage::RPC client("game", "localhost:8080");
 
 	//
 	// However, we will store the result into
