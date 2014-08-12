@@ -22,6 +22,14 @@ namespace mage {
 		return "success";
 	}
 
+	MageClientError::MageClientError(const std::string& message)
+	: MageError::MageError(MAGE_CLIENT_ERROR, message) {
+	}
+
+	std::string MageClientError::code() const {
+		return "client error";
+	}
+
 	MageRPCError::MageRPCError(int code, const std::string& message)
 	: MageError::MageError(MAGE_RPC_ERROR, "MAGE RPC error: " + message)
 	, m_iErrorCode(code) {

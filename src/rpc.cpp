@@ -1,4 +1,4 @@
-#include "mage.h"
+#include "rpc.h"
 
 using namespace jsonrpc;
 
@@ -11,7 +11,9 @@ namespace mage {
 	         const std::string& mageProtocol)
 	: m_sProtocol(mageProtocol)
 	, m_sDomain(mageDomain)
-	, m_sApplication(mageApplication) {
+	, m_sApplication(mageApplication)
+	, m_bShouldRunPollingThread(false)
+	, m_pPollingThread(nullptr) {
 		m_pHttpClient    = new HttpClient(GetUrl());
 		m_pJsonRpcClient = new Client(m_pHttpClient);
 	}
@@ -19,8 +21,53 @@ namespace mage {
 	RPC::~RPC() {
 		this->CancelAll();
 
+		if (m_pPollingThread != nullptr) {
+			if (m_pPollingThread->joinable() == true) {
+				m_pPollingThread->join();
+			}
+			delete m_pPollingThread;
+		}
+
 		delete m_pJsonRpcClient;
 		delete m_pHttpClient;
+	}
+
+	void RPC::ExtractEventsFromCommandResponse(const Json::Value& myEvents) const {
+		bool hasParseError = false;
+		bool hasInvalidFormatError = false;
+
+		for (unsigned int i = 0; i < myEvents.size(); ++i) {
+			// We can only handle string
+			if (!myEvents[i].isString()) {
+				continue;
+			}
+
+			Json::Reader reader;
+			Json::Value event;
+			if (!reader.parse(myEvents[i].asString(), event)) {
+				hasParseError = true;
+				continue;
+			}
+
+			switch (event.size()) {
+				case 1:
+					ReceiveEvent(event[0u].asString());
+					break;
+				case 2:
+					ReceiveEvent(event[0u].asString(), event[1u]);
+					break;
+				default:
+					hasInvalidFormatError = true;
+			}
+		}
+
+		if (hasParseError) {
+			throw new MageClientError("One of the received events can't be read.");
+		}
+
+		if (hasInvalidFormatError) {
+			throw new MageClientError("One of the received events has an invalid format.");
+		}
 	}
 
 	Json::Value RPC::Call(const std::string& name,
@@ -37,11 +84,11 @@ namespace mage {
 			throw MageErrorMessage(res["errorCode"].asString());
 		}
 
-		/**
-		 * Todo?:
-		 *   foreach Event
-		 *     call event callback
-		 */
+		// If the myEvents array is present
+		if (res.isMember("myEvents") && res["myEvents"].isArray()) {
+			ExtractEventsFromCommandResponse(res["myEvents"]);
+		}
+
 		return res;
 	}
 
@@ -102,30 +149,51 @@ namespace mage {
 		return id;
 	}
 
+	void RPC::SetProtocol(const std::string& mageProtocol) {
+		std::lock_guard<std::mutex> lock(jsonrpcUrl_mutex);
+
+		msgStreamUrl_mutex.lock();
+		m_sProtocol = mageProtocol;
+		msgStreamUrl_mutex.unlock();
+		m_pHttpClient->SetUrl(GetUrl());
+	}
+
 	void RPC::SetDomain(const std::string& mageDomain) {
+		std::lock_guard<std::mutex> lock(jsonrpcUrl_mutex);
+
+		msgStreamUrl_mutex.lock();
 		m_sDomain = mageDomain;
+		msgStreamUrl_mutex.unlock();
 		m_pHttpClient->SetUrl(GetUrl());
 	}
 
 	void RPC::SetApplication(const std::string& mageApplication) {
+		std::lock_guard<std::mutex> lock(jsonrpcUrl_mutex);
+
+		msgStreamUrl_mutex.lock();
 		m_sApplication = mageApplication;
+		msgStreamUrl_mutex.unlock();
 		m_pHttpClient->SetUrl(GetUrl());
 	}
 
-	void RPC::SetProtocol(const std::string& mageProtocol) {
-		m_sProtocol = mageProtocol;
-		m_pHttpClient->SetUrl(GetUrl());
-	}
+	void RPC::SetSession(const std::string& sessionKey) {
+		std::lock_guard<std::mutex> lock(sessionKey_mutex);
 
-	void RPC::SetSession(const std::string& sessionKey) const {
 		m_pHttpClient->AddHeader("X-MAGE-SESSION", sessionKey);
+		msgStreamUrl_mutex.lock();
+		m_sSessionKey = sessionKey;
+		msgStreamUrl_mutex.unlock();
 	}
 
 	void RPC::ClearSession() const {
+		std::lock_guard<std::mutex> lock(sessionKey_mutex);
+
 		m_pHttpClient->RemoveHeader("X-MAGE-SESSION");
 	}
 
 	std::string RPC::GetUrl() const {
+		std::lock_guard<std::mutex> lock(jsonrpcUrl_mutex);
+
 		return m_sProtocol + "://" + m_sDomain + "/" + m_sApplication + "/jsonrpc";
 	}
 

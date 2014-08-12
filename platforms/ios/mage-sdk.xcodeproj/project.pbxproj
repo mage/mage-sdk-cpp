@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		218B92421986217000C091CB /* rpc_stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 218B923F1986217000C091CB /* rpc_stream.cpp */; };
+		218B92431986217000C091CB /* rpc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 218B92401986217000C091CB /* rpc.cpp */; };
 		6E203781195F1B96009D14D5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E203780195F1B96009D14D5 /* Foundation.framework */; };
 		6E203786195F1B96009D14D5 /* mage_sdk.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6E203785195F1B96009D14D5 /* mage_sdk.h */; };
 		6E203788195F1B96009D14D5 /* mage_sdk.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E203787195F1B96009D14D5 /* mage_sdk.m */; };
@@ -18,7 +20,6 @@
 		6E20379D195F1B96009D14D5 /* mage_sdkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E20379C195F1B96009D14D5 /* mage_sdkTests.m */; };
 		6E2037A7195F1C98009D14D5 /* libcurl_arm64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E2037A6195F1C98009D14D5 /* libcurl_arm64.a */; };
 		6E2037AC195F1CC8009D14D5 /* exceptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037A8195F1CC8009D14D5 /* exceptions.cpp */; };
-		6E2037AD195F1CC8009D14D5 /* mage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037AA195F1CC8009D14D5 /* mage.cpp */; };
 		6E2037E7195F1D47009D14D5 /* client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037B2195F1D47009D14D5 /* client.cpp */; };
 		6E2037E8195F1D47009D14D5 /* clientconnector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037B4195F1D47009D14D5 /* clientconnector.cpp */; };
 		6E2037E9195F1D47009D14D5 /* httpclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2037B8195F1D47009D14D5 /* httpclient.cpp */; };
@@ -62,6 +63,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		218B923E1986217000C091CB /* eventObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eventObserver.h; path = ../../../src/eventObserver.h; sourceTree = "<group>"; };
+		218B923F1986217000C091CB /* rpc_stream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rpc_stream.cpp; path = ../../../src/rpc_stream.cpp; sourceTree = "<group>"; };
+		218B92401986217000C091CB /* rpc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rpc.cpp; path = ../../../src/rpc.cpp; sourceTree = "<group>"; };
+		218B92411986217000C091CB /* rpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rpc.h; path = ../../../src/rpc.h; sourceTree = "<group>"; };
 		6E20377D195F1B96009D14D5 /* libmage-sdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libmage-sdk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E203780195F1B96009D14D5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6E203784195F1B96009D14D5 /* mage-sdk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mage-sdk-Prefix.pch"; sourceTree = "<group>"; };
@@ -76,7 +81,6 @@
 		6E2037A6195F1C98009D14D5 /* libcurl_arm64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl_arm64.a; path = ../externals/curl/prebuilt/ios/libcurl_arm64.a; sourceTree = "<group>"; };
 		6E2037A8195F1CC8009D14D5 /* exceptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exceptions.cpp; path = ../../../src/exceptions.cpp; sourceTree = "<group>"; };
 		6E2037A9195F1CC8009D14D5 /* exceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exceptions.h; path = ../../../src/exceptions.h; sourceTree = "<group>"; };
-		6E2037AA195F1CC8009D14D5 /* mage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mage.cpp; path = ../../../src/mage.cpp; sourceTree = "<group>"; };
 		6E2037AB195F1CC8009D14D5 /* mage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mage.h; path = ../../../src/mage.h; sourceTree = "<group>"; };
 		6E2037B0195F1D47009D14D5 /* abstractauthenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = abstractauthenticator.h; sourceTree = "<group>"; };
 		6E2037B1195F1D47009D14D5 /* abstractrequesthandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = abstractrequesthandler.h; sourceTree = "<group>"; };
@@ -191,9 +195,12 @@
 			isa = PBXGroup;
 			children = (
 				6E2037AF195F1D47009D14D5 /* jsonrpc */,
+				218B923E1986217000C091CB /* eventObserver.h */,
+				218B923F1986217000C091CB /* rpc_stream.cpp */,
+				218B92401986217000C091CB /* rpc.cpp */,
+				218B92411986217000C091CB /* rpc.h */,
 				6E2037A8195F1CC8009D14D5 /* exceptions.cpp */,
 				6E2037A9195F1CC8009D14D5 /* exceptions.h */,
-				6E2037AA195F1CC8009D14D5 /* mage.cpp */,
 				6E2037AB195F1CC8009D14D5 /* mage.h */,
 				6E203785195F1B96009D14D5 /* mage_sdk.h */,
 				6E203787195F1B96009D14D5 /* mage_sdk.m */,
@@ -389,6 +396,7 @@
 				6E2037E9195F1D47009D14D5 /* httpclient.cpp in Sources */,
 				6E2037F4195F1D47009D14D5 /* server.cpp in Sources */,
 				6E2037EF195F1D47009D14D5 /* json_value.cpp in Sources */,
+				218B92421986217000C091CB /* rpc_stream.cpp in Sources */,
 				6E2037E8195F1D47009D14D5 /* clientconnector.cpp in Sources */,
 				6E2037EB195F1D47009D14D5 /* mongoose.c in Sources */,
 				6E2037F3195F1D47009D14D5 /* rpcprotocolserver.cpp in Sources */,
@@ -397,6 +405,7 @@
 				6E203788195F1B96009D14D5 /* mage_sdk.m in Sources */,
 				6E2037AC195F1CC8009D14D5 /* exceptions.cpp in Sources */,
 				6E2037F7195F1D47009D14D5 /* specificationwriter.cpp in Sources */,
+				218B92431986217000C091CB /* rpc.cpp in Sources */,
 				6E2037F0195F1D47009D14D5 /* json_writer.cpp in Sources */,
 				6E2037EA195F1D47009D14D5 /* httpserver.cpp in Sources */,
 				6E2037E7195F1D47009D14D5 /* client.cpp in Sources */,
@@ -405,7 +414,6 @@
 				6E2037F1195F1D47009D14D5 /* procedure.cpp in Sources */,
 				6E2037EE195F1D47009D14D5 /* json_reader.cpp in Sources */,
 				6E2037ED195F1D47009D14D5 /* exception.cpp in Sources */,
-				6E2037AD195F1CC8009D14D5 /* mage.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
