@@ -12,7 +12,7 @@ using namespace std;
 //
 
 int main() {
-	mage::RPC client("game", "tomandjerry.test-node.wizcorp.jp");
+	mage::RPC client("game", "localhost:8080");
 
 	//
 	// However, we will store the result into
@@ -50,6 +50,7 @@ int main() {
 
 		cout << "user.register: " << res << endl;
 	});
+
 	std::thread::id t2 = client.Call("user.register", params, [](mage::MageError err, Json::Value res) {
 		std::cout << "2:Executed, we will now sleep for 1 second..." << std::endl;
 		usleep(1000000);
@@ -88,8 +89,8 @@ int main() {
 
 	client.Cancel(t1);
 	cout << "t1 canceled" << endl;
-	client.Cancel(t2);
-	cout << "t2 canceled" << endl;
+	client.Join(t2);
+	cout << "t2 joined" << endl;
 	client.Join(t3);
 	cout << "t3 joined" << endl;
 }
