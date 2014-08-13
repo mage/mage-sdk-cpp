@@ -34,9 +34,13 @@ namespace mage {
 			                                      const Json::Value& params,
 			                                      bool doAsync) const;
 			virtual std::future<void> Call(const std::string& name,
-			                  const Json::Value& params,
-			                  const std::function<void(mage::MageError, Json::Value)>& callback,
-			                  bool doAsync) const;
+			                               const Json::Value& params,
+			                               const std::function<void(mage::MageError, Json::Value)>& callback,
+			                               bool doAsync) const;
+
+			virtual std::thread::id Call(const std::string& name,
+			                              const Json::Value& params,
+			                              const std::function<void(mage::MageError, Json::Value)>& callback);
 
 			virtual void ReceiveEvent(const std::string& name,
 			                          const Json::Value& data = Json::Value::null) const;
@@ -54,6 +58,9 @@ namespace mage {
 
 			std::string GetUrl() const;
 			std::string GetMsgStreamUrl(Transport transport = SHORTPOLLING) const;
+
+			void Join(std::thread::id threadId);
+			void Cancel(std::thread::id threadId);
 
 		private:
 			void DoHttpGet(std::string *buffer, const std::string& url) const;
@@ -82,6 +89,11 @@ namespace mage {
 			mutable std::mutex jsonrpcUrl_mutex;
 			mutable std::mutex sessionKey_mutex;
 			mutable std::mutex observerList_mutex;
+
+			std::map<std::thread::id, std::thread> m_taskList;
+
+			static bool IsCancelThread(std::thread::id threadId);
+			void CancelAll();
 	};
 
 }  // namespace mage
