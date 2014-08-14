@@ -38,6 +38,11 @@ int main() {
 		std::cout << "Executed, we will now sleep for 1 second..." << std::endl;
 		usleep(1000000);
 
+		if (err.type() == MAGE_CLIENT_ERROR) {
+			cerr << "MAGE returned the following error: " << err.what() << " (code " << err.code() << ")" << endl;
+			return;
+		}
+
 		if (err.type() == MAGE_RPC_ERROR) {
 			cerr << "An RPC error has occured: "  << err.what() << " (code " << err.code() << ")" << endl;
 			return;
