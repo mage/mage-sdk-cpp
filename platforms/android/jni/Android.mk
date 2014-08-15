@@ -9,7 +9,7 @@ MAGE_SRC_DIR := $(LOCAL_PATH)/../../../src
 LIBJSONRPC_SRC_DIR := $(LOCAL_PATH)/../../../vendor/libjson-rpc-cpp/src
 
 LOCAL_SRC_FILES := $(MAGE_SRC_DIR)/exceptions.cpp \
-				   $(MAGE_SRC_DIR)/mage.cpp \
+				   $(MAGE_SRC_DIR)/rpc.cpp \
 				   $(LIBJSONRPC_SRC_DIR)/jsonrpc/client.cpp \
 				   $(LIBJSONRPC_SRC_DIR)/jsonrpc/clientconnector.cpp \
 				   $(LIBJSONRPC_SRC_DIR)/jsonrpc/connectors/mongoose.c \
