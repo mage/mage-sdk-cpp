@@ -50,6 +50,9 @@ int main() {
 		// We set the session
 		//
 		client.SetSession(user["session"]["key"].asString());
+	} catch (mage::MageClientError e) {
+		cerr << "MAGE returned the following error: " << e.what() << " (code " << e.code() << ")" << endl;
+		return 1;
 	} catch (mage::MageRPCError e) {
 		cerr << "Could not login, an RPC error has occured: "  << e.what() << " (code " << e.code() << ")" << endl;
 		return 1;
@@ -71,6 +74,8 @@ int main() {
 	try {
 		res = client.Call("mymodule.mycommand", params);
 		cout << "mymodule.mycommand (authenticated): " << res << endl;
+	} catch (mage::MageClientError e) {
+		cerr << "MAGE returned the following error: " << e.what() << " (code " << e.code() << ")" << endl;
 	} catch (mage::MageRPCError e) {
 		cerr << "An RPC error has occured: "  << e.what() << " (code " << e.code() << ")" << endl;
 	} catch (mage::MageErrorMessage e) {

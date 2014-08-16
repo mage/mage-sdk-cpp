@@ -36,6 +36,8 @@ int main() {
 	try {
 		res = client.Call("user.register", params, true);
 		cout << "user.register: " << res.get() << endl;
+	} catch (mage::MageClientError e) {
+		cerr << "MAGE returned the following error: " << e.what() << " (code " << e.code() << ")" << endl;
 	} catch (mage::MageRPCError e) {
 		cerr << "An RPC error has occured: "  << e.what() << " (code " << e.code() << ")" << endl;
 	} catch (mage::MageErrorMessage e) {

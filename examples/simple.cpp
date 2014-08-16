@@ -35,6 +35,8 @@ int main() {
 	try {
 		res = client.Call("mymodule.mycommand", params);
 		cout << "mymodule.mycommand: " << res << endl;
+	} catch (mage::MageClientError e) {
+		cerr << "MAGE returned the following error: " << e.what() << " (code " << e.code() << ")" << endl;
 	} catch (mage::MageRPCError e) {
 		cerr << "An RPC error has occured: "  << e.what() << " (code " << e.code() << ")" << endl;
 	} catch (mage::MageErrorMessage e) {

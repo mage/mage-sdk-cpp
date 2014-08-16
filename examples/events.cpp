@@ -47,6 +47,8 @@ int main() {
 	try {
 		loginRes = client.Call("ident.login", auth, true);
 		loginRes.wait();
+	} catch (mage::MageClientError e) {
+		cerr << "MAGE returned the following error: " << e.what() << " (code " << e.code() << ")" << endl;
 	} catch (mage::MageRPCError e) {
 		cerr << "Could not login, an RPC error has occured: "  << e.what() << " (code " << e.code() << ")" << endl;
 		return 1;
@@ -78,6 +80,8 @@ int main() {
 
 		// Handle the command response
 		cout << "mymodule.mycommand (authenticated): " << res.get() << endl;
+	} catch (mage::MageClientError e) {
+		cerr << "MAGE returned the following error: " << e.what() << " (code " << e.code() << ")" << endl;
 	} catch (mage::MageRPCError e) {
 		cerr << "An RPC error has occured: "  << e.what() << " (code " << e.code() << ")" << endl;
 	} catch (mage::MageErrorMessage e) {
