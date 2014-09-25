@@ -71,13 +71,23 @@ add_custom_target(
 )
 
 add_custom_target(
+  android-unity
+  COMMAND cd ${CMAKE_SOURCE_DIR}/platforms/android-unity && \${MAKE}
+)
+
+add_custom_target(
+  clean-android-unity
+  COMMAND rm -rf ${CMAKE_SOURCE_DIR}/platforms/android-unity/libs
+)
+
+add_custom_target(
   platforms
-  DEPENDS android ios ios-unity
+  DEPENDS android android-unity ios ios-unity
 )
 
 add_custom_target(
   lint
-  COMMAND python tools/cpplint.py --filter=-whitespace/tab,-legal,-build,-readability/streams,-runtime/explicit,-whitespace/indent --linelength=120 src/*.{h,cpp} src/bin/*.cpp examples/*.cpp
+  COMMAND python ../tools/cpplint.py --filter=-whitespace/tab,-legal,-build,-readability/streams,-runtime/explicit,-whitespace/indent --linelength=120 src/*.{h,cpp} ../src/bin/*.cpp ../examples/*.cpp
 )
 
 add_subdirectory(src)
