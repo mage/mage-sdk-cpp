@@ -226,6 +226,7 @@ namespace mage {
 		return m_sProtocol + "://" + m_sDomain + "/" + m_sApplication + "/jsonrpc";
 	}
 
+#ifndef UNITY
 	void RPC::Join(std::thread::id threadId) {
 		if (m_taskList.count(threadId) > 0 && m_taskList[threadId].joinable()) {
 			m_taskList[threadId].join();
@@ -254,4 +255,5 @@ namespace mage {
 	bool RPC::IsCancelThread(std::thread::id threadId) {
 		return find(s_runningThreadIds.begin(), s_runningThreadIds.end() , threadId) == s_runningThreadIds.end();
 	}
+#endif
 }  // namespace mage

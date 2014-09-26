@@ -66,8 +66,10 @@ namespace mage {
 			std::string GetUrl() const;
 			std::string GetMsgStreamUrl(Transport transport = SHORTPOLLING) const;
 
+#ifndef UNITY
 			void Join(std::thread::id threadId);
 			void Cancel(std::thread::id threadId);
+#endif
 
 		private:
 			void DoHttpGet(std::string *buffer, const std::string& url) const;
