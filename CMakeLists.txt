@@ -45,6 +45,21 @@ add_custom_target(
   COMMAND rm -rf ${CMAKE_SOURCE_DIR}/platforms/ios/build/Release-iphoneos
 )
 
+add_custom_command(
+  OUTPUT platforms/ios/build/UnityRelease-iphoneos/libmage-sdk.a
+  COMMAND xcodebuild ONLY_ACTIVE_ARCH=NO -project "${CMAKE_SOURCE_DIR}/platforms/ios/mage-sdk.xcodeproj" -configuration "UnityRelease"
+)
+
+add_custom_target(
+  ios-unity
+  DEPENDS platforms/ios/build/UnityRelease-iphoneos/libmage-sdk.a
+)
+
+add_custom_target(
+  clean-ios-unity
+  COMMAND rm -rf ${CMAKE_SOURCE_DIR}/platforms/ios/build/UnityRelease-iphoneos
+)
+
 add_custom_target(
   android
   COMMAND cd ${CMAKE_SOURCE_DIR}/platforms/android && \${MAKE}
@@ -56,13 +71,23 @@ add_custom_target(
 )
 
 add_custom_target(
+  android-unity
+  COMMAND cd ${CMAKE_SOURCE_DIR}/platforms/android-unity && \${MAKE}
+)
+
+add_custom_target(
+  clean-android-unity
+  COMMAND rm -rf ${CMAKE_SOURCE_DIR}/platforms/android-unity/libs
+)
+
+add_custom_target(
   platforms
-  DEPENDS android ios
+  DEPENDS android android-unity ios ios-unity
 )
 
 add_custom_target(
   lint
-  COMMAND python tools/cpplint.py --filter=-whitespace/tab,-legal,-build,-readability/streams,-runtime/explicit,-whitespace/indent --linelength=120 src/*.{h,cpp} src/bin/*.cpp examples/*.cpp
+  COMMAND python ../tools/cpplint.py --filter=-whitespace/tab,-legal,-build,-readability/streams,-runtime/explicit,-whitespace/indent --linelength=120 src/*.{h,cpp} ../src/bin/*.cpp ../examples/*.cpp
 )
 
 add_subdirectory(src)

@@ -6,7 +6,7 @@
 
 namespace mage {
 
-	enum mage_error_t : int {
+	enum mage_error_t {
 		MAGE_ERROR = 0,
 		MAGE_SUCCESS,
 		MAGE_CLIENT_ERROR,
@@ -17,7 +17,11 @@ namespace mage {
 	class MageError: public std::runtime_error {
 		public:
 			MageError(const std::string& message);
+#ifndef UNITY
 			virtual ~MageError() {}
+#else
+			virtual ~MageError() throw() {}
+#endif
 			virtual std::string code() const;
 			int type() const { return m_iType; }
 		protected:
@@ -28,21 +32,33 @@ namespace mage {
 	class MageSuccess: public MageError {
 		public:
 			MageSuccess(const std::string& message = "");
+#ifndef UNITY
 			virtual ~MageSuccess() {}
+#else
+			virtual ~MageSuccess() throw() {}
+#endif
 			virtual std::string code() const;
 	};
 
 	class MageClientError: public MageError {
 		public:
 			MageClientError(const std::string& message = "");
+#ifndef UNITY
 			virtual ~MageClientError() {}
+#else
+			virtual ~MageClientError() throw() {}
+#endif
 			virtual std::string code() const;
 	};
 
 	class MageRPCError: public MageError {
 		public:
 			MageRPCError(int code, const std::string& message);
+#ifndef UNITY
 			virtual ~MageRPCError() {}
+#else
+			virtual ~MageRPCError() throw() {}
+#endif
 			virtual std::string code() const;
 
 		private:
@@ -53,7 +69,11 @@ namespace mage {
 		public:
 			MageErrorMessage(const std::string& code,
 			                 const std::string& message = "");
+#ifndef UNITY
 			virtual ~MageErrorMessage() {}
+#else
+			virtual ~MageErrorMessage() throw() {}
+#endif
 			virtual std::string code() const;
 
 		private:

@@ -12,3 +12,5 @@ examples/*
 !examples/CMakeLists.txt
 
 platforms/android/obj
+platforms/android-unity/obj
+platforms/android-unity/libs

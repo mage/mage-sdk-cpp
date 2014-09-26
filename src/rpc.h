@@ -3,11 +3,13 @@
 
 #include <string>
 #include <list>
-#include <functional>
-#include <future>
-#include <mutex>
-#include <condition_variable>
-#include <atomic>
+#ifndef UNITY
+	#include <functional>
+	#include <future>
+	#include <mutex>
+	#include <condition_variable>
+	#include <atomic>
+#endif	
 
 #include <jsonrpc/rpc.h>
 
@@ -30,6 +32,7 @@ namespace mage {
 
 			virtual Json::Value Call(const std::string& name,
 			                         const Json::Value& params) const;
+#ifndef UNITY
 			virtual std::future<Json::Value> Call(const std::string& name,
 			                                      const Json::Value& params,
 			                                      bool doAsync) const;
@@ -41,14 +44,18 @@ namespace mage {
 			virtual std::thread::id Call(const std::string& name,
 			                              const Json::Value& params,
 			                              const std::function<void(mage::MageError, Json::Value)>& callback);
+#endif
 
 			virtual void ReceiveEvent(const std::string& name,
 			                          const Json::Value& data = Json::Value::null) const;
 			void AddObserver(EventObserver* observer);
+			const std::list<EventObserver*>& GetObservers() const;
 
 			void PullEvents(Transport transport = SHORTPOLLING);
+#ifndef UNITY
 			void StartPolling(Transport transport = LONGPOLLING);
 			void StopPolling();
+#endif
 
 			void SetProtocol(const std::string& mageProtocol);
 			void SetDomain(const std::string& mageDomain);
@@ -59,8 +66,10 @@ namespace mage {
 			std::string GetUrl() const;
 			std::string GetMsgStreamUrl(Transport transport = SHORTPOLLING) const;
 
+#ifndef UNITY
 			void Join(std::thread::id threadId);
 			void Cancel(std::thread::id threadId);
+#endif
 
 		private:
 			void DoHttpGet(std::string *buffer, const std::string& url) const;
@@ -73,16 +82,21 @@ namespace mage {
 			std::string m_sApplication;
 			std::string m_sSessionKey;
 
+#ifndef UNITY
 			std::atomic<bool> m_bShouldRunPollingThread;
+#endif
 
 			std::list<EventObserver*> m_oObserverList;
 			std::list<std::string>    m_oMsgToConfirm;
 
+#ifndef UNITY
 			std::thread *m_pPollingThread;
+#endif
 
 			jsonrpc::HttpClient *m_pHttpClient;
 			jsonrpc::Client     *m_pJsonRpcClient;
 
+#ifndef UNITY
 			std::condition_variable pollingThread_cv;
 			std::mutex pollingThread_mutex;
 			mutable std::recursive_mutex msgStreamUrl_mutex;
@@ -94,6 +108,7 @@ namespace mage {
 
 			static bool IsCancelThread(std::thread::id threadId);
 			void CancelAll();
+#endif
 	};
 
 }  // namespace mage

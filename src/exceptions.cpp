@@ -2,7 +2,8 @@
 
 namespace mage {
 	MageError::MageError(const std::string& message)
-	: MageError::MageError(MAGE_ERROR, message) {
+	: std::runtime_error(message)
+	, m_iType(MAGE_ERROR) {
 	}
 
 	MageError::MageError(mage_error_t type, const std::string& message)
@@ -36,7 +37,13 @@ namespace mage {
 	}
 
 	std::string MageRPCError::code() const {
+#ifndef UNITY
 		return std::to_string(m_iErrorCode);
+#else
+		char buffer[10];
+		sprintf(buffer, "%d", m_iErrorCode);
+		return std::string(buffer);
+#endif
 	}
 
 	MageErrorMessage::MageErrorMessage(const std::string& code,

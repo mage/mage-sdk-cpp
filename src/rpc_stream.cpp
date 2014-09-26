@@ -3,11 +3,12 @@
 #include <curl/curl.h>
 
 #include <iostream>
-#include <chrono>
-#include <thread>
-
-#ifndef SHORTPOLLING_INTERVAL_SECS
-	#define SHORTPOLLING_INTERVAL_SECS 5
+#ifndef UNITY
+	#include <chrono>
+	#include <thread>
+	#ifndef SHORTPOLLING_INTERVAL_SECS
+		#define SHORTPOLLING_INTERVAL_SECS 5
+	#endif
 #endif
 
 using namespace jsonrpc;
@@ -15,19 +16,27 @@ using namespace jsonrpc;
 namespace mage {
 
 	void RPC::ReceiveEvent(const std::string& name, const Json::Value& data) const {
+#ifndef UNITY
 		std::lock_guard<std::mutex> lock(observerList_mutex);
+#endif
 
 		std::list<EventObserver*>::const_iterator citr;
-		for(citr = m_oObserverList.cbegin();
-		    citr != m_oObserverList.cend(); ++citr) {
+		for(citr = m_oObserverList.begin();
+		    citr != m_oObserverList.end(); ++citr) {
 			(*citr)->ReceiveEvent(name, data);
 		}
 	}
 
 	void RPC::AddObserver(EventObserver* observer) {
+#ifndef UNITY
 		std::lock_guard<std::mutex> lock(observerList_mutex);
+#endif
 
 		m_oObserverList.push_back(observer);
+	}
+
+	const std::list<EventObserver*>& RPC::GetObservers() const {
+		return m_oObserverList;
 	}
 
 	static int writer(char *data, size_t size, size_t nmemb,
@@ -88,9 +97,13 @@ namespace mage {
 						break;
 				}
 			}
+#ifndef UNITY
 			msgStreamUrl_mutex.lock();
+#endif
 			m_oMsgToConfirm.push_back(*citr);
+#ifndef UNITY
 			msgStreamUrl_mutex.unlock();
+#endif
 		}
 
 		if (hasInvalidFormatError) {
@@ -105,9 +118,13 @@ namespace mage {
 		DoHttpGet(&buffer, url);
 
 		// The previous messages were confirmed
+#ifndef UNITY
 		msgStreamUrl_mutex.lock();
+#endif
 		m_oMsgToConfirm.clear();
+#ifndef UNITY
 		msgStreamUrl_mutex.unlock();
+#endif
 
 		// No messages to read
 		if (buffer.empty()) {
@@ -122,6 +139,7 @@ namespace mage {
 		ExtractEventsFromMsgStreamResponse(buffer);
 	}
 
+#ifndef UNITY
 	void RPC::StartPolling(Transport transport) {
 		sessionKey_mutex.lock();
 		if (m_sSessionKey.empty()) {
@@ -177,17 +195,20 @@ namespace mage {
 		pollingThread_cv.notify_all();
 		m_pPollingThread->join();
 	}
+#endif
 
 	std::string RPC::GetConfirmIds() const {
+#ifndef UNITY
 		std::lock_guard<std::recursive_mutex> lock(msgStreamUrl_mutex);
+#endif
 
 		std::stringstream ss;
 
 		bool first = true;
 
 		std::list<std::string>::const_iterator citr;
-		for (citr = m_oMsgToConfirm.cbegin();
-			 citr != m_oMsgToConfirm.cend();
+		for (citr = m_oMsgToConfirm.begin();
+			 citr != m_oMsgToConfirm.end();
 			 ++citr) {
 			if (!first) {
 				ss << ",";
@@ -201,7 +222,9 @@ namespace mage {
 	}
 
 	std::string RPC::GetMsgStreamUrl(Transport transport) const {
+#ifndef UNITY
 		std::lock_guard<std::recursive_mutex> lock(msgStreamUrl_mutex);
+#endif
 
 		std::stringstream ss;
 		ss << m_sProtocol
@@ -220,16 +243,22 @@ namespace mage {
 				throw MageClientError("Unsupported transport.");
 		}
 
+#ifndef UNITY
 		sessionKey_mutex.lock();
+#endif
 		if (m_sSessionKey.empty()) {
+#ifndef UNITY
 			sessionKey_mutex.unlock();
+#endif
 			throw MageClientError("No session key registered.");
 		}
 
 		ss << "&sessionKey="
 		   << m_sSessionKey;
 
+#ifndef UNITY
 		sessionKey_mutex.unlock();
+#endif
 
 		if (!m_oMsgToConfirm.empty()) {
 			ss << "&confirmIds="

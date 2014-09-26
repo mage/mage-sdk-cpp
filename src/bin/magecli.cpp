@@ -263,6 +263,8 @@ int main(int argc, char *argv[]) {
 		}
 
 		if (userCommand == "exit") {
+			cout << "Waiting for the end of the polling thread..." << std::endl;
+			client.StopPolling();
 			break;
 		}
 
